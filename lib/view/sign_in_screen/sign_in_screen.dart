@@ -69,7 +69,7 @@ class _SignInScreenState extends State<SignInScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Hello! Welcome back!', style: GoogleFonts.roboto(fontSize: 28, fontWeight: FontWeight.bold),),
+            Text('Hello! Welcome back!', style: GoogleFonts.roboto(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
             const SizedBox(height: 4,),
             Text("Hello again, You've been missed!", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
           ],
@@ -187,7 +187,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget forgotPassword(){
     return InkWell(
       onTap: (){},
-      child: Text('Forgot Password', style: GoogleFonts.roboto(fontSize: 12,))
+      child: Text('Forgot Password', style: GoogleFonts.roboto(fontSize: 12, color: Colors.red))
     );
   }
 
@@ -248,7 +248,7 @@ class _SignInScreenState extends State<SignInScreen> {
             onTap: (){
               Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
             },
-            child: Text('Sign Up', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),),
+            child: Text('Sign Up', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
           )
         ],
       ),

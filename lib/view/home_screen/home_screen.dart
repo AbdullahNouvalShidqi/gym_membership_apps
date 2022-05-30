@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), label: 'Schedule'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_add_alt_1_outlined), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_add_alt_1_outlined), label: 'Profile'),
           ],
           onTap: (index){
             setState(() {

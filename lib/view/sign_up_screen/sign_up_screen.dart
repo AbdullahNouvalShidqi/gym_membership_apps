@@ -73,7 +73,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create an account', style: GoogleFonts.roboto(fontSize: 28, fontWeight: FontWeight.bold),),
+            Text('Create an account', style: GoogleFonts.roboto(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
             const SizedBox(height: 4,),
             Text("Stay strong and healthy with us", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
           ],
@@ -346,7 +346,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             onTap: (){
               Navigator.pushReplacementNamed(context, SignInScreen.routeName);
             },
-            child: Text('Sign In', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.grey),),
+            child: Text('Log In', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
           )
         ],
       ),

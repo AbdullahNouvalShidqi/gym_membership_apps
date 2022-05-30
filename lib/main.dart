@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gym_membership_apps/view/home_screen/home_screen.dart';
-import 'package:gym_membership_apps/view/sign_in_screen/sign_in_screen.dart';
-import 'package:gym_membership_apps/view/sign_up_screen/sign_up_screen.dart';
-import 'package:gym_membership_apps/view/splash_screen/splash_screen.dart';
-import 'package:gym_membership_apps/view/splash_screen/splash_screen_introduction.dart';
-import 'package:gym_membership_apps/view/splash_screen/splash_screen_view_model.dart';
+import 'package:gym_membership_apps/screen/home/home_screen.dart';
+import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
+import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
+import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
+import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
+import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:provider/provider.dart';
 
 void main() {

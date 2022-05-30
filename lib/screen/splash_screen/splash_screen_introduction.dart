@@ -2,8 +2,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/view/sign_up_screen/sign_up_screen.dart';
-import 'package:gym_membership_apps/view/splash_screen/splash_screen_view_model.dart';
+import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
+import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:provider/provider.dart';
 
 class SplashScreenIntroduction extends StatefulWidget {

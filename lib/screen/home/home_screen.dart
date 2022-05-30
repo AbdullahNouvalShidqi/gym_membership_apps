@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gym_membership_apps/view/home_screen/home_page_screen.dart';
-import 'package:gym_membership_apps/view/profile_screen/profile_screen.dart';
-import 'package:gym_membership_apps/view/schedule_screen/schedule_screen.dart';
+import 'package:gym_membership_apps/screen/home/home_page_screen.dart';
+import 'package:gym_membership_apps/screen/profile/profile_screen.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   static String routeName = '/homeScreen';

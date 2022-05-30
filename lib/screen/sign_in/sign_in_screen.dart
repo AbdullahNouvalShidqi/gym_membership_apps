@@ -1,36 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/view/sign_in_screen/sign_in_screen.dart';
+import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 
-class SignUpScreen extends StatefulWidget {
-  static String routeName = '/signUpScreen';
-  const SignUpScreen({Key? key}) : super(key: key);
+class SignInScreen extends StatefulWidget {
+  static String routeName = '/signInScreen';
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignInScreenState extends State<SignInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
-  final _phoneNumberCtrl = TextEditingController();
-  final _usernameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
-  final _confirmPasswordCtrl = TextEditingController();
   DateTime? currentBackPressTime;
   bool _rememberMe = false;
-  bool _showPass = true;
-  bool _showPassConf = true;
+  bool _setVisiblePass = true;
 
   @override
   void dispose() {
     super.dispose();
     _emailCtrl.dispose();
-    _phoneNumberCtrl.dispose();
-    _usernameCtrl.dispose();
     _passwordCtrl.dispose();
-    _confirmPasswordCtrl.dispose();
   }
 
   @override
@@ -47,16 +40,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   mainTitle(),
-                  usernameFormField(),
                   emailFormField(),
-                  phoneNumberFormField(),
-                  passwordFormField(),
-                  confirmFormField(),       
-                  rememberMeChekBox(),
-                  signUpButton(),
+                  passwordFormField(),              
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      rememberMeChekBox(),
+                      forgotPassword()
+                    ],
+                  ),
+                  loginButton(),
                   Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
-                  googleSiugnUpButton(),
-                  toSignInButton()
+                  googleLoginButton(),
+                  toSignUpButton()
                 ],
               ),
             ),
@@ -68,46 +64,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget mainTitle(){
     return Padding(
-      padding: const EdgeInsets.only(top: 35, bottom: 40),
+      padding: const EdgeInsets.only(top: 35, bottom: 50),
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Create an account', style: GoogleFonts.roboto(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
+            Text('Hello! Welcome back!', style: GoogleFonts.roboto(fontSize: 28, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
             const SizedBox(height: 4,),
-            Text("Stay strong and healthy with us", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+            Text("Hello again, You've been missed!", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
           ],
         ),
-      ),
-    );
-  }
-
-  Widget usernameFormField(){
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Username', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-          const SizedBox(height: 5,),
-          TextFormField(
-            controller: _usernameCtrl,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.account_circle_outlined),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              hintText: 'Enter your username',
-              contentPadding: const EdgeInsets.symmetric(vertical: 12)
-            ),
-            validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
-                return 'Please enter a valid username';
-              }
-              return null;
-            },
-          ),
-        ],
       ),
     );
   }
@@ -121,6 +87,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Email Address', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
+            keyboardType: TextInputType.emailAddress,
             controller: _emailCtrl,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.email_outlined),
@@ -142,57 +109,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget phoneNumberFormField(){
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Phone Number', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-          const SizedBox(height: 5,),
-          TextFormField(
-            keyboardType: TextInputType.phone,
-            controller: _phoneNumberCtrl,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.phone_outlined),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              hintText: 'Enter your phone number',
-              contentPadding: const EdgeInsets.symmetric(vertical: 12)
-            ),
-            validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || int.tryParse(newValue) == null || int.tryParse(newValue).toString().length < 12){
-                return 'Please enter a valid phone number';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget passwordFormField(){
     return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.only(bottom: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
-            obscureText: _showPass,
+            obscureText: _setVisiblePass,
+            keyboardType: TextInputType.visiblePassword,
             controller: _passwordCtrl,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
+                icon: _setVisiblePass ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.visibility_outlined),
                 onPressed: (){
                   setState(() {
-                    _showPass = !_showPass;
+                    _setVisiblePass = !_setVisiblePass;
                   });
-                },
-                icon : _showPass ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.remove_red_eye_outlined)
+                }
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),
@@ -203,48 +140,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             validator: (newValue){
               if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
                 return 'Please enter a valid password';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
-    );
-  
-  }
-  Widget confirmFormField(){
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Confirm Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-          const SizedBox(height: 5,),
-          TextFormField(
-            obscureText: _showPassConf,
-            controller: _confirmPasswordCtrl,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.lock_outline),
-              suffixIcon: IconButton(
-                onPressed: (){
-                  setState(() {
-                    _showPassConf = !_showPassConf;
-                  });
-                },
-                icon : _showPassConf ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.remove_red_eye_outlined)
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              hintText: 'Enter your password',
-              contentPadding: const EdgeInsets.symmetric(vertical: 12),
-            ),
-            validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
-                return 'Please enter a valid password';
-              }
-              if(newValue != _passwordCtrl.text){
-                return 'The value is not right with the password';
               }
               return null;
             },
@@ -289,15 +184,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget signUpButton(){
+  Widget forgotPassword(){
+    return InkWell(
+      onTap: (){},
+      child: Text('Forgot Password', style: GoogleFonts.roboto(fontSize: 12, color: Colors.red))
+    );
+  }
+
+  Widget loginButton(){
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(top: 30, bottom: 15),
+        padding: const EdgeInsets.only(top: 30, bottom: 25),
         child: ElevatedButton(
           style: ButtonStyle(
             fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
           ),
-          child: Text('Sign Up', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+          child: Text('Login', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
           onPressed: (){
             if(!_formKey.currentState!.validate())return;
           },
@@ -306,10 +208,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget googleSiugnUpButton(){
+  Widget googleLoginButton(){
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.only(top: 25),
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -326,7 +228,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: 25,
               ),
               const SizedBox(width: 10),
-              Text('Sign up with Google', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),)
+              Text('Sign in with Google', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),)
             ],
           ),
         ),
@@ -334,19 +236,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget toSignInButton(){
+  Widget toSignUpButton(){
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
+      padding: const EdgeInsets.only(top: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text("Already have an account?", style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),),
+          Text("Don't have an account?", style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),),
           const SizedBox(width: 5,),
           InkWell(
             onTap: (){
-              Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+              Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
             },
-            child: Text('Log In', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
+            child: Text('Sign Up', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
           )
         ],
       ),
@@ -354,15 +256,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<bool> willPopValidation() async {
-    
-    if(_usernameCtrl.text.isNotEmpty ||_emailCtrl.text.isNotEmpty || _phoneNumberCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty){
+    if(_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty){
       bool willPop = false;
       await showDialog(
         context: context,
         builder: (context){
           return AlertDialog(
-            title: Text('Exit ?', style: GoogleFonts.roboto(),),
-            content: Text('You will lost your input data to sign up', style: GoogleFonts.roboto(),),
+            title: Text('Exit?', style: GoogleFonts.roboto(),),
+            content: Text("You will lose your data you've filled!", style: GoogleFonts.roboto(),),
             actions: [
               TextButton(
                 onPressed: (){
@@ -371,7 +272,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   });
                   Navigator.pop(context);
                 },
-                child: Text('Yes', style: GoogleFonts.roboto(),)
+                child: Text('Exit', style: GoogleFonts.roboto(),)
               ),
               TextButton(
                 onPressed: (){
@@ -384,7 +285,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       );
       return willPop;
-    }else{
+    }
+    else{
       DateTime now = DateTime.now();
       if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst){
         currentBackPressTime = now;

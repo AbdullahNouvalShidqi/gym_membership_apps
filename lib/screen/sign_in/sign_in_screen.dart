@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
+import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -18,7 +20,7 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordCtrl = TextEditingController();
   DateTime? currentBackPressTime;
   bool _rememberMe = false;
-  bool _setVisiblePass = true;
+  bool _hidePass = true;
 
   @override
   void dispose() {
@@ -119,16 +121,16 @@ class _SignInScreenState extends State<SignInScreen> {
           Text('Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
-            obscureText: _setVisiblePass,
+            obscureText: _hidePass,
             keyboardType: TextInputType.visiblePassword,
             controller: _passwordCtrl,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
-                icon: _setVisiblePass ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.visibility_outlined),
+                icon: _hidePass ? SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor) : SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor),
                 onPressed: (){
                   setState(() {
-                    _setVisiblePass = !_setVisiblePass;
+                    _hidePass = !_hidePass;
                   });
                 }
               ),
@@ -205,6 +207,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Text('Login', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
           onPressed: (){
             if(!_formKey.currentState!.validate())return;
+            Navigator.pushNamed(context, HomeScreen.routeName);
           },
         ),
       ),

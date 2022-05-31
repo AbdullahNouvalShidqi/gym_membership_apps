@@ -7,6 +7,7 @@ import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
+import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -30,6 +31,12 @@ class MyApp extends StatelessWidget {
         title: 'My Gym Apps',
         theme: ThemeData(
           primaryColor: const Color.fromARGB(255, 10, 161, 221),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 10, 161, 221)),
+            )
+          ),
+          scaffoldBackgroundColor: Colors.white
         ),
         initialRoute: SplashScreen.routeName,
         onGenerateRoute: (settings){
@@ -118,6 +125,20 @@ class MyApp extends StatelessWidget {
           if(settings.name == OtpScreen.routeName){
             return PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) => const OtpScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child){
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                final tween = Tween(begin: begin, end: end);
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              }
+            );
+          }
+          if(settings.name == UpdatePasswordScreen.routeName){
+            return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => const UpdatePasswordScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child){
                 const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;

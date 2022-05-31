@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/otp/otp_succes_screen.dart';
+import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -39,6 +41,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 const SizedBox(height: 25,),
                 Center(
                   child: PinCodeTextField(
+                    keyboardType: TextInputType.number,
                     mainAxisAlignment: MainAxisAlignment.center,
                     controller: _otpController,
                     appContext: context,
@@ -62,10 +65,11 @@ class _OtpScreenState extends State<OtpScreen> {
                       return null;
                     },
                     pinTheme: PinTheme(
-                      inactiveColor: Colors.black,
+                      inactiveColor: hasError ? Colors.red : Theme.of(context).primaryColor,
+                      activeColor: hasError ? Colors.red : Theme.of(context).primaryColor,
+                      selectedColor: hasError ? Colors.red : Theme.of(context).primaryColor,
                       shape: PinCodeFieldShape.box,
                       borderRadius: BorderRadius.circular(8),
-                      errorBorderColor: Colors.red,
                       fieldHeight: 56,
                       fieldWidth: 56,
                       fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 8)
@@ -94,15 +98,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 ElevatedButton(
                   onPressed: (){
                     if(hasError)return;
-                    showModalBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(40) , topRight: Radius.circular(40))
-                      ),
-                      context: context,
-                      builder: (context){
-                        return const OtpSuccesScreen();
-                      }
-                    );
+                    Navigator.pushNamed(context, UpdatePasswordScreen.routeName);
                   },
                   style: ButtonStyle(
                     fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))

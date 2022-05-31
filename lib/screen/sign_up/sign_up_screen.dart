@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
@@ -20,8 +21,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordCtrl = TextEditingController();
   DateTime? currentBackPressTime;
   bool _rememberMe = false;
-  bool _showPass = true;
-  bool _showPassConf = true;
+  bool _hidePass = true;
+  bool _hidePassConf = true;
 
   @override
   void dispose() {
@@ -182,17 +183,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
-            obscureText: _showPass,
+            obscureText: _hidePass,
             controller: _passwordCtrl,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
                 onPressed: (){
                   setState(() {
-                    _showPass = !_showPass;
+                    _hidePass = !_hidePass;
                   });
                 },
-                icon : _showPass ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.remove_red_eye_outlined)
+                icon : _hidePass ? SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor) : SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),
@@ -221,17 +222,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Confirm Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
-            obscureText: _showPassConf,
+            obscureText: _hidePassConf,
             controller: _confirmPasswordCtrl,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
                 onPressed: (){
                   setState(() {
-                    _showPassConf = !_showPassConf;
+                    _hidePassConf = !_hidePassConf;
                   });
                 },
-                icon : _showPassConf ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.remove_red_eye_outlined)
+                icon : _hidePassConf ? SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor) : SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),

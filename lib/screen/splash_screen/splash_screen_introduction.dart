@@ -105,8 +105,14 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
                       padding: const EdgeInsets.symmetric(horizontal: 55),
                       child: ElevatedButton(
                         onPressed: (){
-                          splashScreenViewModel.doneFirstTime();
-                          Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                          _currentIndex += 1;
+                          if(_currentIndex < splashScreenViewModel.introductionData.length){
+                            _carouselCtrl.animateToPage(_currentIndex);
+                          }
+                          else{
+                            splashScreenViewModel.doneFirstTime();
+                            Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                          }
                         },
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all(Colors.white),

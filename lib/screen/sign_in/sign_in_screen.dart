@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -186,7 +187,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Widget forgotPassword(){
     return InkWell(
-      onTap: (){},
+      onTap: (){
+        Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
+      },
       child: Text('Forgot Password', style: GoogleFonts.roboto(fontSize: 12, color: Colors.red))
     );
   }

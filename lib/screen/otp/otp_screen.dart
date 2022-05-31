@@ -1,0 +1,119 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/otp/otp_succes_screen.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
+
+class OtpScreen extends StatefulWidget {
+  static String routeName = '/otp';
+  const OtpScreen({Key? key}) : super(key: key);
+
+  @override
+  State<OtpScreen> createState() => _OtpScreenState();
+}
+
+class _OtpScreenState extends State<OtpScreen> {
+  bool hasError = false;
+  final _formKey = GlobalKey<FormState>();
+  final _otpController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 95),
+                  child: SvgPicture.asset(
+                    'assets/otp_logo.svg'
+                  ),
+                ),
+                const SizedBox(height: 35,),
+                Text('OTP VERIFICATION', style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500,)),
+                const SizedBox(height: 15,),
+                Text('Enter the OTP sent to riz*****mail.com', style: GoogleFonts.roboto(fontSize: 16, color: Colors.grey[700]),),
+                const SizedBox(height: 25,),
+                Center(
+                  child: PinCodeTextField(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    controller: _otpController,
+                    appContext: context,
+                    length: 4,
+                    onChanged: (newValue){
+                      if(newValue.isEmpty || newValue.length < 4){
+                        setState(() {
+                          hasError = true;
+                        });
+                        return;
+                      }else{
+                        setState(() {
+                          hasError = false;
+                        });
+                      }
+                    },
+                    validator: (newValue){
+                      if(newValue == null || newValue.isEmpty || newValue.length < 4){
+                        
+                      }
+                      return null;
+                    },
+                    pinTheme: PinTheme(
+                      inactiveColor: Colors.black,
+                      shape: PinCodeFieldShape.box,
+                      borderRadius: BorderRadius.circular(8),
+                      errorBorderColor: Colors.red,
+                      fieldHeight: 56,
+                      fieldWidth: 56,
+                      fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 8)
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 6,),
+                hasError ? Text('Please enter a valid OTP', style: GoogleFonts.roboto(color: Colors.red),) : const SizedBox(),
+                const SizedBox(height: 20,),
+                Text('00:120 Sec', style: GoogleFonts.roboto(fontSize: 16),),
+                const SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("Don't receive code ?", style: GoogleFonts.roboto(fontSize: 16)),
+                    const SizedBox(width: 5,),
+                    InkWell(
+                      onTap: (){
+                        
+                      },
+                      child: Text('Re-send', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600)),
+                    )
+                  ],
+                ),
+                const SizedBox(height: 15,),
+                ElevatedButton(
+                  onPressed: (){
+                    if(hasError)return;
+                    showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(40) , topRight: Radius.circular(40))
+                      ),
+                      context: context,
+                      builder: (context){
+                        return const OtpSuccesScreen();
+                      }
+                    );
+                  },
+                  style: ButtonStyle(
+                    fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
+                  ),
+                  child: Text('Submit', style: GoogleFonts.roboto(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),),
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

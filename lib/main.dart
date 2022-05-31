@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
+import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
@@ -90,6 +92,34 @@ class MyApp extends StatelessWidget {
               pageBuilder: (context, animation, secondaryAnimation) => const SplashScreenIntroduction(),
               transitionsBuilder: (context, animation, secondaryAnimation, child){
                 const begin = Offset(0.0, 1.0);
+                const end = Offset.zero;
+                final tween = Tween(begin: begin, end: end);
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              }
+            );
+          }
+          if(settings.name == ForgotPasswordScreen.routeName){
+            return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => const ForgotPasswordScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child){
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                final tween = Tween(begin: begin, end: end);
+                return SlideTransition(
+                  position: animation.drive(tween),
+                  child: child,
+                );
+              }
+            );
+          }
+          if(settings.name == OtpScreen.routeName){
+            return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => const OtpScreen(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child){
+                const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
                 return SlideTransition(

@@ -64,7 +64,7 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
               child: SizedBox(
                 width: MediaQuery.of(context).size.width,
                 child: Image.asset(
-                  splashScreenViewModel.introductionData[itemI]['image'],
+                  splashScreenViewModel.introductionData[itemI].image,
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                 ),
@@ -76,9 +76,9 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
                 alignment: Alignment.topCenter,
                 child: Column(
                   children: [
-                    Text(splashScreenViewModel.introductionData[itemI]['title'], style: GoogleFonts.roboto(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),),
+                    Text(splashScreenViewModel.introductionData[itemI].title, style: GoogleFonts.roboto(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),),
                     const SizedBox(height: 5,),
-                    Text(splashScreenViewModel.introductionData[itemI]['subtitle'], style: GoogleFonts.roboto(fontSize: 12, color: Colors.white),)
+                    Text(splashScreenViewModel.introductionData[itemI].subtitle, style: GoogleFonts.roboto(fontSize: 12, color: Colors.white),)
                   ],
                 )
               )

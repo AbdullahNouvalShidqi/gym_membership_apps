@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/screen/home/home_page_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_screen.dart';
@@ -46,10 +47,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         body: IndexedStack(index: _selectedPage, children: _pageOption),
         bottomNavigationBar: BottomNavigationBar(
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), label: 'Schedule'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_add_alt_1_outlined), label: 'Profile'),
+          items: [
+            BottomNavigationBarItem(icon: SvgPicture.asset('assets/home_icon.svg', color: _selectedPage == 0 ? Theme.of(context).primaryColor : Theme.of(context).unselectedWidgetColor,), label: 'Home'),
+            BottomNavigationBarItem(icon: SvgPicture.asset('assets/schedule_icon.svg', color: _selectedPage == 1 ? Theme.of(context).primaryColor : Theme.of(context).unselectedWidgetColor,), label: 'Schedule'),
+            BottomNavigationBarItem(icon: SvgPicture.asset('assets/profile_icon.svg', color: _selectedPage == 2 ? Theme.of(context).primaryColor : Theme.of(context).unselectedWidgetColor,), label: 'Profile'),
           ],
           onTap: (index){
             setState(() {

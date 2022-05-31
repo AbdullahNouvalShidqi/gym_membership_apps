@@ -41,27 +41,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
       child: Form(
         key: _formKey,
         child: Scaffold(
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  mainTitle(),
-                  usernameFormField(),
-                  emailFormField(),
-                  phoneNumberFormField(),
-                  passwordFormField(),
-                  confirmFormField(),       
-                  rememberMeChekBox(),
-                  signUpButton(),
-                  Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
-                  googleSiugnUpButton(),
-                  toSignInButton()
-                ],
-              ),
-            ),
-          ),
+          body: body()
+        ),
+      ),
+    );
+  }
+
+  Widget body(){
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            mainTitle(),
+            usernameFormField(),
+            emailFormField(),
+            phoneNumberFormField(),
+            passwordFormField(),
+            confirmFormField(),       
+            rememberMeChekBox(),
+            signUpButton(),
+            Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+            googleSiugnUpButton(),
+            toSignInButton()
+          ],
         ),
       ),
     );

@@ -36,30 +36,34 @@ class _SignInScreenState extends State<SignInScreen> {
       child: Form(
         key: _formKey,
         child: Scaffold(
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  mainTitle(),
-                  emailFormField(),
-                  passwordFormField(),              
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      rememberMeChekBox(),
-                      forgotPassword()
-                    ],
-                  ),
-                  loginButton(),
-                  Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
-                  googleLoginButton(),
-                  toSignUpButton()
-                ],
-              ),
+          body: body()
+        ),
+      ),
+    );
+  }
+
+  Widget body(){
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            mainTitle(),
+            emailFormField(),
+            passwordFormField(),              
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                rememberMeChekBox(),
+                forgotPassword()
+              ],
             ),
-          ),
+            loginButton(),
+            Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+            googleLoginButton(),
+            toSignUpButton()
+          ],
         ),
       ),
     );

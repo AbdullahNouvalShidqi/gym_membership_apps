@@ -58,39 +58,38 @@ class HomePageScreen extends StatelessWidget {
             const SizedBox(height: 5,),
             SizedBox(
               height: 164,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 5,
-                  itemBuilder: (context, i){
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: 125,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              color: Theme.of(context).primaryColor
-                            ),
+              child: ListView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                physics: const BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+                itemCount: 5,
+                itemBuilder: (context, i){
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 125,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Theme.of(context).primaryColor
                           ),
-                          Positioned(
-                            bottom: 10,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: SizedBox(
-                                width: 101,
-                                height: 38,
-                                child: Text('Weight Lifting Class $i', maxLines: 2 ,overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),)
-                              ),
-                            )
+                        ),
+                        Positioned(
+                          bottom: 10,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: SizedBox(
+                              width: 101,
+                              height: 38,
+                              child: Text('Weight Lifting Class ${i+1}', maxLines: 2 ,overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),)
+                            ),
                           )
-                        ],
-                      ),
-                    );
-                  }
-                ),
+                        )
+                      ],
+                    ),
+                  );
+                }
               ),
             )
           ],

@@ -22,94 +22,112 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 95),
-                  child: SvgPicture.asset(
-                    'assets/otp_logo.svg'
-                  ),
-                ),
-                const SizedBox(height: 35,),
-                Text('OTP VERIFICATION', style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500,)),
-                const SizedBox(height: 15,),
-                Text('Enter the OTP sent to riz*****mail.com', style: GoogleFonts.roboto(fontSize: 16, color: Colors.grey[700]),),
-                const SizedBox(height: 25,),
-                Center(
-                  child: PinCodeTextField(
-                    keyboardType: TextInputType.number,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    controller: _otpController,
-                    appContext: context,
-                    length: 4,
-                    onChanged: (newValue){
-                      if(newValue.isEmpty || newValue.length < 4){
-                        setState(() {
-                          hasError = true;
-                        });
-                        return;
-                      }else{
-                        setState(() {
-                          hasError = false;
-                        });
-                      }
-                    },
-                    validator: (newValue){
-                      if(newValue == null || newValue.isEmpty || newValue.length < 4){
-                        
-                      }
-                      return null;
-                    },
-                    pinTheme: PinTheme(
-                      inactiveColor: hasError ? Colors.red : Theme.of(context).primaryColor,
-                      activeColor: hasError ? Colors.red : Theme.of(context).primaryColor,
-                      selectedColor: hasError ? Colors.red : Theme.of(context).primaryColor,
-                      shape: PinCodeFieldShape.box,
-                      borderRadius: BorderRadius.circular(8),
-                      fieldHeight: 56,
-                      fieldWidth: 56,
-                      fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 8)
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 6,),
-                hasError ? Text('Please enter a valid OTP', style: GoogleFonts.roboto(color: Colors.red),) : const SizedBox(),
-                const SizedBox(height: 20,),
-                Text('00:120 Sec', style: GoogleFonts.roboto(fontSize: 16),),
-                const SizedBox(height: 10,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("Don't receive code ?", style: GoogleFonts.roboto(fontSize: 16)),
-                    const SizedBox(width: 5,),
-                    InkWell(
-                      onTap: (){
-                        
-                      },
-                      child: Text('Re-send', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600)),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 15,),
-                ElevatedButton(
-                  onPressed: (){
-                    if(hasError)return;
-                    Navigator.pushNamed(context, UpdatePasswordScreen.routeName);
-                  },
-                  style: ButtonStyle(
-                    fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
-                  ),
-                  child: Text('Submit', style: GoogleFonts.roboto(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),),
-                )
-              ],
-            ),
+      body: body()
+    );
+  }
+
+  Widget body(){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              mainTitle(),
+              pinCodeTextField(),
+              const SizedBox(height: 6,),
+              hasError ? Text('Please enter a valid OTP', style: GoogleFonts.roboto(color: Colors.red),) : const SizedBox(),
+              const SizedBox(height: 20,),
+              Text('00:120 Sec', style: GoogleFonts.roboto(fontSize: 16),),
+              const SizedBox(height: 10,),
+              resendCode(),
+              const SizedBox(height: 15,),
+              continueButton()
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget mainTitle(){
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 95),
+          child: SvgPicture.asset(
+            'assets/otp_logo.svg'
+          ),
+        ),
+        const SizedBox(height: 35,),
+        Text('OTP VERIFICATION', style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500,)),
+        const SizedBox(height: 15,),
+        Text('Enter the OTP sent to riz*****mail.com', style: GoogleFonts.roboto(fontSize: 16, color: Colors.grey[700]),),
+        const SizedBox(height: 25,),
+      ],
+    );
+  }
+
+  Widget pinCodeTextField(){
+    return PinCodeTextField(
+      showCursor: true,
+      cursorColor: Colors.black,
+      keyboardType: TextInputType.number,
+      mainAxisAlignment: MainAxisAlignment.center,
+      controller: _otpController,
+      appContext: context,
+      length: 4,
+      onChanged: (newValue){
+        if(newValue.isEmpty || newValue.length < 4){
+          setState(() {
+            hasError = true;
+          });
+          return;
+        }else{
+          setState(() {
+            hasError = false;
+          });
+        }
+      },
+      pinTheme: PinTheme(
+        inactiveColor: hasError ? Colors.red : Theme.of(context).primaryColor,
+        activeColor: hasError ? Colors.red : Theme.of(context).primaryColor,
+        selectedColor: hasError ? Colors.red : Theme.of(context).primaryColor,
+        shape: PinCodeFieldShape.box,
+        borderRadius: BorderRadius.circular(8),
+        fieldHeight: 56,
+        fieldWidth: 56,
+        fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 8)
+      ),
+    );
+  }
+
+  Widget resendCode(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text("Don't receive code ?", style: GoogleFonts.roboto(fontSize: 16)),
+        const SizedBox(width: 5,),
+        InkWell(
+          onTap: (){
+            
+          },
+          child: Text('Re-send', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600)),
+        )
+      ],
+    );
+  }
+
+  Widget continueButton(){
+    return ElevatedButton(
+      onPressed: (){
+        if(hasError)return;
+        Navigator.pushNamed(context, UpdatePasswordScreen.routeName);
+      },
+      style: ButtonStyle(
+        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
+      ),
+      child: Text('Submit', style: GoogleFonts.roboto(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),),
     );
   }
 }

@@ -87,9 +87,9 @@ class _OtpScreenState extends State<OtpScreen> {
         }
       },
       pinTheme: PinTheme(
-        inactiveColor: hasError ? Colors.red : Theme.of(context).primaryColor,
-        activeColor: hasError ? Colors.red : Theme.of(context).primaryColor,
-        selectedColor: hasError ? Colors.red : Theme.of(context).primaryColor,
+        inactiveColor: hasError ? Colors.red : Theme.of(context).inputDecorationTheme.focusColor,
+        activeColor: hasError ? Colors.red : Theme.of(context).inputDecorationTheme.focusColor,
+        selectedColor: hasError ? Colors.red : Theme.of(context).inputDecorationTheme.focusColor,
         shape: PinCodeFieldShape.box,
         borderRadius: BorderRadius.circular(8),
         fieldHeight: 56,

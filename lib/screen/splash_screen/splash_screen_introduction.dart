@@ -139,10 +139,10 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
           }
         },
         style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Colors.white),
+          backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 34, 85, 156)),
           fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 50)),
         ),
-        child: Text('Get Started', style: GoogleFonts.roboto(fontSize: 24, color: Theme.of(context).primaryColor),),
+        child: Text('Get Started', style: GoogleFonts.roboto(fontSize: 24, color: Colors.white,)),
       ),
     );
   }

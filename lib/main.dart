@@ -35,13 +35,25 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'My Gym Apps',
         theme: ThemeData(
-          primaryColor: const Color.fromARGB(255, 10, 161, 221),
+          primaryColor: const Color.fromARGB(255, 242, 115, 112),
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 10, 161, 221)),
+              backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 242, 115, 112)),
             )
           ),
-          scaffoldBackgroundColor: Colors.white
+          scaffoldBackgroundColor: Colors.white,
+          inputDecorationTheme: const InputDecorationTheme(
+            focusColor: Color.fromARGB(255, 34, 85, 156),
+            prefixIconColor: Color.fromARGB(255, 34, 85, 156),
+            suffixIconColor: Color.fromARGB(255, 34, 85, 156),
+            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 34, 85, 156), width: 2)),
+          ),
+          checkboxTheme: CheckboxThemeData(
+            fillColor: MaterialStateProperty.all(const Color.fromARGB(255, 34, 85, 156)),
+          ),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            selectedItemColor: Color.fromARGB(255, 242, 115, 112)
+          )
         ),
         initialRoute: SplashScreen.routeName,
         onGenerateRoute: (settings){

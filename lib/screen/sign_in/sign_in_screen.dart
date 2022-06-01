@@ -211,7 +211,7 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Text('Login', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
           onPressed: (){
             if(!_formKey.currentState!.validate())return;
-            Navigator.pushNamed(context, HomeScreen.routeName);
+            Navigator.pushReplacementNamed(context, HomeScreen.routeName);
           },
         ),
       ),

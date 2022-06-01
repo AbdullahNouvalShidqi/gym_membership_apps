@@ -1,9 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/home_item_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePageScreen extends StatelessWidget {
   const HomePageScreen({Key? key}) : super(key: key);
@@ -54,7 +59,7 @@ class HomePageScreen extends StatelessWidget {
           const SizedBox(height: 20,),
           costumListItems(context: context, homeViewModel: homeViewModel, type: 'Online'),
           const SizedBox(height: 20,),
-          tips()
+          tips(homeViewModel: homeViewModel)
         ],
       ),
     );
@@ -73,7 +78,7 @@ class HomePageScreen extends StatelessWidget {
               Text('$type Class', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: (){
-
+                  Navigator.pushNamed(context, SeeAllScren.routeName, arguments: type);
                 },
                 child: Text('See All', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).primaryColor),)
               )
@@ -131,25 +136,93 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  Widget tips(){
+  Widget tips({required HomeViewModel homeViewModel}){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.only(bottom: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Tips for you', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text('Tips for you', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+          ),
           const SizedBox(height: 10,),
-          Stack(
-            children: [
-              Image.asset('assets/tips.png'),
-              Positioned(
-                bottom: 10,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text('How to lose weight fast in 3 simple steps', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+          CarouselSlider.builder(
+            itemCount: homeViewModel.articles.length,
+            itemBuilder: (context, itemI, pageI){
+              return InkWell(
+                onTap: () async {
+                  var url = Uri.parse(homeViewModel.articles[itemI].url);
+                  if(await canLaunchUrl(url)){
+                    await launchUrl(url);
+                  }
+                  else{
+                    Fluttertoast.showToast(msg: 'Error: Cannot open url');
+                  }
+                },
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: CachedNetworkImage(
+                        imageUrl: homeViewModel.articles[itemI].imageUrl,
+                        width: 800,
+                        fit: BoxFit.cover,
+                        placeholder: (context, child){
+                          return Container(
+                            height: 600,
+                            width: 800,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            child: const SpinKitPianoWave(color: Colors.white),
+                          );
+                        },
+                        imageBuilder: (context, image){
+                          return Container(
+                            height: 600,
+                            width: 800,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                image: image,
+                                fit: BoxFit.cover
+                              )
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.2)
+                          ),
+                          height: 45,
+                          width: 409,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(homeViewModel.articles[itemI].title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                          ),
+                        ),
+                      ),
+                    )
+                  ]
                 ),
-              )
-            ]
+              );
+            },
+            options: CarouselOptions(
+              autoPlay: true,
+              enlargeCenterPage: true,
+              viewportFraction: 1,
+              height: 250,
+              autoPlayInterval: const Duration(seconds: 5)
+            )
           )
         ],
       ),

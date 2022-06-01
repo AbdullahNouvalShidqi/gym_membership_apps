@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -305,6 +306,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Text('Sign Up', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
           onPressed: (){
             if(!_formKey.currentState!.validate())return;
+            Navigator.pushReplacementNamed(context, HomeScreen.routeName);
           },
         ),
       ),

@@ -41,7 +41,7 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hello', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
+                    Text('Hello,', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
                     Text('Rizky Ditya A Rachman', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500))
                   ],
                 )

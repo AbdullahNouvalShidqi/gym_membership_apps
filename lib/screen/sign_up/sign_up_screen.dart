@@ -198,7 +198,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _hidePass = !_hidePass;
                   });
                 },
-                icon : _hidePass ? SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor) : SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor),
+                icon : _hidePass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor)),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),
@@ -237,7 +237,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     _hidePassConf = !_hidePassConf;
                   });
                 },
-                icon : _hidePassConf ? SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor) : SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor),
+                icon : _hidePassConf ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor)),
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),

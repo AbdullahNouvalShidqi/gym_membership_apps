@@ -131,7 +131,7 @@ class _SignInScreenState extends State<SignInScreen> {
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.lock_outline),
               suffixIcon: IconButton(
-                icon: _hidePass ? SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor) : SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor),
+                icon: _hidePass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).primaryColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).primaryColor)),
                 onPressed: (){
                   setState(() {
                     _hidePass = !_hidePass;

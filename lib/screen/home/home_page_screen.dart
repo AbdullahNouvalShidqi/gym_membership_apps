@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/home_item_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,8 +39,8 @@ class HomePageScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hello,', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
-                    Text('Rizky Ditya A Rachman', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500))
+                    Text('Hello,', style: Utilities.greetingHomeStyle,),
+                    Text('Rizky Ditya A Rachman', style: Utilities.greetinSubHomeStyle)
                   ],
                 )
               ],
@@ -50,8 +51,8 @@ class HomePageScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Select', style: GoogleFonts.roboto(fontSize: 32, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor)),
-                Text('Workout', style: GoogleFonts.roboto(fontSize: 32, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor))
+                Text('Select', style: Utilities.homeViewMainTitleStyle),
+                Text('Workout', style: Utilities.homeViewMainTitleStyle)
               ],
             ),
           ),

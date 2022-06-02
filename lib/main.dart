@@ -10,6 +10,7 @@ import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -34,27 +35,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'My Gym Apps',
-        theme: ThemeData(
-          primaryColor: const Color.fromARGB(255, 242, 115, 112),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 242, 115, 112)),
-            )
-          ),
-          scaffoldBackgroundColor: Colors.white,
-          inputDecorationTheme: const InputDecorationTheme(
-            focusColor: Color.fromARGB(255, 34, 85, 156),
-            prefixIconColor: Color.fromARGB(255, 34, 85, 156),
-            suffixIconColor: Color.fromARGB(255, 34, 85, 156),
-            focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Color.fromARGB(255, 34, 85, 156), width: 2)),
-          ),
-          checkboxTheme: CheckboxThemeData(
-            fillColor: MaterialStateProperty.all(const Color.fromARGB(255, 34, 85, 156)),
-          ),
-          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-            selectedItemColor: Color.fromARGB(255, 242, 115, 112)
-          )
-        ),
+        theme: Utilities.myTheme,
         initialRoute: SplashScreen.routeName,
         onGenerateRoute: (settings){
           if(settings.name == SplashScreen.routeName){

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/home_item_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
 class SeeAllScren extends StatefulWidget {
@@ -49,12 +50,12 @@ class _SeeAllScrenState extends State<SeeAllScren> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+            padding: const EdgeInsets.only(top: 30, bottom: 12, left: 20, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Select', style: GoogleFonts.roboto(fontSize: 32, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor)),
-                Text('$classType Class', style: GoogleFonts.roboto(fontSize: 32, fontWeight: FontWeight.w700, color: Theme.of(context).primaryColor))
+                Text('Select', style: Utilities.homeViewMainTitleStyle),
+                Text('$classType Class', style: Utilities.homeViewMainTitleStyle)
               ],
             ),
           ),

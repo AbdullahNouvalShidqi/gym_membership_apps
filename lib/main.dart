@@ -3,7 +3,7 @@ import 'package:gym_membership_apps/screen/forgot_password/forgot_password_scree
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
-import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
@@ -19,7 +19,6 @@ void main() {
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -31,12 +30,15 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => HomeViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileViewModel(),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'My Gym Apps',
         theme: Utilities.myTheme,
-        initialRoute: SplashScreen.routeName,
+        home: const SplashScreen(),
         onGenerateRoute: (settings){
           if(settings.name == SplashScreen.routeName){
             return PageRouteBuilder(
@@ -145,21 +147,6 @@ class MyApp extends StatelessWidget {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const UpdatePasswordScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == SeeAllScren.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const SeeAllScren(),
               transitionsBuilder: (context, animation, secondaryAnimation, child){
                 const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;

@@ -1,61 +1,92 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/screen/otp/otp_succes_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
-class UpdatePasswordScreen extends StatefulWidget {
-  static String routeName = '/updatePassword';
-  const UpdatePasswordScreen({Key? key}) : super(key: key);
+class ProfileUpdatePasswordScreen extends StatefulWidget {
+  static String routeName = '/profileUpdatePassword';
+  const ProfileUpdatePasswordScreen({Key? key}) : super(key: key);
 
   @override
-  State<UpdatePasswordScreen> createState() => _UpdatePasswordScreenState();
+  State<ProfileUpdatePasswordScreen> createState() => _ProfileUpdatePasswordScreenState();
 }
 
-class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
-  bool _hideNewPass = true;
-  bool _hidePassConf = true;
+class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _newPasswordCtrl = TextEditingController();
-  final _confirmPasswordCtrl = TextEditingController();
+  final _currentPwCtrl = TextEditingController();
+  final _newPwCtrl = TextEditingController();
+  final _confirmPwCtrl = TextEditingController();
+  bool _hideNewPass = true;
+  bool _hideCurrentPass = true;
+  bool _hidePassConf = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         title: Text('Update Password', style: Utilities.appBarTextStyle,),
-        centerTitle: true,
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
           },
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor,),
-        ),
+          icon: const Icon(Icons.arrow_back_ios),
+        )
+        
       ),
-      body: body()
-    );
-  }
-
-  Widget body(){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SingleChildScrollView(
+      body: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
         child: Form(
           key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 40,),
+              currentPasswordFormField(),
+              const SizedBox(height: 20,),
               newPasswordFormField(),
               const SizedBox(height: 20,),
               confirmFormField(),
-              const SizedBox(height: 30,),
+              const SizedBox(height: 15,),
               continueButton()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget currentPasswordFormField(){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Current Password', style: GoogleFonts.roboto(),),
+        const SizedBox(height: 5,),
+        TextFormField(
+          obscureText: _hideCurrentPass,
+          controller: _currentPwCtrl,
+          decoration: InputDecoration(
+            prefixIcon: const Icon(Icons.lock_outline),
+            hintText: 'Enter your password',
+            contentPadding: const EdgeInsets.symmetric(vertical: 3),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4)
+            ),
+            suffixIcon: IconButton(
+              onPressed: (){
+                setState(() {
+                  _hideCurrentPass = !_hideCurrentPass;
+                });
+              },
+              icon: _hideCurrentPass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
+            )
+          ),
+          validator: (newValue){
+            if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
+              return 'Please enter a valid password';
+            }
+            return null;
+          },
+        ),
+      ],
     );
   }
 
@@ -67,7 +98,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         const SizedBox(height: 5,),
         TextFormField(
           obscureText: _hideNewPass,
-          controller: _newPasswordCtrl,
+          controller: _newPwCtrl,
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.lock_outline),
             hintText: 'Enter new password',
@@ -103,7 +134,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         const SizedBox(height: 5,),
         TextFormField(
           obscureText: _hidePassConf,
-          controller: _confirmPasswordCtrl,
+          controller: _confirmPwCtrl,
           decoration: InputDecoration(
             prefixIcon: const Icon(Icons.lock_outline),
             hintText: 'Enter new password',
@@ -121,7 +152,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
             ),
           ),
           validator: (newValue){
-            if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6 || newValue != _newPasswordCtrl.text){
+            if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6 || newValue != _newPwCtrl.text){
               return 'Please enter a valid password';
             }
             return null;
@@ -132,23 +163,16 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   }
 
   Widget continueButton(){
-    return ElevatedButton(
-      onPressed: (){
-        if(!_formKey.currentState!.validate())return;
-        showModalBottomSheet(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(40) , topRight: Radius.circular(40))
-          ),
-          context: context,
-          builder: (context){
-            return const OtpSuccesScreen();
-          }
-        );
-      },
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40)),
+    return Center(
+      child: ElevatedButton(
+        onPressed: (){
+          if(!_formKey.currentState!.validate())return;
+        },
+        style: ButtonStyle(
+          fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
+        ),
+        child: Text('Continue', style: GoogleFonts.roboto(fontSize: 16, color: Colors.white),)
       ),
-      child: Text('Continue', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),)
     );
   }
 }

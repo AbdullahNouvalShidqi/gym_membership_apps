@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePageScreen extends StatelessWidget {
+  static String routeName = '/homePageScreen';
   const HomePageScreen({Key? key}) : super(key: key);
 
   @override
@@ -31,9 +32,10 @@ class HomePageScreen extends StatelessWidget {
             padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
             child: Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
+                  backgroundColor: Utilities.primaryColor,
                   radius: 25,
-                  child: Icon(Icons.person),
+                  child: const Icon(Icons.person, color: Colors.white,),
                 ),
                 const SizedBox(width: 10,),
                 Column(
@@ -60,7 +62,7 @@ class HomePageScreen extends StatelessWidget {
           const SizedBox(height: 20,),
           costumListItems(context: context, homeViewModel: homeViewModel, type: 'Online'),
           const SizedBox(height: 20,),
-          tips(homeViewModel: homeViewModel)
+          tipsCarouselView(homeViewModel: homeViewModel)
         ],
       ),
     );
@@ -137,7 +139,7 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  Widget tips({required HomeViewModel homeViewModel}){
+  Widget tipsCarouselView({required HomeViewModel homeViewModel}){
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -152,67 +154,11 @@ class HomePageScreen extends StatelessWidget {
             itemCount: homeViewModel.articles.length,
             itemBuilder: (context, itemI, pageI){
               return InkWell(
-                onTap: () async {
-                  var url = Uri.parse(homeViewModel.articles[itemI].url);
-                  if(await canLaunchUrl(url)){
-                    await launchUrl(url);
-                  }
-                  else{
-                    Fluttertoast.showToast(msg: 'Error: Cannot open url');
-                  }
-                },
+                onTap: tipsItemOnTap(articleUrl: homeViewModel.articles[itemI].url),
                 child: Stack(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: CachedNetworkImage(
-                        imageUrl: homeViewModel.articles[itemI].imageUrl,
-                        width: 800,
-                        fit: BoxFit.cover,
-                        placeholder: (context, child){
-                          return Container(
-                            height: 600,
-                            width: 800,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            child: const SpinKitPianoWave(color: Colors.white),
-                          );
-                        },
-                        imageBuilder: (context, image){
-                          return Container(
-                            height: 600,
-                            width: 800,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8),
-                              image: DecorationImage(
-                                image: image,
-                                fit: BoxFit.cover
-                              )
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.2)
-                          ),
-                          height: 45,
-                          width: 409,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            child: Text(homeViewModel.articles[itemI].title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                          ),
-                        ),
-                      ),
-                    )
+                    tipsImage(imageUrl: homeViewModel.articles[itemI].imageUrl),
+                    tipsTitle(title: homeViewModel.articles[itemI].title)
                   ]
                 ),
               );
@@ -226,6 +172,74 @@ class HomePageScreen extends StatelessWidget {
             )
           )
         ],
+      ),
+    );
+  }
+
+  Future<void> Function() tipsItemOnTap({required String articleUrl}){
+    return () async {
+      var url = Uri.parse(articleUrl);
+      if(await canLaunchUrl(url)){
+        await launchUrl(url);
+      }
+      else{
+        Fluttertoast.showToast(msg: 'Error: Cannot open url');
+      }
+    };
+  }
+
+  Widget tipsImage({required String imageUrl}){
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        width: 800,
+        fit: BoxFit.cover,
+        placeholder: (context, child){
+          return Container(
+            height: 600,
+            width: 800,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor,
+            ),
+            child: const SpinKitPianoWave(color: Colors.white),
+          );
+        },
+        imageBuilder: (context, image){
+          return Container(
+            height: 600,
+            width: 800,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8),
+              image: DecorationImage(
+                image: image,
+                fit: BoxFit.cover
+              )
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget tipsTitle({required String title}){
+    return Positioned(
+      bottom: 0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.2)
+          ),
+          height: 45,
+          width: 409,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+          ),
+        ),
       ),
     );
   }

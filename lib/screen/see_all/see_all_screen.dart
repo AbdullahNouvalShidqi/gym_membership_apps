@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/model/home_item_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +19,7 @@ class _SeeAllScrenState extends State<SeeAllScren> {
   Widget build(BuildContext context) {
     classType = ModalRoute.of(context)!.settings.arguments as String;
     final homeViewModel = Provider.of<HomeViewModel>(context);
+    
     return Scaffold(
       body: body(context: context, classType: classType, homeViewModel: homeViewModel),
     );
@@ -42,8 +42,8 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hello,', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
-                    Text('Rizky Ditya A Rachman', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500))
+                    Text('Hello,', style: Utilities.greetingHomeStyle,),
+                    Text('Rizky Ditya A Rachman', style: Utilities.greetinSubHomeStyle)
                   ],
                 )
               ],

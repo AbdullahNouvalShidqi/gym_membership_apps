@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class ScheduleScreen extends StatelessWidget {
+  static String routeName = '/schedule';
   const ScheduleScreen({Key? key}) : super(key: key);
 
   @override
@@ -11,12 +12,12 @@ class ScheduleScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('My Schedules', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
+        title: Text('My Schedules', style: Utilities.appBarTextStyle),
         centerTitle: true,
-        backgroundColor: Colors.white,
       ),
       body: Center(
         child: ListView.builder(
+          physics: const BouncingScrollPhysics(),
           itemCount: 10,
           itemBuilder: (context, i){
             return Padding(
@@ -27,7 +28,7 @@ class ScheduleScreen extends StatelessWidget {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: const [
-                    BoxShadow(blurRadius: 5, color: Color.fromARGB(255, 250, 250, 250))
+                    BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240))
                   ]
                 ),
                 margin: const EdgeInsets.symmetric(horizontal: 20),

@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/home_item_model.dart';
-import 'package:gym_membership_apps/screen/home/home_page_screen.dart';
-import 'package:gym_membership_apps/screen/profile/profile_screen.dart';
-import 'package:gym_membership_apps/screen/schedule/schedule_screen.dart';
 
 class HomeViewModel with ChangeNotifier{
   final List<HomeItemModel> _homeItem = [
@@ -50,19 +47,5 @@ class HomeViewModel with ChangeNotifier{
 
   List<ArticleModel> get articles => _articles;
 
-  final List<Widget> _pageOption = [
-    const HomePageScreen(),
-    const ScheduleScreen(),
-    const ProfileScreen()
-  ];
 
-  int _selectedPage = 0;
-  int get selectedPage => _selectedPage;
-
-  Widget get pageOption => _pageOption[_selectedPage];
-
-  void changePage(int i){
-    _selectedPage = i;
-    notifyListeners();
-  }
 }

@@ -44,6 +44,7 @@ dependencies:
   pin_code_fields: ^7.4.0
   url_launcher: ^6.1.2
   cached_network_image: ^3.2.1
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

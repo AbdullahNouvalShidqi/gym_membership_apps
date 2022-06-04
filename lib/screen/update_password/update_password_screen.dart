@@ -20,6 +20,13 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   final _confirmPasswordCtrl = TextEditingController();
 
   @override
+  void dispose() {
+    _newPasswordCtrl.dispose();
+    _confirmPasswordCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

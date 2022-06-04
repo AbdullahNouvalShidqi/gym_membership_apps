@@ -16,6 +16,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailCtrl = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    _emailCtrl.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: body()

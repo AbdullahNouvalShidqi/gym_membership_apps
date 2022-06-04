@@ -21,6 +21,13 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
   bool _hidePassConf = true;
 
   @override
+  void dispose() {
+    super.dispose();
+    _currentPwCtrl.dispose();
+    _newPwCtrl.dispose();
+    _confirmPwCtrl.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -37,17 +44,19 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
         padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              currentPasswordFormField(),
-              const SizedBox(height: 20,),
-              newPasswordFormField(),
-              const SizedBox(height: 20,),
-              confirmFormField(),
-              const SizedBox(height: 15,),
-              continueButton()
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                currentPasswordFormField(),
+                const SizedBox(height: 20,),
+                newPasswordFormField(),
+                const SizedBox(height: 20,),
+                confirmFormField(),
+                const SizedBox(height: 15,),
+                continueButton()
+              ],
+            ),
           ),
         ),
       ),

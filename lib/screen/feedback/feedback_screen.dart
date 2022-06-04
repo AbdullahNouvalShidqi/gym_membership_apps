@@ -17,6 +17,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   final _reviewCtrl = TextEditingController();
 
   @override
+  void dispose() {
+    super.dispose();
+    _reviewCtrl.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

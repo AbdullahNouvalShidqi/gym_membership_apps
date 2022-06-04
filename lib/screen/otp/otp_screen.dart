@@ -18,6 +18,12 @@ class _OtpScreenState extends State<OtpScreen> {
   final _otpController = TextEditingController();
 
   @override
+  void dispose() {
+    _otpController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: body()

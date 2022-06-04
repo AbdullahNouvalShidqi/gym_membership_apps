@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/screen/home/tab_navigator.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,15 +27,25 @@ class _HomeScreenState extends State<HomeScreen> {
     
     return WillPopScope(
       onWillPop: ()async{
-        final isFirstRouteInCurrentTab = !await _navigatorKeys[_currentPage]!.currentState!.maybePop();
-        if(isFirstRouteInCurrentTab){
-          if(_currentPage != "Home"){
-            _selectTab("Home", 0);
-
-            return false;
-          }
+        final isNotFirstRouteInCurrentTab = await _navigatorKeys[_currentPage]!.currentState!.maybePop();
+        if(isNotFirstRouteInCurrentTab){
+          return false;
         }
-        return isFirstRouteInCurrentTab;
+        else if(_currentPage != "Home"){
+          _selectTab("Home", 0);
+          return false;
+        }
+        else{
+          DateTime now = DateTime.now();
+          if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && ModalRoute.of(context)!.isFirst){
+            currentBackPressTime = now;
+            Fluttertoast.showToast(
+              msg: 'Press back again to exit'
+            );
+            return Future.value(false);
+          }
+          return Future.value(true);
+        }
       },
       child: Scaffold(
         body: Stack(

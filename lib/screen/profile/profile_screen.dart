@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
+import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -233,6 +235,12 @@ class ProfileScreen extends StatelessWidget {
       }
       if(i == 3){
         Navigator.pushNamed(context, FeedbackScreen.routeName);
+      }
+      if(i == 4){
+        Navigator.pushNamed(context, TermsAndConditionsScreen.routeName);
+      }
+      if(i == 5){
+        Navigator.pushNamed(context, FaqScreen.routeName);
       }
     };
   }

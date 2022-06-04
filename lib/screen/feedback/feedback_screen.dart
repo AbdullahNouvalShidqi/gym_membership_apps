@@ -21,6 +21,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Send us Feedbacks', style: Utilities.appBarTextStyle,),
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios)
+        ),
       ),
       body: SingleChildScrollView(
         child: Padding(

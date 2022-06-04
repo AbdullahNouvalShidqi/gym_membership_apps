@@ -34,9 +34,10 @@ class _SeeAllScrenState extends State<SeeAllScren> {
             padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
             child: Row(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
+                  backgroundColor: Utilities.primaryColor,
                   radius: 25,
-                  child: Icon(Icons.person),
+                  child: const Icon(Icons.person, color: Colors.white,),
                 ),
                 const SizedBox(width: 10,),
                 Column(

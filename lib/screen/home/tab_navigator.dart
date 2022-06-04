@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_page_screen.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
@@ -6,6 +7,7 @@ import 'package:gym_membership_apps/screen/profile/profile_screen.dart';
 import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_screen.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
+import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 
 class TabNavigator extends StatelessWidget {
   const TabNavigator({Key? key, required this.navigatorKey, required this.tabItem}) : super(key: key);
@@ -79,6 +81,36 @@ class TabNavigator extends StatelessWidget {
           return PageRouteBuilder(
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const FeedbackScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child){
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              final tween = Tween(begin: begin, end: end);
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            }
+          );
+        }
+        if(settings.name == TermsAndConditionsScreen.routeName){
+          return PageRouteBuilder(
+            settings: settings,
+            pageBuilder: (context, animation, secondaryAnimation) => const TermsAndConditionsScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child){
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              final tween = Tween(begin: begin, end: end);
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            }
+          );
+        }
+        if(settings.name == FaqScreen.routeName){
+          return PageRouteBuilder(
+            settings: settings,
+            pageBuilder: (context, animation, secondaryAnimation) => const FaqScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;

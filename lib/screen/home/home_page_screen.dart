@@ -158,7 +158,7 @@ class HomePageScreen extends StatelessWidget {
                 child: Stack(
                   children: [
                     tipsImage(imageUrl: homeViewModel.articles[itemI].imageUrl),
-                    tipsTitle(title: homeViewModel.articles[itemI].title)
+                    tipsTitle(context: context, title: homeViewModel.articles[itemI].title)
                   ]
                 ),
               );
@@ -223,9 +223,11 @@ class HomePageScreen extends StatelessWidget {
     );
   }
 
-  Widget tipsTitle({required String title}){
+  Widget tipsTitle({required BuildContext context, required String title}){
     return Positioned(
+      left: 0,
       bottom: 0,
+      right: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
@@ -234,7 +236,7 @@ class HomePageScreen extends StatelessWidget {
             color: Colors.black.withOpacity(0.2)
           ),
           height: 45,
-          width: 409,
+          width: MediaQuery.of(context).size.width,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Text(title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),

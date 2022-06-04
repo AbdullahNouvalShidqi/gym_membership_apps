@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/faq/faq_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class FaqScreen extends StatefulWidget {
   static String routeName = '/faq';
@@ -46,6 +48,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final faqScreenModel = Provider.of<FaqViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('FAQ', style: Utilities.appBarTextStyle,),
@@ -80,7 +83,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('How to do the payment?', style: GoogleFonts.roboto(fontSize: 16),),
+                          faqScreenModel.mainData[i]['title']!,
                           RotationTransition(
                             turns: Tween(begin: 0.0, end: 0.25).animate(controllers[i]),
                             child: Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
@@ -107,30 +110,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                         controller: scrollControllers[i],
                         child: SingleChildScrollView(
                           controller: scrollControllers[i],
-                          child: RichText(
-                            text: TextSpan(
-                              text: '1. Select another Menu > Transfer \n2. Select the origin account and select the destination account to MANDIRI account \n3. Enter the account number ',
-                              style: GoogleFonts.roboto(fontSize: 10, color: Colors.black),
-                              children: [
-                                TextSpan(
-                                  text: '12345678910 ',
-                                  style: GoogleFonts.roboto(fontSize: 10, color: Utilities.primaryColor),
-                                ),
-                                TextSpan(
-                                  text: 'and select correct \n4. Enter the payment amount ',
-                                  style: GoogleFonts.roboto(fontSize: 10, color: Colors.black),
-                                ),
-                                TextSpan(
-                                  text: 'Rp.300.000',
-                                  style: GoogleFonts.roboto(fontSize: 10, color: Utilities.primaryColor),
-                                ),
-                                TextSpan(
-                                  text: ' and select correct \n5. Check the data on the screen. Make sure the name is the recipient’s name and the amount is correct. if so, select Yes.',
-                                  style: GoogleFonts.roboto(fontSize: 10, color: Colors.black),
-                                ),             
-                              ]
-                            ),
-                          ),
+                          child: faqScreenModel.mainData[i]['value']!,
                         )
                       )
                     ),
@@ -147,11 +127,19 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
   void Function() onTap(int i){
     return (){
       setState(() {
-        isShows[i] = !isShows[i];
-      });
-      controllers[i].isCompleted ?
-      controllers[i].reverse():
-      controllers[i].forward();
+          isShows[i] = !isShows[i];
+        });
+      if(controllers[i].status == AnimationStatus.forward){
+        controllers[i].reverse();  
+      }
+      else if(controllers[i].status == AnimationStatus.reverse){
+        controllers[i].forward();
+      }
+      else{
+        controllers[i].isCompleted ?
+        controllers[i].reverse():
+        controllers[i].forward();
+      }
     };
   }
 }

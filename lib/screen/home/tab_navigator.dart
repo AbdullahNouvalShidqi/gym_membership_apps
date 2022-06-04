@@ -35,6 +35,8 @@ class TabNavigator extends StatelessWidget {
       onGenerateRoute: (settings){
         if(settings.name == SeeAllScren.routeName){
           return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const SeeAllScren(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
@@ -50,6 +52,8 @@ class TabNavigator extends StatelessWidget {
         }
         if(settings.name == PersonalDetail.routeName){
           return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const PersonalDetail(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
@@ -65,6 +69,8 @@ class TabNavigator extends StatelessWidget {
         }
         if(settings.name == ProfileUpdatePasswordScreen.routeName){
           return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const ProfileUpdatePasswordScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
@@ -80,6 +86,8 @@ class TabNavigator extends StatelessWidget {
         }
         if(settings.name == FeedbackScreen.routeName){
           return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const FeedbackScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
@@ -95,6 +103,8 @@ class TabNavigator extends StatelessWidget {
         }
         if(settings.name == TermsAndConditionsScreen.routeName){
           return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const TermsAndConditionsScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
@@ -110,6 +120,8 @@ class TabNavigator extends StatelessWidget {
         }
         if(settings.name == FaqScreen.routeName){
           return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const FaqScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
@@ -125,14 +137,19 @@ class TabNavigator extends StatelessWidget {
         }
         if(settings.name == DetailScreen.routeName){
           return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const DetailScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
-              const begin = Offset(1.0, 0.0);
-              const end = Offset.zero;
+              const begin = 0.0;
+              const end = 1.0;
               final tween = Tween(begin: begin, end: end);
-              return SlideTransition(
-                position: animation.drive(tween),
+              const curve = Curves.easeInOutQuad;
+              final curveAnimation = CurvedAnimation(parent: animation, curve: curve);
+
+              return FadeTransition(
+                opacity: tween.animate(curveAnimation),
                 child: child,
               );
             }

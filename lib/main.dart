@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/screen/faq/faq_view_model.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => ProfileViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FaqViewModel(),
         ),
       ],
       child: MaterialApp(

@@ -107,7 +107,8 @@ class _SignInScreenState extends State<SignInScreen> {
               contentPadding: const EdgeInsets.symmetric(vertical: 12)
             ),
             validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
+              RegExp test = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || !test.hasMatch(_emailCtrl.text)){
                 return 'Please enter a valid email address';
               }
               return null;

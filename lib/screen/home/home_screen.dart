@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -57,10 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(icon: SvgPicture.asset('assets/home_icon.svg', color: _selectedIndex == 0 ? Theme.of(context).primaryColor : Theme.of(context).unselectedWidgetColor,), label: 'Home'),
-            BottomNavigationBarItem(icon: SvgPicture.asset('assets/schedule_icon.svg', color: _selectedIndex == 1 ? Theme.of(context).primaryColor : Theme.of(context).unselectedWidgetColor,), label: 'Schedule'),
-            BottomNavigationBarItem(icon: SvgPicture.asset('assets/profile_icon.svg', color: _selectedIndex == 2 ? Theme.of(context).primaryColor : Theme.of(context).unselectedWidgetColor,), label: 'Profile'),
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.home_outlined), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), label: 'Schedule'),
+            BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_crop_rectangle), label: 'Profile'),
           ],
           onTap: (index){
             _selectTab(pageKeys[index], index);

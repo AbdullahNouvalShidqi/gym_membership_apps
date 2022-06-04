@@ -41,53 +41,65 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             children: [
               Text('What do you think of the app?', style: GoogleFonts.roboto(fontSize: 12),),
               const SizedBox(height: 6,),
-              RatingBar.builder(
-                itemPadding: const EdgeInsets.only(right: 3),
-                initialRating: _rating,
-                itemCount: 5,
-                itemBuilder: (context, i){
-                  return Icon(Icons.star, color: Utilities.primaryColor,);
-                },
-                onRatingUpdate: (rating){
-                  _rating = rating;
-                }
-              ),
+              ratingStarBar(),
               const SizedBox(height: 31,),
               Text('What do you think of the app?', style: GoogleFonts.roboto(fontSize: 12),),
               const SizedBox(height: 5,),
-              Form(
-                key: _formKey,
-                child: TextFormField(
-                  controller: _reviewCtrl,
-                  decoration: InputDecoration(
-                    hintText: 'Type your feedback 500 character left',
-                    hintStyle: GoogleFonts.roboto(),
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
-                  ),
-                  maxLines: 8,
-                  maxLength: 500,
-                  validator: (newValue){
-                    if(newValue == ' ' || newValue!.contains('  ')){
-                      return 'Please input your feedback correctly';
-                    }
-                    return null;
-                  },
-                ),
-              ),
+              feedbackFormField(),
               const SizedBox(height: 20,),
-              ElevatedButton(
-                onPressed: (){
-                  if(_formKey.currentState!.validate())return;
-                },
-                style: ButtonStyle(
-                  fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
-                ),
-                child: Text('Submit', style: Utilities.buttonTextStyle)
-              )
+              submitButton()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget ratingStarBar(){
+    return RatingBar.builder(
+      itemPadding: const EdgeInsets.only(right: 3),
+      initialRating: _rating,
+      itemCount: 5,
+      itemBuilder: (context, i){
+        return Icon(Icons.star, color: Utilities.primaryColor,);
+      },
+      onRatingUpdate: (rating){
+        _rating = rating;
+      }
+    );
+  }
+
+  Widget feedbackFormField(){
+    return Form(
+      key: _formKey,
+      child: TextFormField(
+        controller: _reviewCtrl,
+        decoration: InputDecoration(
+          hintText: 'Type your feedback 500 character left',
+          hintStyle: GoogleFonts.roboto(),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        ),
+        maxLines: 8,
+        maxLength: 500,
+        validator: (newValue){
+          if(newValue == ' ' || newValue!.contains('  ')){
+            return 'Please input your feedback correctly';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  Widget submitButton(){
+    return ElevatedButton(
+      onPressed: (){
+        if(_formKey.currentState!.validate())return;
+      },
+      style: ButtonStyle(
+        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
+      ),
+      child: Text('Submit', style: Utilities.buttonTextStyle)
     );
   }
 }

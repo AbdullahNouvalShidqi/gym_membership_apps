@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   static String routeName = '/forgotPassword';
@@ -91,7 +92,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               )
             ),
             validator: (newValue){
-              if(newValue == null || newValue == '' || newValue.contains(' ')){
+              if(newValue == null || newValue == '' || newValue.contains(' ') || Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
                 return 'Please enter a valid email';
               }
               return null;
@@ -110,7 +111,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       },
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40)),
-        backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)
+        backgroundColor: MaterialStateProperty.all(Utilities.primaryColor)
       ),
       child: Text('Continue', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),)
     );

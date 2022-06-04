@@ -70,6 +70,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
         Text('Current Password', style: GoogleFonts.roboto(),),
         const SizedBox(height: 5,),
         TextFormField(
+          keyboardType: TextInputType.visiblePassword,
           obscureText: _hideCurrentPass,
           controller: _currentPwCtrl,
           decoration: InputDecoration(
@@ -106,6 +107,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
         Text('New Password', style: GoogleFonts.roboto(),),
         const SizedBox(height: 5,),
         TextFormField(
+          keyboardType: TextInputType.visiblePassword,
           obscureText: _hideNewPass,
           controller: _newPwCtrl,
           decoration: InputDecoration(
@@ -142,6 +144,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
         Text('Confirm Password', style: GoogleFonts.roboto(),),
         const SizedBox(height: 5,),
         TextFormField(
+          keyboardType: TextInputType.visiblePassword,
           obscureText: _hidePassConf,
           controller: _confirmPwCtrl,
           decoration: InputDecoration(

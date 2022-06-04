@@ -129,6 +129,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Email Address', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
+            keyboardType: TextInputType.emailAddress,
             controller: _emailCtrl,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.email_outlined),
@@ -139,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               contentPadding: const EdgeInsets.symmetric(vertical: 12)
             ),
             validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
+              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
                 return 'Please enter a valid email address';
               }
               return null;
@@ -190,6 +191,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
+            keyboardType: TextInputType.visiblePassword,
             obscureText: _hidePass,
             controller: _passwordCtrl,
             decoration: InputDecoration(
@@ -229,6 +231,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           Text('Confirm Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
           const SizedBox(height: 5,),
           TextFormField(
+            keyboardType: TextInputType.visiblePassword,
             obscureText: _hidePassConf,
             controller: _confirmPasswordCtrl,
             decoration: InputDecoration(

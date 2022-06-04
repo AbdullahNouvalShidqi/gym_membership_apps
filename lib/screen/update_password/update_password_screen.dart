@@ -73,6 +73,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         Text('New Password', style: GoogleFonts.roboto(),),
         const SizedBox(height: 5,),
         TextFormField(
+          keyboardType: TextInputType.visiblePassword,
           obscureText: _hideNewPass,
           controller: _newPasswordCtrl,
           decoration: InputDecoration(
@@ -109,6 +110,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         Text('Confirm Password', style: GoogleFonts.roboto(),),
         const SizedBox(height: 5,),
         TextFormField(
+          keyboardType: TextInputType.visiblePassword,
           obscureText: _hidePassConf,
           controller: _confirmPasswordCtrl,
           decoration: InputDecoration(

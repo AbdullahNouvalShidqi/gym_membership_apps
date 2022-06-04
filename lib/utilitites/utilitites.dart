@@ -5,6 +5,7 @@ class Utilities{
   static Color primaryColor = const Color.fromARGB(255, 242, 115, 112);
   static Color subPrimaryColor = const Color.fromARGB(255, 34, 85, 156);
   static Color myWhiteColor = const Color.fromARGB(255, 250, 250, 250);
+  static RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
   static ThemeData myTheme = ThemeData(
     colorScheme: ThemeData().colorScheme.copyWith(primary: subPrimaryColor, secondary: primaryColor),

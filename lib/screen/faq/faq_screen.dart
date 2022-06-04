@@ -62,63 +62,71 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 35),
         child: ListView.builder(
-          itemCount: 2,
+          itemCount: faqScreenModel.mainData.length,
           itemBuilder: (context, i){
             return Column(
               children: [
-                InkWell(
-                  onTap: onTap(i),
-                  child: Container(
-                    height: 48,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240))
-                      ]
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          faqScreenModel.mainData[i]['title']!,
-                          RotationTransition(
-                            turns: Tween(begin: 0.0, end: 0.25).animate(controllers[i]),
-                            child: Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: isShows[i] ? 10 : 5),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    width: MediaQuery.of(context).size.width,
-                    height: isShows[i] ? 150 : 0,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 232, 232, 232),
-                      borderRadius: BorderRadius.circular(8)
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10,),
-                      child: Scrollbar(
-                        thumbVisibility: true,
-                        controller: scrollControllers[i],
-                        child: SingleChildScrollView(
-                          controller: scrollControllers[i],
-                          child: faqScreenModel.mainData[i]['value']!,
-                        )
-                      )
-                    ),
-                  ),
-                ),
+                costumMainCard(i: i, titleWidget: faqScreenModel.mainData[i]['title']!),
+                costumSubCard(i: i, value: faqScreenModel.mainData[i]['value']!)
               ],
             );
           }
+        ),
+      ),
+    );
+  }
+
+  Widget costumMainCard({required int i, required Widget titleWidget}){
+    return InkWell(
+      onTap: onTap(i),
+      child: Container(
+        height: 48,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          boxShadow: const [
+            BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240))
+          ]
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              titleWidget,
+              RotationTransition(
+                turns: Tween(begin: 0.0, end: 0.25).animate(controllers[i]),
+                child: Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget costumSubCard({required int i, required Widget value}){
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: isShows[i] ? 10 : 5),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: MediaQuery.of(context).size.width,
+        height: isShows[i] ? 150 : 0,
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 232, 232, 232),
+          borderRadius: BorderRadius.circular(8)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10,),
+          child: Scrollbar(
+            thumbVisibility: true,
+            controller: scrollControllers[i],
+            child: SingleChildScrollView(
+              controller: scrollControllers[i],
+              child: value,
+            )
+          )
         ),
       ),
     );

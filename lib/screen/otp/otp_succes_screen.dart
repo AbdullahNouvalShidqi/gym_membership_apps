@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class OtpSuccesScreen extends StatelessWidget {
   const OtpSuccesScreen({Key? key}) : super(key: key);
@@ -32,7 +33,7 @@ class OtpSuccesScreen extends StatelessWidget {
                 style: ButtonStyle(
                   fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 56))
                 ),
-                child: Text('Return to login', style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w700),),
+                child: Text('Return to login', style: Utilities.buttonTextStyle),
               ),
             )
           ],

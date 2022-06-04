@@ -4,13 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 class Utilities{
   static Color primaryColor = const Color.fromARGB(255, 242, 115, 112);
   static Color subPrimaryColor = const Color.fromARGB(255, 34, 85, 156);
+  static Color myWhiteColor = const Color.fromARGB(255, 250, 250, 250);
 
   static ThemeData myTheme = ThemeData(
     colorScheme: ThemeData().colorScheme.copyWith(primary: subPrimaryColor, secondary: primaryColor),
     appBarTheme: AppBarTheme(
       centerTitle: true,
       elevation: 0,
-      color: Colors.white,
+      color: myWhiteColor,
       iconTheme: IconThemeData(
         color: primaryColor
       )
@@ -21,7 +22,7 @@ class Utilities{
         backgroundColor: MaterialStateProperty.all(primaryColor),
       )
     ),
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: myWhiteColor,
     inputDecorationTheme: InputDecorationTheme(
       focusColor: subPrimaryColor,
       focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: subPrimaryColor)),
@@ -31,6 +32,7 @@ class Utilities{
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       selectedItemColor: primaryColor,
+      backgroundColor: myWhiteColor
     )
   );
 
@@ -47,6 +49,8 @@ class Utilities{
   static TextStyle personalDetailLabel = GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor);
 
   static TextStyle personalDetailValue = GoogleFonts.roboto(fontSize: 16, color: Colors.grey);
+
+  static TextStyle buttonTextStyle = GoogleFonts.roboto(fontSize: 16, color: Colors.white);
 
   static Color approvedColor = const Color.fromARGB(255, 23, 226, 67);
 

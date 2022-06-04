@@ -37,7 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         else{
           DateTime now = DateTime.now();
-          if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && ModalRoute.of(context)!.isFirst){
+          if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && !isNotFirstRouteInCurrentTab){
             currentBackPressTime = now;
             Fluttertoast.showToast(
               msg: 'Press back again to exit'
@@ -82,8 +82,17 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void _selectTab(String tabItem, int index){
+  void _selectTab(String tabItem, int index) async{
     if(tabItem == _currentPage){
+      final isNotFirstRouteInCurrentTab = _navigatorKeys[_currentPage]!.currentState!.canPop();
+      DateTime now = DateTime.now();
+      if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && isNotFirstRouteInCurrentTab){
+        currentBackPressTime = now;
+        Fluttertoast.showToast(
+          msg: 'Press $_currentPage again to main page of $_currentPage'
+        );
+        return;
+      }
       _navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
     }else{
       setState(() {
@@ -92,20 +101,4 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
-
-  // if(homeViewModel.selectedPage != 0){
-        //   homeViewModel.changePage(0);
-        //   return false;
-        // }
-        // else{
-        //   DateTime now = DateTime.now();
-        //   if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && ModalRoute.of(context)!.isFirst){
-        //     currentBackPressTime = now;
-        //     Fluttertoast.showToast(
-        //       msg: 'Press back again to exit'
-        //     );
-        //     return Future.value(false);
-        //   }
-        //   return Future.value(true);
-        // }
 }

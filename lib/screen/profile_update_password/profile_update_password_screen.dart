@@ -171,7 +171,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
         ),
-        child: Text('Continue', style: GoogleFonts.roboto(fontSize: 16, color: Colors.white),)
+        child: Text('Continue', style: Utilities.buttonTextStyle)
       ),
     );
   }

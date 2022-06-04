@@ -209,7 +209,7 @@ class _SignInScreenState extends State<SignInScreen> {
           style: ButtonStyle(
             fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
           ),
-          child: Text('Login', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+          child: Text('Login', style: Utilities.buttonTextStyle),
           onPressed: (){
             if(!_formKey.currentState!.validate())return;
             Navigator.pushReplacementNamed(context, HomeScreen.routeName);

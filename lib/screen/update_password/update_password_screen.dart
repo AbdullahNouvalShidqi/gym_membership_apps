@@ -148,7 +148,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40)),
       ),
-      child: Text('Continue', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),)
+      child: Text('Continue', style: Utilities.buttonTextStyle,)
     );
   }
 }

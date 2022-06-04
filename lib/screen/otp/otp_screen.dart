@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -124,7 +125,7 @@ class _OtpScreenState extends State<OtpScreen> {
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
       ),
-      child: Text('Submit', style: GoogleFonts.roboto(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w500),),
+      child: Text('Submit', style: Utilities.buttonTextStyle,),
     );
   }
 }

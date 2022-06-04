@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_page_screen.dart';
@@ -111,6 +112,21 @@ class TabNavigator extends StatelessWidget {
           return PageRouteBuilder(
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const FaqScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child){
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              final tween = Tween(begin: begin, end: end);
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            }
+          );
+        }
+        if(settings.name == DetailScreen.routeName){
+          return PageRouteBuilder(
+            settings: settings,
+            pageBuilder: (context, animation, secondaryAnimation) => const DetailScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;

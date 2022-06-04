@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/home_item_model.dart';
+import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -99,37 +100,48 @@ class HomePageScreen extends StatelessWidget {
             itemBuilder: (context, i){
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Stack(
-                  children: [
-                    Container(
-                      width: 125,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Theme.of(context).primaryColor,
-                        image: DecorationImage(
-                          image: AssetImage(items[i].image),
-                          fit: BoxFit.cover
-                        )
+                child: InkWell(
+                  onTap: (){
+                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
+                      'classType' : type,
+                      'className' : items[i].className,
+                      'image' : items[i].image
+                    });
+                  },
+                  child: Container(                    
+                    width: 125,
+                    alignment: Alignment.bottomLeft,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: AssetImage(items[i].image),
+                        fit: BoxFit.cover
                       ),
                     ),
-                    Positioned(
-                      bottom: 10,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: SizedBox(
-                          width: 101,
-                          height: 38,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(items[i].className, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                              Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                            ],
-                          )
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        gradient: const LinearGradient(
+                          colors: [Colors.black,  Colors.transparent], 
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.center
                         ),
-                      )
-                    )
-                  ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(items[i].className, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                            Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               );
             }
@@ -155,12 +167,7 @@ class HomePageScreen extends StatelessWidget {
             itemBuilder: (context, itemI, pageI){
               return InkWell(
                 onTap: tipsItemOnTap(articleUrl: homeViewModel.articles[itemI].url),
-                child: Stack(
-                  children: [
-                    tipsImage(imageUrl: homeViewModel.articles[itemI].imageUrl),
-                    tipsTitle(context: context, title: homeViewModel.articles[itemI].title)
-                  ]
-                ),
+                child: tipsImage(imageUrl: homeViewModel.articles[itemI].imageUrl, title: homeViewModel.articles[itemI].title),
               );
             },
             options: CarouselOptions(
@@ -188,7 +195,7 @@ class HomePageScreen extends StatelessWidget {
     };
   }
 
-  Widget tipsImage({required String imageUrl}){
+  Widget tipsImage({required String imageUrl, required String title}){
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: CachedNetworkImage(
@@ -215,37 +222,30 @@ class HomePageScreen extends StatelessWidget {
               image: DecorationImage(
                 image: image,
                 fit: BoxFit.cover
-              )
+              ),
             ),
+            child: carouselTitle(title: title)
           );
         },
       ),
     );
   }
 
-  Widget tipsTitle({required BuildContext context, required String title}){
-    return Positioned(
-      left: 0,
-      bottom: 0,
-      right: 0,
+  Widget carouselTitle({required String title}){
+    return Container(
+      alignment: Alignment.bottomLeft,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.black,  Colors.transparent], 
+          begin: Alignment.bottomCenter,
+          end: Alignment.center
+        )
+      ),
+      height: 60,
+      width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Container(
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black,  Colors.transparent], 
-              begin: Alignment.bottomCenter,
-              end: Alignment.topCenter
-            )
-          ),
-          height: 60,
-          width: MediaQuery.of(context).size.width,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 15, right: 15),
-            child: Text(title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-          ),
-        ),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+        child: Text(title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
       ),
     );
   }

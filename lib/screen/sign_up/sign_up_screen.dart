@@ -304,7 +304,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           style: ButtonStyle(
             fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
           ),
-          child: Text('Sign Up', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),),
+          child: Text('Sign Up', style: Utilities.buttonTextStyle,),
           onPressed: (){
             if(!_formKey.currentState!.validate())return;
             Navigator.pushReplacementNamed(context, HomeScreen.routeName);

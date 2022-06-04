@@ -77,7 +77,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 style: ButtonStyle(
                   fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
                 ),
-                child: Text('Submit', style: GoogleFonts.roboto(fontSize: 16, color: Colors.white),)
+                child: Text('Submit', style: Utilities.buttonTextStyle)
               )
             ],
           ),

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -345,19 +346,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   Widget toSignInButton(){
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text("Already have an account?", style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),),
-          const SizedBox(width: 5,),
-          InkWell(
-            onTap: (){
-              Navigator.pushReplacementNamed(context, SignInScreen.routeName);
-            },
-            child: Text('Log In', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),),
-          )
-        ],
-      ),
+      child: Center(
+        child: RichText(
+          text: TextSpan(
+            text: 'Already have an account? ',
+            style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
+            children: [
+              TextSpan(
+                text: 'Log in',
+                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
+                recognizer: TapGestureRecognizer()..onTap = (){
+                  Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+                }
+              )
+            ]
+          ),
+        ),
+      )
     );
   }
 

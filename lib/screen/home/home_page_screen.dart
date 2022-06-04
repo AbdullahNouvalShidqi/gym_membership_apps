@@ -232,13 +232,17 @@ class HomePageScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Container(
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.2)
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.black,  Colors.transparent], 
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter
+            )
           ),
-          height: 45,
+          height: 60,
           width: MediaQuery.of(context).size.width,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.only(left: 15, right: 15),
             child: Text(title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
           ),
         ),

@@ -19,7 +19,7 @@ class ClassModel {
     required this.endAt, 
     required this.qtyUser, 
     required this.type,
-    this.image = '',
+    this.image,
     required this.instructor
   });
 

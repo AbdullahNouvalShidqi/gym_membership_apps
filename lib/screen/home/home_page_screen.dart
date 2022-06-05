@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/model/home_item_model.dart';
+import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
@@ -59,9 +59,9 @@ class HomePageScreen extends StatelessWidget {
               ],
             ),
           ),
-          costumListItems(context: context, homeViewModel: homeViewModel, type: 'Offline'),
-          const SizedBox(height: 20,),
           costumListItems(context: context, homeViewModel: homeViewModel, type: 'Online'),
+          const SizedBox(height: 20,),
+          costumListItems(context: context, homeViewModel: homeViewModel, type: 'Offline'),
           const SizedBox(height: 20,),
           tipsCarouselView(homeViewModel: homeViewModel)
         ],
@@ -70,7 +70,7 @@ class HomePageScreen extends StatelessWidget {
   }
 
   Widget costumListItems({required BuildContext context, required HomeViewModel homeViewModel, required String type}){
-    final List<HomeItemModel> items = type == 'Online' ? homeViewModel.homeItem.reversed.toList() : homeViewModel.homeItem;
+    final List<ClassModel> items = type == 'Online' ? homeViewModel.classes.where((e) => e.type == type).toList() : homeViewModel.classes.where((e) => e.type == type).toList().reversed.toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,11 +102,7 @@ class HomePageScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: InkWell(
                   onTap: (){
-                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
-                      'classType' : type,
-                      'className' : items[i].className,
-                      'image' : items[i].image
-                    });
+                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
                   },
                   child: Container(                    
                     width: 125,
@@ -114,7 +110,7 @@ class HomePageScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                        image: AssetImage(items[i].image),
+                        image: AssetImage(items[i].image!),
                         fit: BoxFit.cover
                       ),
                     ),
@@ -135,7 +131,7 @@ class HomePageScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(items[i].className, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                            Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
                             Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
                           ],
                         ),

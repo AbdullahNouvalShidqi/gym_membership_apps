@@ -18,15 +18,39 @@ class _OtpScreenState extends State<OtpScreen> {
   final _otpController = TextEditingController();
 
   @override
-  void dispose() {
-    _otpController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: body()
+    return WillPopScope(
+      onWillPop: () async {
+        bool willPop = false;
+        await showDialog(
+          context: context,
+          builder: (context){
+            return AlertDialog(
+              title: Text('Exit ?', style: GoogleFonts.roboto(),),
+              content: Text('If you exit you will go back to the main login screen, you sure?', style: GoogleFonts.roboto(),),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    willPop = true;
+                    Navigator.pop(context);
+                  },
+                  child: Text('Yes', style: GoogleFonts.roboto(),)
+                ),
+                TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel', style: GoogleFonts.roboto(),)
+                ),
+              ]
+            );
+          }
+        );
+        return willPop;
+      },
+      child: Scaffold(
+        body: body()
+      ),
     );
   }
 
@@ -126,7 +150,7 @@ class _OtpScreenState extends State<OtpScreen> {
     return ElevatedButton(
       onPressed: (){
         if(hasError)return;
-        Navigator.pushNamed(context, UpdatePasswordScreen.routeName);
+        Navigator.pushReplacementNamed(context, UpdatePasswordScreen.routeName);
       },
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))

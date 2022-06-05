@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -18,12 +19,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final data = ModalRoute.of(context)!.settings.arguments as Map;
-    final String classType = data['classType'];
-    final String className = data['className'];
-    final String image = data['image'];
+    final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     List<String> images = [
-      image,
+      item.image!,
       'assets/weightlifting.png',
       'assets/weightloss.png'
     ];
@@ -51,15 +49,15 @@ class _DetailScreenState extends State<DetailScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 15),
-                        mainTitleStatus(className: className, classType: classType),
+                        mainTitleStatus(className: item.name, type: item.type),
                         const SizedBox(height: 5),
                         price(),
                         const SizedBox(height: 10),
-                        instructorName(),
+                        instructorName(item: item),
                         const SizedBox(height: 5,),
                         gymLocation(),
                         const SizedBox(height: 10,),
-                        classDetail(),
+                        classDetail(item: item),
                         const SizedBox(height: 40,),
                         seeAvalableClassButton()
                       ],
@@ -158,7 +156,7 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget mainTitleStatus({required String className, required String classType}){
+  Widget mainTitleStatus({required String className, required String type}){
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -171,7 +169,7 @@ class _DetailScreenState extends State<DetailScreen> {
             borderRadius: BorderRadius.circular(100),
             color: Utilities.subPrimaryColor,
           ),
-          child: Text(classType, style: GoogleFonts.roboto(fontSize: 12, color: Utilities.myWhiteColor),),
+          child: Text(type, style: GoogleFonts.roboto(fontSize: 12, color: Utilities.myWhiteColor),),
         )
       ],
     );
@@ -188,12 +186,12 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget instructorName (){
+  Widget instructorName ({required ClassModel item}){
     return Row(
       children: [
         SvgPicture.asset('assets/gym_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
-        Text('Aldi Amal', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+        Text(item.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
       ],
     );
   }
@@ -208,13 +206,13 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget classDetail(){
+  Widget classDetail({required ClassModel item}){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('About This Class', style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w700),),
         const SizedBox(height: 5,),
-        Text('Yoga is a mind and body practice. Various styles of yoga combine physical postures, breathing techniques, and meditation or relaxation. Yoga is an ancient practice that may have originated in India. It involves movement, meditation, and breathing techniques to promote mental and physical well-being.', style: GoogleFonts.roboto(fontSize: 12, color: const Color.fromARGB(255, 88, 88, 88), height: 1.5),),
+        Text(item.description, style: GoogleFonts.roboto(fontSize: 12, color: const Color.fromARGB(255, 88, 88, 88), height: 1.5),),
       ],
     );
   }

@@ -140,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               contentPadding: const EdgeInsets.symmetric(vertical: 12)
             ),
             validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
+              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || !Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
                 return 'Please enter a valid email address';
               }
               return null;

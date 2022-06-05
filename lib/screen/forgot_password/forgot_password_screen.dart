@@ -17,12 +17,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final _emailCtrl = TextEditingController();
 
   @override
-  void dispose() {
-    super.dispose();
-    _emailCtrl.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: body()
@@ -39,7 +33,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             mainLogo(),
             mainTitles(),
             const SizedBox(height: 35,),
-            emailFormField(),
+            Form(
+              key: _formKey,
+              child: emailFormField()
+            ),
             const SizedBox(height: 24,),
             continueButton()
           ],
@@ -79,25 +76,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       children: [
         Text('Email Address', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w600),),
         const SizedBox(height: 5,),
-        Form(
-          key: _formKey,
-          child: TextFormField(
-            controller: _emailCtrl,
-            decoration: InputDecoration(
-              hintText: 'Enter your email',
-              prefixIcon: const Icon(Icons.email_outlined),
-              contentPadding: const EdgeInsets.symmetric(vertical: 3),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4)
-              )
-            ),
-            validator: (newValue){
-              if(newValue == null || newValue == '' || newValue.contains(' ') || Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
-                return 'Please enter a valid email';
-              }
-              return null;
-            },
-          )
+        TextFormField(
+          controller: _emailCtrl,
+          decoration: InputDecoration(
+            hintText: 'Enter your email',
+            prefixIcon: const Icon(Icons.email_outlined),
+            contentPadding: const EdgeInsets.symmetric(vertical: 3),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4)
+            )
+          ),
+          validator: (newValue){
+            if(newValue == null || newValue == '' || newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
+              return 'Please enter a valid email';
+            }
+            return null;
+          },
         ),
       ],
     );
@@ -107,11 +101,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return ElevatedButton(
       onPressed: (){
         if(!_formKey.currentState!.validate())return;
-        Navigator.pushNamed(context, OtpScreen.routeName);
+        Navigator.pushReplacementNamed(context, OtpScreen.routeName);
       },
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40)),
-        backgroundColor: MaterialStateProperty.all(Utilities.primaryColor)
+        backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)
       ),
       child: Text('Continue', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),)
     );

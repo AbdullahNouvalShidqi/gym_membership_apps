@@ -14,19 +14,19 @@ class SeeAllScren extends StatefulWidget {
 }
 
 class _SeeAllScrenState extends State<SeeAllScren> {
-  String classType = '';
+  String type = '';
 
   @override
   Widget build(BuildContext context) {
-    classType = ModalRoute.of(context)!.settings.arguments as String;
+    type = ModalRoute.of(context)!.settings.arguments as String;
     final homeViewModel = Provider.of<HomeViewModel>(context);
     
     return Scaffold(
-      body: body(context: context, classType: classType, homeViewModel: homeViewModel),
+      body: body(context: context, type: type, homeViewModel: homeViewModel),
     );
   }
 
-  Widget body({required BuildContext context, required String classType, required HomeViewModel homeViewModel}){
+  Widget body({required BuildContext context, required String type, required HomeViewModel homeViewModel}){
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,18 +57,18 @@ class _SeeAllScrenState extends State<SeeAllScren> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Select', style: Utilities.homeViewMainTitleStyle),
-                Text('$classType Class', style: Utilities.homeViewMainTitleStyle)
+                Text('$type Class', style: Utilities.homeViewMainTitleStyle)
               ],
             ),
           ),
-          costumGridView(homeViewModel: homeViewModel, classType: classType)
+          costumGridView(homeViewModel: homeViewModel, type: type)
         ]
       ),
     );
   }
 
-  Widget costumGridView({required HomeViewModel homeViewModel, required String classType}){
-    final items = classType == 'Offline' ? homeViewModel.homeItem : homeViewModel.homeItem.reversed.toList();
+  Widget costumGridView({required HomeViewModel homeViewModel, required String type}){
+    final items = type == 'Online' ? homeViewModel.classes.where((e) => e.type == type).toList() : homeViewModel.classes.where((e) => e.type == type).toList().reversed.toList();
 
     return GridView.builder(
       padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
@@ -84,11 +84,7 @@ class _SeeAllScrenState extends State<SeeAllScren> {
       itemBuilder: (context, i){
         return InkWell(
           onTap: (){
-            Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
-              'classType' : classType,
-              'className' : items[i].className,
-              'image' : items[i].image
-            });
+            Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
           },
           child: Container(
             height: 195,
@@ -97,7 +93,7 @@ class _SeeAllScrenState extends State<SeeAllScren> {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               image: DecorationImage(
-                image: AssetImage(items[i].image),
+                image: AssetImage(items[i].image!),
                 fit: BoxFit.cover
               )
             ),
@@ -118,7 +114,7 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(items[i].className, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                    Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
                     Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
                   ],
                 ),

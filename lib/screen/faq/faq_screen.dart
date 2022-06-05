@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/faq/faq_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -13,37 +12,34 @@ class FaqScreen extends StatefulWidget {
 }
 
 class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
-  late final controller1 = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
-  late final controller2 = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
+  late final List<ScrollController> _scrollControllers = [];
+  late final List<AnimationController> _animationControllers = [];
+  late final List<bool> _isShown = [];
 
-  late final List<AnimationController> controllers = [
-    controller1,
-    controller2
-  ];
-
-  bool isShown1 = false;
-  bool isShown2 = false;
-
-  late final List<bool> isShows = [
-    isShown1,
-    isShown2
-  ];
-  
-  final _scrollController1 = ScrollController();
-  final _scrollController2 = ScrollController();
-
-  late final List<ScrollController> scrollControllers = [
-    _scrollController1,
-    _scrollController2
-  ];
+  @override
+  void initState() {
+    super.initState();
+    int length = Provider.of<FaqViewModel>(context, listen: false).mainData.length;
+    for(var i = 0; i < length; i++){
+      _scrollControllers.add(
+        ScrollController()       
+      );
+      _animationControllers.add(
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
+      );
+      _isShown.add(
+        false
+      );
+    }
+  }
 
   @override
   void dispose() {
     super.dispose();
-    controller1.dispose();
-    controller2.dispose();
-    _scrollController1.dispose();
-    _scrollController2.dispose();
+    for(var i = 0; i < _scrollControllers.length; i++){
+      _scrollControllers[i].dispose();
+      _animationControllers[i].dispose();
+    }
   }
 
   @override
@@ -96,7 +92,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
             children: [
               titleWidget,
               RotationTransition(
-                turns: Tween(begin: 0.0, end: 0.25).animate(controllers[i]),
+                turns: Tween(begin: 0.0, end: 0.25).animate(_animationControllers[i]),
                 child: Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
               ),
             ],
@@ -108,25 +104,31 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
 
   Widget costumSubCard({required int i, required Widget value}){
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: isShows[i] ? 10 : 5),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: MediaQuery.of(context).size.width,
-        height: isShows[i] ? 150 : 0,
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 232, 232, 232),
-          borderRadius: BorderRadius.circular(8)
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10,),
-          child: Scrollbar(
-            thumbVisibility: true,
-            controller: scrollControllers[i],
-            child: SingleChildScrollView(
-              controller: scrollControllers[i],
-              child: value,
-            )
-          )
+      padding: EdgeInsets.symmetric(vertical: _isShown[i] ? 10 : 5),
+      child: SlideTransition(
+        position: Tween(begin: const Offset(0.0, -0.2), end: Offset.zero).animate(_animationControllers[i]),
+        child: FadeTransition(
+          opacity: _animationControllers[i],
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            width: MediaQuery.of(context).size.width,
+            height: _isShown[i] ? 150 : 0,
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 232, 232, 232),
+              borderRadius: BorderRadius.circular(8)
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(10,),
+              child: Scrollbar(
+                thumbVisibility: true,
+                controller: _scrollControllers[i],
+                child: SingleChildScrollView(
+                  controller: _scrollControllers[i],
+                  child: value,
+                )
+              )
+            ),
+          ),
         ),
       ),
     );
@@ -135,18 +137,18 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
   void Function() onTap(int i){
     return (){
       setState(() {
-          isShows[i] = !isShows[i];
+          _isShown[i] = !_isShown[i];
         });
-      if(controllers[i].status == AnimationStatus.forward){
-        controllers[i].reverse();  
+      if(_animationControllers[i].status == AnimationStatus.forward){
+        _animationControllers[i].reverse();  
       }
-      else if(controllers[i].status == AnimationStatus.reverse){
-        controllers[i].forward();
+      else if(_animationControllers[i].status == AnimationStatus.reverse){
+        _animationControllers[i].forward();
       }
       else{
-        controllers[i].isCompleted ?
-        controllers[i].reverse():
-        controllers[i].forward();
+        _animationControllers[i].isCompleted ?
+        _animationControllers[i].reverse():
+        _animationControllers[i].forward();
       }
     };
   }

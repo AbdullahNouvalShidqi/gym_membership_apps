@@ -20,27 +20,78 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   final _confirmPasswordCtrl = TextEditingController();
 
   @override
-  void dispose() {
-    _newPasswordCtrl.dispose();
-    _confirmPasswordCtrl.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('Update Password', style: Utilities.appBarTextStyle,),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: (){
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor,),
+    return WillPopScope(
+      onWillPop: () async {
+        bool willPop = false;
+        await showDialog(
+          context: context,
+          builder: (context){
+            return AlertDialog(
+              title: Text('Exit ?', style: GoogleFonts.roboto(),),
+              content: Text('If you exit you will go back to the main login screen, you sure?', style: GoogleFonts.roboto(),),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    willPop = true;
+                    Navigator.pop(context);
+                  },
+                  child: Text('Yes', style: GoogleFonts.roboto(),)
+                ),
+                TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel', style: GoogleFonts.roboto(),)
+                ),
+              ]
+            );
+          }
+        );
+        return willPop;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text('Update Password', style: Utilities.appBarTextStyle,),
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () async {
+              bool willPop = false;
+              await showDialog(
+                context: context,
+                builder: (context){
+                  return AlertDialog(
+                    title: Text('Exit ?', style: GoogleFonts.roboto(),),
+                    content: Text('If you exit you will go back to the main login screen, you sure?', style: GoogleFonts.roboto(),),
+                    actions: [
+                      TextButton(
+                        onPressed: (){
+                          willPop = true;
+                          Navigator.pop(context);
+                        },
+                        child: Text('Yes', style: GoogleFonts.roboto(),)
+                      ),
+                      TextButton(
+                        onPressed: (){
+                          Navigator.pop(context);
+                        },
+                        child: Text('Cancel', style: GoogleFonts.roboto(),)
+                      ),
+                    ]
+                  );
+                }
+              );
+              if(willPop){
+                if(!mounted)return;
+                Navigator.pop(context);
+              }
+            },
+            icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor,),
+          ),
         ),
+        body: body()
       ),
-      body: body()
     );
   }
 
@@ -73,7 +124,6 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         Text('New Password', style: GoogleFonts.roboto(),),
         const SizedBox(height: 5,),
         TextFormField(
-          keyboardType: TextInputType.visiblePassword,
           obscureText: _hideNewPass,
           controller: _newPasswordCtrl,
           decoration: InputDecoration(
@@ -110,7 +160,6 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         Text('Confirm Password', style: GoogleFonts.roboto(),),
         const SizedBox(height: 5,),
         TextFormField(
-          keyboardType: TextInputType.visiblePassword,
           obscureText: _hidePassConf,
           controller: _confirmPasswordCtrl,
           decoration: InputDecoration(

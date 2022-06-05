@@ -1,36 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:intl/intl.dart';
 
-class ScheduleScreen extends StatelessWidget {
-  static String routeName = '/schedule';
-  const ScheduleScreen({Key? key}) : super(key: key);
+class AvailableClassScreen extends StatelessWidget {
+  static String routeName = '/availableClass';
+  const AvailableClassScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        title: Text('My Schedules', style: Utilities.appBarTextStyle),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          itemCount: 10,
-          itemBuilder: (context, i){
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: costumCard()
-            );
-          }
+        title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle,),
+        leading: IconButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          icon: const Icon(Icons.arrow_back_ios)
         ),
+      ),
+      body: ListView.builder(
+        physics: const BouncingScrollPhysics(),
+        itemCount: 10,
+        itemBuilder: (context, i){
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: costumCard(item: item),
+          );
+        }
       ),
     );
   }
 
-  Widget costumCard(){
+  Widget costumCard({required ClassModel item}){
     return Container(
       height: 114,
       decoration: BoxDecoration(
@@ -48,45 +53,45 @@ class ScheduleScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: image()
+              child: image(item: item)
             ),
             Expanded(
-              child: details()
+              child: details(item: item)
             ),
-            statusAndButton()
+            statusAndButton(item: item)
           ],
         ),
       ),
     );
   }
 
-  Widget image(){
+  Widget image({required ClassModel item}){
     return Container(
       height: 94,
       width: 73,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        image: const DecorationImage(
-          image: AssetImage('assets/yoga.png'),
+        image: DecorationImage(
+          image: AssetImage(item.image!),
           fit: BoxFit.cover
         )
       ),
     );
   }
 
-  Widget details(){
+  Widget details({required ClassModel item}){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Online', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
-        Text('Yoga Class', maxLines: 1, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
+        Text(item.type, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
+        Text('${item.name} Class', maxLines: 1, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
         const SizedBox(height: 10,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('24 May 2022, 10:00', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text('${DateFormat('d MMMM y').format(item.startAt)}, ${DateFormat('Hm').format(item.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -95,7 +100,7 @@ class ScheduleScreen extends StatelessWidget {
           children: [
             SvgPicture.asset('assets/gym_icon.svg', color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('Aldi Amal', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text(item.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -111,7 +116,7 @@ class ScheduleScreen extends StatelessWidget {
     );
   }
 
-  Widget statusAndButton(){
+  Widget statusAndButton({required ClassModel item}){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,21 +135,39 @@ class ScheduleScreen extends StatelessWidget {
                 width: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Utilities.waitingColor
+                  color: statusColorChecker(qtyUser: item.qtyUser)
                 ),
               ),
               const SizedBox(width: 5,),
-              Text('Waiting', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+              Text(statusChecker(qtyUser: item.qtyUser), style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
             ],
           ),
         ),
         ElevatedButton(
-          onPressed: (){
+          onPressed: item.qtyUser == 0 ? null : (){
 
           },
-          child: Text('Pay Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(item.qtyUser == 0 ? const Color.fromARGB(255, 188, 188, 188) : Utilities.primaryColor)
+          ),
+          child: Text(item.qtyUser == 0 ? 'Full' : 'Book Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
         )
       ],
     );
+  }
+
+  Color statusColorChecker({required int qtyUser}){
+    if(qtyUser == 0){
+      return Utilities.failedColor;
+
+    }
+    return Utilities.approvedColor;
+  }
+
+  String statusChecker({required int qtyUser}){
+    if(qtyUser == 0){
+      return 'Full';
+    }
+    return 'Available';
   }
 }

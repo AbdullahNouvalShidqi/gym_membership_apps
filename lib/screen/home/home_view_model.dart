@@ -88,7 +88,7 @@ class HomeViewModel with ChangeNotifier{
       description: 'Bodybuilding is a specific and interesting sport that requires determination and strong discipline. What makes bodybuilding so different is that unlike most sports, in bodybuilding, competitors are judged by the way they look, not the way they perform.',
       startAt: DateTime.now(),
       endAt: DateTime.now().add(const Duration(days: 1)),
-      qtyUser: 25,
+      qtyUser: 0,
       type: 'Online',
       image: 'assets/bodybuilding.png',
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')

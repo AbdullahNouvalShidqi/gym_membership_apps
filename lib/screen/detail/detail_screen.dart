@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -59,7 +60,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         const SizedBox(height: 10,),
                         classDetail(item: item),
                         const SizedBox(height: 40,),
-                        seeAvalableClassButton()
+                        seeAvalableClassButton(item: item)
                       ],
                     ),
                   ),
@@ -85,18 +86,21 @@ class _DetailScreenState extends State<DetailScreen> {
         )
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            IconButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,)
+            SizedBox(
+              width: 24,
+              child: IconButton(
+                onPressed: (){
+                  Navigator.pop(context);
+                },
+                icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,)
+              ),
             ),
-            SizedBox(width: MediaQuery.of(context).size.width / 4,),
-            Text('Detail Class', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),)
+            Expanded(child: Text('Detail Class', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),)),
+            const SizedBox(width: 24,)
           ],
         ),
       ),
@@ -217,10 +221,10 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget seeAvalableClassButton(){
+  Widget seeAvalableClassButton({required ClassModel item}){
     return ElevatedButton(
       onPressed: (){
-        
+        Navigator.pushNamed(context, AvailableClassScreen.routeName, arguments: item);
       },
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))

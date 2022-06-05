@@ -230,8 +230,9 @@ class HomePageScreen extends StatelessWidget {
   Widget carouselTitle({required String title}){
     return Container(
       alignment: Alignment.bottomLeft,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        gradient: const LinearGradient(
           colors: [Colors.black,  Colors.transparent], 
           begin: Alignment.bottomCenter,
           end: Alignment.center

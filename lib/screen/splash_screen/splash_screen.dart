@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen> {
             SvgPicture.asset('assets/logo.svg'),
             const SizedBox(height: 10,),
             Text(
-              'Healthy Gym',
+              'A-A Gym',
               textAlign: TextAlign.center,
               style: GoogleFonts.roboto(
                 fontSize: 32,

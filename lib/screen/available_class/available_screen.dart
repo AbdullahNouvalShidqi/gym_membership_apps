@@ -135,11 +135,11 @@ class AvailableClassScreen extends StatelessWidget {
                 width: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: statusColorChecker(qtyUser: item.qtyUser)
+                  color: item.qtyUser == 0 ? Utilities.failedColor : Utilities.approvedColor
                 ),
               ),
               const SizedBox(width: 5,),
-              Text(statusChecker(qtyUser: item.qtyUser), style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+              Text(item.qtyUser == 0 ? 'Full' : 'Available', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
             ],
           ),
         ),
@@ -154,20 +154,5 @@ class AvailableClassScreen extends StatelessWidget {
         )
       ],
     );
-  }
-
-  Color statusColorChecker({required int qtyUser}){
-    if(qtyUser == 0){
-      return Utilities.failedColor;
-
-    }
-    return Utilities.approvedColor;
-  }
-
-  String statusChecker({required int qtyUser}){
-    if(qtyUser == 0){
-      return 'Full';
-    }
-    return 'Available';
   }
 }

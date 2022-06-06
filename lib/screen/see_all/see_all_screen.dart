@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -20,13 +22,14 @@ class _SeeAllScrenState extends State<SeeAllScren> {
   Widget build(BuildContext context) {
     type = ModalRoute.of(context)!.settings.arguments as String;
     final homeViewModel = Provider.of<HomeViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context).user;
     
     return Scaffold(
-      body: body(context: context, type: type, homeViewModel: homeViewModel),
+      body: body(context: context, type: type, homeViewModel: homeViewModel, user: user),
     );
   }
 
-  Widget body({required BuildContext context, required String type, required HomeViewModel homeViewModel}){
+  Widget body({required BuildContext context, required String type, required HomeViewModel homeViewModel, required UserModel user}){
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +48,7 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Hello,', style: Utilities.greetingHomeStyle,),
-                    Text('Rizky Ditya A Rachman', style: Utilities.greetinSubHomeStyle)
+                    Text(user.username, style: Utilities.greetinSubHomeStyle)
                   ],
                 )
               ],

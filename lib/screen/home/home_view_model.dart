@@ -1,16 +1,96 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/instructor_model.dart';
+import 'package:gym_membership_apps/screen/home/tab_navigator.dart';
 
 class HomeViewModel with ChangeNotifier{
+
+  int _selectedIndex = 0;
+  int get selectedIndex => _selectedIndex;
+
+  String _currentPage = 'Home';
+  String get currentPage => _currentPage;
+
+  DateTime? currentBackPressTime;
+
+  final List<String> _pageKeys = ["Home", "Schedule", "Profile"];
+  List<String> get pageKeys => _pageKeys;
+  final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
+    "Home" : GlobalKey<NavigatorState>(),
+    "Schedule" : GlobalKey<NavigatorState>(),
+    "Profile" : GlobalKey<NavigatorState>(),
+  };
+
+  GlobalKey<NavigatorState> get navigatorKey => _navigatorKeys[_currentPage]!;
+
+  void selectTab(String tabItem, int index) async{
+    if(tabItem == _currentPage){
+      final isNotFirstRouteInCurrentTab = _navigatorKeys[_currentPage]!.currentState!.canPop();
+      DateTime now = DateTime.now();
+      if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && isNotFirstRouteInCurrentTab){
+        currentBackPressTime = now;
+        Fluttertoast.cancel();
+        Fluttertoast.showToast(
+          msg: "Press $_currentPage again to main page of $_currentPage"
+        );
+        return;
+      }
+      currentBackPressTime = null;
+      Fluttertoast.cancel();
+      _navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
+    }else{
+      _currentPage = pageKeys[index];
+      _selectedIndex = index;
+      notifyListeners();
+    }
+  }
+
+  Widget buildOffstageNavigator(String tabItem) {
+    return Offstage(
+      offstage: _currentPage != tabItem,
+      child: TabNavigator(
+        navigatorKey: _navigatorKeys[tabItem]!,
+        tabItem: tabItem,
+      ),
+    );
+  }
+
+  Future<bool> Function() onWillPop(){
+    return () async {
+      final isNotFirstRouteInCurrentTab = await navigatorKey.currentState!.maybePop();
+      if(isNotFirstRouteInCurrentTab){
+        return false;
+      }
+      else if(_currentPage != "Home"){
+        selectTab("Home", 0);
+        return false;
+      }
+      else{
+        DateTime now = DateTime.now();
+        if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && !isNotFirstRouteInCurrentTab){
+          currentBackPressTime = now;
+          Fluttertoast.cancel();
+          Fluttertoast.showToast(
+            msg: 'Press back again to exit'
+          );
+          return false;
+        }
+        currentBackPressTime = null;
+        Fluttertoast.cancel();
+        return true;
+      }
+    };
+  }
+
   final List<ClassModel> _classes = [
     ClassModel(
       idClass: 0,
       name: 'Weight Lifting',
       description: 'Weightlifting is the sport of Strength, Power, Speed and Precision. In competition, the lifts are comprised of the Snatch and the Clean & Jerk – both of which are efforts to lift the maximum amount of weight from ground to overhead in two distinct ways. In training, weightlifting and accessory exercises challenge the mind and body to grow strong and powerful through repetition after repetition of the basics.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
       image: 'assets/weightlifting.png',
@@ -21,7 +101,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Body Building',
       description: 'Bodybuilding is a specific and interesting sport that requires determination and strong discipline. What makes bodybuilding so different is that unlike most sports, in bodybuilding, competitors are judged by the way they look, not the way they perform.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
       image: 'assets/bodybuilding.png',
@@ -32,7 +112,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Yoga',
       description: 'Yoga is a mind and body practice. Various styles of yoga combine physical postures, breathing techniques, and meditation or relaxation. Yoga is an ancient practice that may have originated in India. It involves movement, meditation, and breathing techniques to promote mental and physical well-being.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
       image: 'assets/yoga.png',
@@ -43,7 +123,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Weight Loss',
       description: 'Weight loss is a decrease in body weight resulting from either voluntary (diet, exercise) or involuntary (illness) circumstances. Most instances of weight loss arise due to the loss of body fat, but in cases of extreme or severe weight loss, protein and other substances in the body can also be depleted.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
       image: 'assets/weightloss.png',
@@ -54,7 +134,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Zumba',
       description: 'A fitness program which is inspired by music and dance, which were earlier just Latin in nature, now it has got all world wide dance forms and music into its fitness regime.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
       image: 'assets/zumba.png',
@@ -65,7 +145,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Cardio',
       description: 'Cardio is defined as any type of exercise that gets your heart rate up and keeps it up for a prolonged period of time. Your respiratory system will start working harder as you begin to breathe faster and more deeply.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
       image: 'assets/cardio.png',
@@ -76,7 +156,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Weight Lifting',
       description: 'Weightlifting is the sport of Strength, Power, Speed and Precision. In competition, the lifts are comprised of the Snatch and the Clean & Jerk – both of which are efforts to lift the maximum amount of weight from ground to overhead in two distinct ways. In training, weightlifting and accessory exercises challenge the mind and body to grow strong and powerful through repetition after repetition of the basics.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
       image: 'assets/weightlifting.png',
@@ -87,7 +167,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Body Building',
       description: 'Bodybuilding is a specific and interesting sport that requires determination and strong discipline. What makes bodybuilding so different is that unlike most sports, in bodybuilding, competitors are judged by the way they look, not the way they perform.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 0,
       type: 'Online',
       image: 'assets/bodybuilding.png',
@@ -98,7 +178,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Yoga',
       description: 'Yoga is a mind and body practice. Various styles of yoga combine physical postures, breathing techniques, and meditation or relaxation. Yoga is an ancient practice that may have originated in India. It involves movement, meditation, and breathing techniques to promote mental and physical well-being.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
       image: 'assets/yoga.png',
@@ -109,7 +189,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Weight Loss',
       description: 'Weight loss is a decrease in body weight resulting from either voluntary (diet, exercise) or involuntary (illness) circumstances. Most instances of weight loss arise due to the loss of body fat, but in cases of extreme or severe weight loss, protein and other substances in the body can also be depleted.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
       image: 'assets/weightloss.png',
@@ -120,7 +200,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Zumba',
       description: 'A fitness program which is inspired by music and dance, which were earlier just Latin in nature, now it has got all world wide dance forms and music into its fitness regime.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
       image: 'assets/zumba.png',
@@ -131,7 +211,7 @@ class HomeViewModel with ChangeNotifier{
       name: 'Cardio',
       description: 'Cardio is defined as any type of exercise that gets your heart rate up and keeps it up for a prolonged period of time. Your respiratory system will start working harder as you begin to breathe faster and more deeply.',
       startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(days: 1)),
+      endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
       image: 'assets/cardio.png',

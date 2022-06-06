@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleScreen extends StatelessWidget {
   static String routeName = '/schedule';
@@ -9,6 +13,7 @@ class ScheduleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheduleViewModel = Provider.of<ScheduleViewModel>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -18,11 +23,11 @@ class ScheduleScreen extends StatelessWidget {
       body: Center(
         child: ListView.builder(
           physics: const BouncingScrollPhysics(),
-          itemCount: 10,
+          itemCount: scheduleViewModel.listSchedule.length,
           itemBuilder: (context, i){
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 5),
-              child: costumCard()
+              child: costumCard(scheduleViewModel: scheduleViewModel, i: i)
             );
           }
         ),
@@ -30,7 +35,7 @@ class ScheduleScreen extends StatelessWidget {
     );
   }
 
-  Widget costumCard(){
+  Widget costumCard({required ScheduleViewModel scheduleViewModel, required int i}){
     return Container(
       height: 114,
       decoration: BoxDecoration(
@@ -48,10 +53,10 @@ class ScheduleScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: image()
+              child: image(image: scheduleViewModel.listSchedule[i].image!)
             ),
             Expanded(
-              child: details()
+              child: details(classModel: scheduleViewModel.listSchedule[i])
             ),
             statusAndButton()
           ],
@@ -60,33 +65,33 @@ class ScheduleScreen extends StatelessWidget {
     );
   }
 
-  Widget image(){
+  Widget image({required String image}){
     return Container(
       height: 94,
       width: 73,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        image: const DecorationImage(
-          image: AssetImage('assets/yoga.png'),
+        image: DecorationImage(
+          image: AssetImage(image),
           fit: BoxFit.cover
         )
       ),
     );
   }
 
-  Widget details(){
+  Widget details({required ClassModel classModel}){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Online', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
-        Text('Yoga Class', maxLines: 1, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
+        Text(classModel.type, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
+        Text(classModel.name, maxLines: 1, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
         const SizedBox(height: 10,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('24 May 2022, 10:00', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text('${DateFormat('d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -95,7 +100,7 @@ class ScheduleScreen extends StatelessWidget {
           children: [
             SvgPicture.asset('assets/gym_icon.svg', color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('Aldi Amal', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text(classModel.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),

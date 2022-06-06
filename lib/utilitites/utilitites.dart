@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class Utilities{
-  static Color primaryColor = const Color.fromARGB(255, 242, 115, 112);
-  static Color subPrimaryColor = const Color.fromARGB(255, 34, 85, 156);
-  static Color myWhiteColor = const Color.fromARGB(255, 250, 250, 250);
+  static Color primaryColor = const Color.fromRGBO(242, 115, 112, 1);
+  static Color subPrimaryColor = const Color.fromRGBO(34, 85, 156, 1);
+  static Color myWhiteColor = const Color.fromRGBO(250, 250, 250, 1);
   static RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
 
   static ThemeData myTheme = ThemeData(
@@ -53,9 +53,10 @@ class Utilities{
 
   static TextStyle buttonTextStyle = GoogleFonts.roboto(fontSize: 16, color: Colors.white);
 
-  static Color approvedColor = const Color.fromARGB(255, 23, 226, 67);
+  static Color approvedColor = const Color.fromRGBO(23, 226, 67, 1);
 
-  static Color failedColor = const Color.fromARGB(255, 246, 0, 0);
+  static Color failedColor = const Color.fromRGBO(246, 0, 0, 1);
 
-  static Color waitingColor = const Color.fromARGB(255, 226, 206, 23);
+  static Color waitingColor = const Color.fromRGBO(226, 206, 23, 1);
+
 }

@@ -5,8 +5,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -19,12 +21,13 @@ class HomePageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeViewModel = Provider.of<HomeViewModel>(context);
+    final user = Provider.of<ProfileViewModel>(context).user;
     return Scaffold(
-      body: body(context: context, homeViewModel: homeViewModel)
+      body: body(context: context, homeViewModel: homeViewModel, user: user)
     );
   }
 
-  Widget body({required BuildContext context, required HomeViewModel homeViewModel}){
+  Widget body({required BuildContext context, required HomeViewModel homeViewModel, required UserModel user}){
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +46,7 @@ class HomePageScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('Hello,', style: Utilities.greetingHomeStyle,),
-                    Text('Rizky Ditya A Rachman', style: Utilities.greetinSubHomeStyle)
+                    Text(user.username, style: Utilities.greetinSubHomeStyle)
                   ],
                 )
               ],

@@ -5,8 +5,10 @@ import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
+import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
@@ -37,134 +39,144 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => FaqViewModel(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => SignUpViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ScheduleViewModel(),
+        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'My Gym Apps',
-        theme: Utilities.myTheme,
-        home: const SplashScreen(),
-        onGenerateRoute: (settings){
-          if(settings.name == SplashScreen.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const SplashScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                final tween = Tween(begin: 0.0, end: 1.0);
-                return ScaleTransition(
-                  scale: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == SignInScreen.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const SignInScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(-1.0, 0.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == SignUpScreen.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const SignUpScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == HomeScreen.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(0.0, 1.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == SplashScreenIntroduction.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const SplashScreenIntroduction(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(0.0, 1.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == ForgotPasswordScreen.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const ForgotPasswordScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == OtpScreen.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const OtpScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          if(settings.name == UpdatePasswordScreen.routeName){
-            return PageRouteBuilder(
-              settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const UpdatePasswordScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                final tween = Tween(begin: begin, end: end);
-                return SlideTransition(
-                  position: animation.drive(tween),
-                  child: child,
-                );
-              }
-            );
-          }
-          return null;
-        },
-      ),
+      builder: (context, child){
+        final profileViewModel = Provider.of<ProfileViewModel>(context);
+        return MaterialApp(
+          navigatorKey: profileViewModel.mainNavigatorKey,
+          debugShowCheckedModeBanner: false,
+          title: 'My Gym Apps',
+          theme: Utilities.myTheme,
+          home: const SplashScreen(),
+          onGenerateRoute: (settings){
+            if(settings.name == SplashScreen.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const SplashScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  final tween = Tween(begin: 0.0, end: 1.0);
+                  return ScaleTransition(
+                    scale: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            if(settings.name == SignInScreen.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const SignInScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  const begin = Offset(-1.0, 0.0);
+                  const end = Offset.zero;
+                  final tween = Tween(begin: begin, end: end);
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            if(settings.name == SignUpScreen.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const SignUpScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  final tween = Tween(begin: begin, end: end);
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            if(settings.name == HomeScreen.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  const begin = Offset(0.0, 1.0);
+                  const end = Offset.zero;
+                  final tween = Tween(begin: begin, end: end);
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            if(settings.name == SplashScreenIntroduction.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const SplashScreenIntroduction(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  const begin = Offset(0.0, 1.0);
+                  const end = Offset.zero;
+                  final tween = Tween(begin: begin, end: end);
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            if(settings.name == ForgotPasswordScreen.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const ForgotPasswordScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  final tween = Tween(begin: begin, end: end);
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            if(settings.name == OtpScreen.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const OtpScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  final tween = Tween(begin: begin, end: end);
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            if(settings.name == UpdatePasswordScreen.routeName){
+              return PageRouteBuilder(
+                settings: settings,
+                pageBuilder: (context, animation, secondaryAnimation) => const UpdatePasswordScreen(),
+                transitionsBuilder: (context, animation, secondaryAnimation, child){
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  final tween = Tween(begin: begin, end: end);
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                }
+              );
+            }
+            return null;
+          },
+        );
+      },
     );
   }
 }

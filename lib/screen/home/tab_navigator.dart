@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
+import 'package:gym_membership_apps/screen/book/book_screen.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
@@ -162,6 +163,23 @@ class TabNavigator extends StatelessWidget {
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const AvailableClassScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child){
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              final tween = Tween(begin: begin, end: end);
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            }
+          );
+        }
+        if(settings.name == BookScreen.routeName){
+          return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
+            settings: settings,
+            pageBuilder: (context, animation, secondaryAnimation) => const BookScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;

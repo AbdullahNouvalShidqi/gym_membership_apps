@@ -4,9 +4,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 
+enum ProfileViewState{
+  none,
+  loading,
+  error
+}
+
 class ProfileViewModel with ChangeNotifier{
-  UserModel _user = UserModel(username: '', emailAddress: '', phoneNumber: '', password: '');
+  static UserModel _user = UserModel(username: '', emailAddress: '', phoneNumber: '', password: '');
   UserModel get user => _user;
+
+  ProfileViewState _state = ProfileViewState.none;
+  ProfileViewState get state => _state;
 
   bool _myAccountSelected = true;
   bool _progressSelected = false;
@@ -47,9 +56,20 @@ class ProfileViewModel with ChangeNotifier{
 
   List<Map<String, Widget>> get myAccountItems => _myAccountItems;
 
-  void setUserData({required String username, required String emailAddress, required String phoneNumber, required String password}){
-    _user = UserModel(emailAddress: emailAddress, username: username, phoneNumber: phoneNumber, password: password);
+  final GlobalKey<NavigatorState> _mainNavigatorKey = GlobalKey<NavigatorState>();
+  GlobalKey<NavigatorState> get mainNavigatorKey => _mainNavigatorKey;
+
+  void changeState(ProfileViewState s){
+    _state = s;
     notifyListeners();
+  }
+
+  static void setUserData({required String username, required String emailAddress, required String phoneNumber, required String password}){
+    _user = UserModel(emailAddress: emailAddress, username: username, phoneNumber: phoneNumber, password: password);
+  }
+
+  static void disposeUserData(){
+    _user = UserModel(emailAddress: '', username: '', password: '', phoneNumber: '');
   }
 
   void myAccountButtonOnTap(){

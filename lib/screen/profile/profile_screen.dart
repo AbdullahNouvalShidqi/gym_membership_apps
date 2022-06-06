@@ -1,11 +1,15 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
+import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
+import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +20,7 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final homeViewModel = Provider.of<HomeViewModel>(context);
     final profileViewModel = Provider.of<ProfileViewModel>(context);
     final myAccountSelected = profileViewModel.myAccountSelected;
     final progressSelected = profileViewModel.progressSelected;
@@ -37,7 +42,7 @@ class ProfileScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 15,),
-            Text('Rizky Rahman', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+            Text(profileViewModel.user.username, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
             const SizedBox(height: 30,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,14 +71,14 @@ class ProfileScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 25),
-            Expanded(child: itemsToReturn(profileViewModel: profileViewModel, myAccountSelected: myAccountSelected))
+            Expanded(child: itemsToReturn(profileViewModel: profileViewModel, myAccountSelected: myAccountSelected, homeViewModel: homeViewModel))
           ],
         ),
       ),
     );
   }
 
-  Widget itemsToReturn({required ProfileViewModel profileViewModel, required bool myAccountSelected}){
+  Widget itemsToReturn({required ProfileViewModel profileViewModel, required bool myAccountSelected, required HomeViewModel homeViewModel}){
     if(myAccountSelected){
       return ListView.builder(
         physics: const BouncingScrollPhysics(),
@@ -83,7 +88,7 @@ class ProfileScreen extends StatelessWidget {
             children: [
               if(i < 6) ...[
                 InkWell(
-                  onTap: listTileOntap(context: context, i: i),
+                  onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel),
                   child: Container(
                     height: 45,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -102,7 +107,7 @@ class ProfileScreen extends StatelessWidget {
               if(i==6) ...[
                 const SizedBox(height: 20,),
                 InkWell(
-                  onTap: listTileOntap(context: context, i: i),
+                  onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel),
                   child: Container(
                     height: 45,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -225,8 +230,13 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  void Function() listTileOntap({required BuildContext context, required int i}){
-    return (){
+  Future<void> Function() listTileOntap({
+    required BuildContext context, 
+    required int i, 
+    required ProfileViewModel profileViewModel,
+    required HomeViewModel homeViewModel
+  }){
+    return () async {
       if(i == 0){
         Navigator.pushNamed(context, PersonalDetail.routeName);
       }
@@ -241,6 +251,37 @@ class ProfileScreen extends StatelessWidget {
       }
       if(i == 5){
         Navigator.pushNamed(context, FaqScreen.routeName);
+      }
+      if(i == 6){
+        bool logOut = false;
+        await showDialog(
+          context: context,
+          builder: (context){
+            return AlertDialog(
+              title: Text('Sign Out?', style: GoogleFonts.roboto(),),
+              content: Text('You sure want to sign out and go to the login screen?', style: GoogleFonts.roboto(),),
+              actions: [
+                TextButton(
+                  onPressed: (){
+                    logOut = true;
+                    Navigator.pop(context);
+                  },
+                  child: Text('Yes', style: GoogleFonts.roboto(),)
+                ),
+                TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text('Cancel', style: GoogleFonts.roboto(),)
+                ),
+              ],
+            );
+          }
+        );
+        if(logOut){
+          homeViewModel.selectTab('Home', 0);
+          profileViewModel.mainNavigatorKey.currentState!.pushReplacementNamed(SignInScreen.routeName);
+        }
       }
     };
   }

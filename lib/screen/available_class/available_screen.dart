@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/book/book_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 
@@ -28,14 +29,14 @@ class AvailableClassScreen extends StatelessWidget {
         itemBuilder: (context, i){
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: costumCard(item: item),
+            child: costumCard(context: context, item: item),
           );
         }
       ),
     );
   }
 
-  Widget costumCard({required ClassModel item}){
+  Widget costumCard({required BuildContext context, required ClassModel item}){
     return Container(
       height: 114,
       decoration: BoxDecoration(
@@ -58,7 +59,7 @@ class AvailableClassScreen extends StatelessWidget {
             Expanded(
               child: details(item: item)
             ),
-            statusAndButton(item: item)
+            statusAndButton(context: context, item: item)
           ],
         ),
       ),
@@ -84,14 +85,14 @@ class AvailableClassScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(item.type, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
-        Text('${item.name} Class', maxLines: 1, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
+        Expanded(child: Text('${item.name} Class', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),)),
         const SizedBox(height: 10,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('${DateFormat('d MMMM y').format(item.startAt)}, ${DateFormat('Hm').format(item.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text('${DateFormat('d MMMM y').format(item.startAt)}, ${DateFormat('Hm').format(item.startAt)} - ${DateFormat('Hm').format(item.endAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -116,7 +117,7 @@ class AvailableClassScreen extends StatelessWidget {
     );
   }
 
-  Widget statusAndButton({required ClassModel item}){
+  Widget statusAndButton({required BuildContext context, required ClassModel item}){
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,7 +146,7 @@ class AvailableClassScreen extends StatelessWidget {
         ),
         ElevatedButton(
           onPressed: item.qtyUser == 0 ? null : (){
-
+            Navigator.pushNamed(context, BookScreen.routeName, arguments: item);
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(item.qtyUser == 0 ? const Color.fromARGB(255, 188, 188, 188) : Utilities.primaryColor)

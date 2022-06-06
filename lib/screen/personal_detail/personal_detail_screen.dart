@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class PersonalDetail extends StatelessWidget {
   static String routeName = '/personallDetail';
@@ -8,6 +10,7 @@ class PersonalDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<ProfileViewModel>(context).user;
     return Scaffold(
       appBar: AppBar(
         title: Text('Personal Details', style: Utilities.appBarTextStyle,),
@@ -42,17 +45,17 @@ class PersonalDetail extends StatelessWidget {
                   children: [
                     Text('Name', style: Utilities.personalDetailLabel,),
                     const SizedBox(height: 5,),
-                    Text('Rizky Ditya A', style: Utilities.personalDetailValue,),
+                    Text(user.username, style: Utilities.personalDetailValue,),
                     Divider(height: 0, color: Utilities.primaryColor.withOpacity(0.5),),
                     const SizedBox(height: 20,),
                     Text('Email', style: Utilities.personalDetailLabel,),
                     const SizedBox(height: 5,),
-                    Text('rizkyrahman@gmail.com', style: Utilities.personalDetailValue,),
+                    Text(user.emailAddress, style: Utilities.personalDetailValue,),
                     Divider(height: 0, color: Utilities.primaryColor.withOpacity(0.5),),
                     const SizedBox(height: 20,),
                     Text('Personal Phone Number', style: Utilities.personalDetailLabel,),
                     const SizedBox(height: 5,),
-                    Text('085 xxx xxx xxx', style: Utilities.personalDetailValue,),
+                    Text(user.phoneNumber, style: Utilities.personalDetailValue,),
                     Divider(height: 0, color: Utilities.primaryColor.withOpacity(0.5),),
                   ],
                 ),

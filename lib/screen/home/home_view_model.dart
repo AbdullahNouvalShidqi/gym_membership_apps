@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/instructor_model.dart';
-import 'package:gym_membership_apps/screen/home/tab_navigator.dart';
+import 'package:gym_membership_apps/utilitites/tab_navigator.dart';
 
 class HomeViewModel with ChangeNotifier{
 
@@ -25,6 +25,9 @@ class HomeViewModel with ChangeNotifier{
 
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKeys[_currentPage]!;
 
+  final ScrollController _homeScrollController = ScrollController();
+  ScrollController get homeScrollController => _homeScrollController;
+
   void selectTab(String tabItem, int index) async{
     if(tabItem == _currentPage){
       final isNotFirstRouteInCurrentTab = _navigatorKeys[_currentPage]!.currentState!.canPop();
@@ -35,6 +38,10 @@ class HomeViewModel with ChangeNotifier{
         Fluttertoast.showToast(
           msg: "Press $_currentPage again to main page of $_currentPage"
         );
+        return;
+      }
+      else if(tabItem == _currentPage && _homeScrollController.offset != _homeScrollController.position.minScrollExtent && !isNotFirstRouteInCurrentTab){
+        _homeScrollController.animateTo(_homeScrollController.position.minScrollExtent, duration: const Duration(milliseconds: 500), curve: Curves.easeOutQuart);
         return;
       }
       currentBackPressTime = null;
@@ -231,6 +238,11 @@ class HomeViewModel with ChangeNotifier{
       imageUrl: 'https://www.mensjournal.com/wp-content/uploads/mf/1280-improve-performance.jpg?w=900&quality=86&strip=all',
       title: "25 Expert Fitness Tips and Strategies Every Lifter Should Know",
       url: 'https://www.mensjournal.com/health-fitness/25-expert-fitness-tips-and-strategies-every-lifter-should-know/'
+    ),
+    ArticleModel(
+      imageUrl: 'https://www.planetfitness.com/sites/default/files/feature-image/PF14209_LowRes%20%281%29.jpg',
+      title: "7 MOTIVATING GYM TIPS FOR BEGINNERS",
+      url: 'https://www.planetfitness.com/community/articles/7-motivating-gym-tips-beginners'
     ),
   ];
 

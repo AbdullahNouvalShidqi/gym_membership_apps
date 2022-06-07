@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -53,7 +54,9 @@ class _SignInScreenState extends State<SignInScreen> {
           children: [
             mainTitle(),
             emailFormField(),
-            passwordFormField(),              
+            const SizedBox(height: 10,),
+            passwordFormField(),
+            const SizedBox(height: 15,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -88,73 +91,39 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget emailFormField(){
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Email Address', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-          const SizedBox(height: 5,),
-          TextFormField(
-            keyboardType: TextInputType.emailAddress,
-            controller: _emailCtrl,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.email_outlined),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              hintText: 'Enter your email address',
-              contentPadding: const EdgeInsets.symmetric(vertical: 12)
-            ),
-            validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || !Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
-                return 'Please enter a valid email address';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
+    return CostumFormField(
+      controller: _emailCtrl,
+      label: 'Email Address',
+      hintText: 'Enter your email address',
+      prefixIcon: const Icon(Icons.email_outlined),
+      validator: (newValue){
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
+          return 'Please enter your email address';
+        }
+        else if(!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')){
+          return 'Please enter a valid email address';
+        }
+        return null;
+      }
     );
   }
 
   Widget passwordFormField(){
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Password', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-          const SizedBox(height: 5,),
-          TextFormField(
-            obscureText: _hidePass,
-            keyboardType: TextInputType.visiblePassword,
-            controller: _passwordCtrl,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.lock_outline),
-              suffixIcon: IconButton(
-                icon: _hidePass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
-                onPressed: (){
-                  setState(() {
-                    _hidePass = !_hidePass;
-                  });
-                }
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4),
-              ),
-              hintText: 'Enter your password',
-              contentPadding: const EdgeInsets.symmetric(vertical: 12),
-            ),
-            validator: (newValue){
-              if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
-                return 'Please enter a valid password';
-              }
-              return null;
-            },
-          ),
-        ],
-      ),
+    return CostumFormField(
+      controller: _passwordCtrl,
+      label: 'Password',
+      hintText: 'Enter your password',
+      prefixIcon: const Icon(Icons.lock_outline),
+      validator: (newValue){
+        if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
+          return 'Please enter your password';
+        }
+        else if(newValue.length < 6 || !Utilities.passwordExp.hasMatch(newValue)){
+          return 'Please enter a valid password';
+        }
+        return null;
+      },
+      useIconHidePassword: true,
     );
   }
 
@@ -230,7 +199,7 @@ class _SignInScreenState extends State<SignInScreen> {
             fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
           ),
           onPressed: (){
-
+            
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

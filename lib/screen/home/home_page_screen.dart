@@ -29,6 +29,7 @@ class HomePageScreen extends StatelessWidget {
 
   Widget body({required BuildContext context, required HomeViewModel homeViewModel, required UserModel user}){
     return SingleChildScrollView(
+      controller: homeViewModel.homeScrollController,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -186,7 +187,7 @@ class HomePageScreen extends StatelessWidget {
     return () async {
       var url = Uri.parse(articleUrl);
       if(await canLaunchUrl(url)){
-        await launchUrl(url);
+        await launchUrl(url, mode: LaunchMode.inAppWebView);
       }
       else{
         Fluttertoast.showToast(msg: 'Error: Cannot open url');

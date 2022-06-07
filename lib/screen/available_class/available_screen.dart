@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/book/book_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_card.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 
@@ -29,7 +30,7 @@ class AvailableClassScreen extends StatelessWidget {
         itemBuilder: (context, i){
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 5),
-            child: costumCard(context: context, item: item),
+            child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
           );
         }
       ),
@@ -136,7 +137,7 @@ class AvailableClassScreen extends StatelessWidget {
                 width: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: item.qtyUser == 0 ? Utilities.failedColor : Utilities.approvedColor
+                  color: item.qtyUser == 0 ? Utilities.redColor : Utilities.greenColor
                 ),
               ),
               const SizedBox(width: 5,),

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,10 +12,15 @@ import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_condit
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   static String routeName = '/profileScreen';
   const ProfileScreen({Key? key}) : super(key: key);
 
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final homeViewModel = Provider.of<HomeViewModel>(context);
@@ -212,7 +215,7 @@ class ProfileScreen extends StatelessWidget {
                             width: 8,
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
-                              color: Utilities.approvedColor
+                              color: Utilities.greenColor
                             ),
                           ),
                           const SizedBox(width: 5,),
@@ -280,7 +283,8 @@ class ProfileScreen extends StatelessWidget {
         );
         if(logOut){
           homeViewModel.selectTab('Home', 0);
-          profileViewModel.mainNavigatorKey.currentState!.pushReplacementNamed(SignInScreen.routeName);
+          if(!mounted)return;
+          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(SignInScreen.routeName, (route) => false);
         }
       }
     };

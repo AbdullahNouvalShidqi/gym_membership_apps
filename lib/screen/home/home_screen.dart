@@ -31,13 +31,17 @@ class HomeScreen extends StatelessWidget {
             BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_crop_rectangle), activeIcon: Icon(CupertinoIcons.person_crop_rectangle_fill), label: 'Profile'),
           ],
           onTap: (index){
-            final initToSchedule = homeViewModel.currentPage != 'Schedule';
+            final onGoToSchedule = homeViewModel.currentPage != 'Schedule';
             homeViewModel.selectTab(homeViewModel.pageKeys[index], index);
-            if(index == 1 && initToSchedule){
+            if(scheduleViewModel.isInit){
               scheduleViewModel.getSchedule(id: '');
+              scheduleViewModel.isInitDone();
+              return;
+            }
+            else if(index == 1 && onGoToSchedule){
+              scheduleViewModel.refreshData();
             }
           },
-          
           currentIndex: homeViewModel.selectedIndex,
           type: BottomNavigationBarType.fixed,
         ),

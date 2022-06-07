@@ -11,7 +11,7 @@ enum ProfileViewState{
 }
 
 class ProfileViewModel with ChangeNotifier{
-  static UserModel _user = UserModel(username: '', emailAddress: '', phoneNumber: '', password: '');
+  static UserModel _user = UserModel(username: '', email: '', contact: '', password: '');
   UserModel get user => _user;
 
   ProfileViewState _state = ProfileViewState.none;
@@ -56,20 +56,17 @@ class ProfileViewModel with ChangeNotifier{
 
   List<Map<String, Widget>> get myAccountItems => _myAccountItems;
 
-  final GlobalKey<NavigatorState> _mainNavigatorKey = GlobalKey<NavigatorState>();
-  GlobalKey<NavigatorState> get mainNavigatorKey => _mainNavigatorKey;
-
   void changeState(ProfileViewState s){
     _state = s;
     notifyListeners();
   }
 
   static void setUserData({required String username, required String emailAddress, required String phoneNumber, required String password}){
-    _user = UserModel(emailAddress: emailAddress, username: username, phoneNumber: phoneNumber, password: password);
+    _user = UserModel(email: emailAddress, username: username, contact: phoneNumber, password: password);
   }
 
   static void disposeUserData(){
-    _user = UserModel(emailAddress: '', username: '', password: '', phoneNumber: '');
+    _user = UserModel(email: '', username: '', password: '', contact: '');
   }
 
   void myAccountButtonOnTap(){

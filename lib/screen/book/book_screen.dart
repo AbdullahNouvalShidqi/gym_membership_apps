@@ -118,9 +118,9 @@ class _BookScreenState extends State<BookScreen> {
                     children: [
                       Text(user.username, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
                       const SizedBox(height: 5,),
-                      Text(user.phoneNumber, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
+                      Text(user.contact, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
                       const SizedBox(height: 5,),
-                      Text(user.emailAddress, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
+                      Text(user.email, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
                     ],
                   )
                 ],

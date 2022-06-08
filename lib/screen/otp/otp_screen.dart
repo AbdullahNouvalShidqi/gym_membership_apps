@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
-import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -14,7 +14,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  bool hasError = false;
+  bool hasError = true;
   final _otpController = TextEditingController();
 
   @override
@@ -84,7 +84,7 @@ class _OtpScreenState extends State<OtpScreen> {
         Padding(
           padding: const EdgeInsets.only(top: 95),
           child: SvgPicture.asset(
-            'assets/otp_logo.svg'
+            'assets/icons/otp_logo.svg'
           ),
         ),
         const SizedBox(height: 35,),
@@ -147,15 +147,12 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   Widget continueButton(){
-    return ElevatedButton(
+    return CostumButton(
       onPressed: (){
         if(hasError)return;
         Navigator.pushReplacementNamed(context, UpdatePasswordScreen.routeName);
       },
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
-      ),
-      child: Text('Submit', style: Utilities.buttonTextStyle,),
+      childText: 'Submit'
     );
   }
 }

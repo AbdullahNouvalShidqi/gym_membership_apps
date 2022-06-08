@@ -49,7 +49,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Offline',
-          image: 'assets/weightlifting.png',
+          images: ['assets/weightlifting.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -60,7 +60,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Offline',
-          image: 'assets/bodybuilding.png',
+          images: ['assets/bodybuilding.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -71,7 +71,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 0,
           type: 'Online',
-          image: 'assets/bodybuilding.png',
+          images: ['assets/bodybuilding.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -82,7 +82,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/yoga.png',
+          images: ['assets/yoga.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -93,7 +93,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/weightloss.png',
+          images: ['assets/weightloss.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -104,7 +104,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/zumba.png',
+          images: ['assets/zumba.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
       ];
@@ -117,8 +117,6 @@ class ScheduleViewModel with ChangeNotifier{
   }
 
   Future<void> refreshData() async {
-    changeState(ScheduleViewState.loading);
-
     try{
       int currentLength = _listSchedule.length;
       await Future.delayed(const Duration(seconds: 2));
@@ -131,7 +129,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Offline',
-          image: 'assets/weightlifting.png',
+          images: ['assets/weightlifting.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -142,7 +140,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Offline',
-          image: 'assets/bodybuilding.png',
+          images: ['assets/bodybuilding.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -153,7 +151,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 0,
           type: 'Online',
-          image: 'assets/bodybuilding.png',
+          images: ['assets/bodybuilding.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -164,7 +162,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/yoga.png',
+          images: ['assets/yoga.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -175,7 +173,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/weightloss.png',
+          images: ['assets/weightloss.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -186,7 +184,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/zumba.png',
+          images: ['assets/zumba.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -197,7 +195,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/yoga.png',
+          images: ['assets/yoga.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -208,7 +206,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/weightloss.png',
+          images: ['assets/weightloss.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
         ClassModel(
@@ -219,7 +217,7 @@ class ScheduleViewModel with ChangeNotifier{
           endAt: DateTime.now().add(const Duration(hours: 3)),
           qtyUser: 25,
           type: 'Online',
-          image: 'assets/zumba.png',
+          images: ['assets/zumba.png'],
           instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
         ),
       ];

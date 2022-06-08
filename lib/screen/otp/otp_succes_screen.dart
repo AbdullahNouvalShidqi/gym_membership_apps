@@ -15,7 +15,7 @@ class OtpSuccesScreen extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 45, bottom: 16),
-              child: SvgPicture.asset('assets/otp_success_logo.svg'),
+              child: SvgPicture.asset('assets/icons/otp_success_logo.svg'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 74),

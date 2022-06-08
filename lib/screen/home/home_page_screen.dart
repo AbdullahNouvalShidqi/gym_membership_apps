@@ -10,66 +10,80 @@ import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
+import 'package:gym_membership_apps/utilitites/home_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class HomePageScreen extends StatelessWidget {
+class HomePageScreen extends StatefulWidget {
   static String routeName = '/homePageScreen';
   const HomePageScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomePageScreen> createState() => _HomePageScreenState();
+}
+
+class _HomePageScreenState extends State<HomePageScreen> {
+
+  @override
   Widget build(BuildContext context) {
-    final homeViewModel = Provider.of<HomeViewModel>(context);
-    final user = Provider.of<ProfileViewModel>(context).user;
     return Scaffold(
-      body: body(context: context, homeViewModel: homeViewModel, user: user)
+      body: body()
     );
   }
 
-  Widget body({required BuildContext context, required HomeViewModel homeViewModel, required UserModel user}){
-    return SingleChildScrollView(
-      controller: homeViewModel.homeScrollController,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Utilities.primaryColor,
-                  radius: 25,
-                  child: const Icon(Icons.person, color: Colors.white,),
+  Widget body(){
+    return Consumer2<HomeViewModel, ProfileViewModel>(
+      builder: (context, homeViewModel, profileViewModel, _) {
+        final isLoading = homeViewModel.state == HomeViewState.loading;
+        final user = profileViewModel.user;
+        if(isLoading){
+          return const HomeShimmerLoading();
+        }
+        return SingleChildScrollView(
+          controller: homeViewModel.homeScrollController,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: Utilities.primaryColor,
+                      radius: 25,
+                      child: const Icon(Icons.person, color: Colors.white,),
+                    ),
+                    const SizedBox(width: 10,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Hello,', style: Utilities.greetingHomeStyle,),
+                        Text(user.username, style: Utilities.greetinSubHomeStyle)
+                      ],
+                    )
+                  ],
                 ),
-                const SizedBox(width: 10,),
-                Column(
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Hello,', style: Utilities.greetingHomeStyle,),
-                    Text(user.username, style: Utilities.greetinSubHomeStyle)
+                    Text('Select', style: Utilities.homeViewMainTitleStyle),
+                    Text('Workout', style: Utilities.homeViewMainTitleStyle)
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+              costumListItems(context: context, homeViewModel: homeViewModel, type: 'Online'),
+              const SizedBox(height: 20,),
+              costumListItems(context: context, homeViewModel: homeViewModel, type: 'Offline'),
+              const SizedBox(height: 20,),
+              tipsCarouselView(homeViewModel: homeViewModel)
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Select', style: Utilities.homeViewMainTitleStyle),
-                Text('Workout', style: Utilities.homeViewMainTitleStyle)
-              ],
-            ),
-          ),
-          costumListItems(context: context, homeViewModel: homeViewModel, type: 'Online'),
-          const SizedBox(height: 20,),
-          costumListItems(context: context, homeViewModel: homeViewModel, type: 'Offline'),
-          const SizedBox(height: 20,),
-          tipsCarouselView(homeViewModel: homeViewModel)
-        ],
-      ),
+        );
+      }
     );
   }
 
@@ -114,7 +128,7 @@ class HomePageScreen extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                        image: AssetImage(items[i].image!),
+                        image: AssetImage(items[i].images!.first),
                         fit: BoxFit.cover
                       ),
                     ),

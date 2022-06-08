@@ -8,7 +8,7 @@ class ClassModel {
   DateTime endAt;
   int qtyUser;
   String type;
-  String? image;
+  List<String>? images;
   InstructorModel instructor;
 
   ClassModel({
@@ -19,7 +19,7 @@ class ClassModel {
     required this.endAt, 
     required this.qtyUser, 
     required this.type,
-    this.image,
+    this.images,
     required this.instructor
   });
 

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -50,7 +52,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       child: Padding(
         padding: const EdgeInsets.only(top: 130, bottom: 45),
         child: SvgPicture.asset(
-          'assets/fw_logo.svg',
+          'assets/icons/fw_logo.svg',
         ),
       ),
     );
@@ -71,43 +73,27 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Widget emailFormField(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Email Address', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w600),),
-        const SizedBox(height: 5,),
-        TextFormField(
-          controller: _emailCtrl,
-          decoration: InputDecoration(
-            hintText: 'Enter your email',
-            prefixIcon: const Icon(Icons.email_outlined),
-            contentPadding: const EdgeInsets.symmetric(vertical: 3),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4)
-            )
-          ),
-          validator: (newValue){
-            if(newValue == null || newValue == '' || newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
-              return 'Please enter a valid email';
-            }
-            return null;
-          },
-        ),
-      ],
+    return CostumFormField(
+      controller: _emailCtrl,
+      label: 'Email Address',
+      hintText: 'Enter your email',
+      prefixIcon: const Icon(Icons.email_outlined),
+      validator: (newValue){
+        if(newValue == null || newValue == '' || newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
+          return 'Please enter a valid email';
+        }
+        return null;
+      },
     );
   }
 
   Widget continueButton(){
-    return ElevatedButton(
+    return CostumButton(
       onPressed: (){
         if(!_formKey.currentState!.validate())return;
         Navigator.pushReplacementNamed(context, OtpScreen.routeName);
       },
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40)),
-        backgroundColor: MaterialStateProperty.all(Theme.of(context).primaryColor)
-      ),
-      child: Text('Continue', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),)
+      childText: 'Continue'
     );
   }
 }

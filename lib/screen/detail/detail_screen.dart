@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
   static String routeName = '/detail';
@@ -21,11 +23,7 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
-    List<String> images = [
-      item.image!,
-      'assets/weightlifting.png',
-      'assets/weightloss.png'
-    ];
+    final availableClassViewModel = Provider.of<AvailableClassViewModel>(context);
 
     return Scaffold(
       body: SafeArea(
@@ -37,10 +35,10 @@ class _DetailScreenState extends State<DetailScreen> {
                 children: [
                   Stack(
                     children: [
-                      carouselSlider(images: images),
+                      carouselSlider(images: item.images!),
                       Positioned.fill(
                         bottom: 17,
-                        child: carouselIndicator(images: images)
+                        child: carouselIndicator(images: item.images!)
                       )
                     ],
                   ),
@@ -60,7 +58,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         const SizedBox(height: 10,),
                         classDetail(item: item),
                         const SizedBox(height: 40,),
-                        seeAvalableClassButton(item: item)
+                        seeAvalableClassButton(item: item, availableClassViewModel: availableClassViewModel)
                       ],
                     ),
                   ),
@@ -149,9 +147,9 @@ class _DetailScreenState extends State<DetailScreen> {
             height: 12,
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             decoration: BoxDecoration(
-              border: Border.all(color: _currentIndex == e.key ? const Color.fromARGB(255, 242, 115, 112) : Colors.white),
+              border: Border.all(color: _currentIndex == e.key ? const Color.fromRGBO(242, 115, 112, 1) : Colors.white),
               shape: BoxShape.circle,
-              color: (const Color.fromARGB(255, 242, 115, 112))
+              color: const Color.fromRGBO(242, 115, 112, 1)
               .withOpacity(_currentIndex == e.key ? 1.0 : 0),
             ),
           ),
@@ -193,7 +191,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget instructorName ({required ClassModel item}){
     return Row(
       children: [
-        SvgPicture.asset('assets/gym_icon.svg', color: Colors.grey),
+        SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
         Text(item.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
       ],
@@ -203,7 +201,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget gymLocation(){
     return Row(
       children: [
-        SvgPicture.asset('assets/location_icon.svg', color: Colors.grey),
+        SvgPicture.asset('assets/icons/location_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
         Text('Gym center, Jakarta', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
       ],
@@ -221,9 +219,10 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget seeAvalableClassButton({required ClassModel item}){
+  Widget seeAvalableClassButton({required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
     return ElevatedButton(
       onPressed: (){
+        availableClassViewModel.getAvailableClasses();
         Navigator.pushNamed(context, AvailableClassScreen.routeName, arguments: item);
       },
       style: ButtonStyle(

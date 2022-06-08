@@ -14,45 +14,48 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> {
-  final _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    final scheduleViewModel = Provider.of<ScheduleViewModel>(context);
-    final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text('My Schedules', style: Utilities.appBarTextStyle),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: RefreshIndicator(
-          onRefresh: scheduleViewModel.refreshData,
-          child: Scrollbar(
-            controller: scheduleViewModel.scheduleListController,
-            thumbVisibility: isLoading ? false : true,
-            child: ListView.builder(
-              controller: scheduleViewModel.scheduleListController,
-              physics: isLoading ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-              itemCount: isLoading ? 8 : scheduleViewModel.listSchedule.length,
-              itemBuilder: (context, i){
-                if(isLoading){
-                  return ShimmeringCard(
-                    isLoading: isLoading, height: 114,
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  );
-                }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.scheduleScreen),
-                );
-              }
+    return Consumer<ScheduleViewModel>(
+      builder: (context, scheduleViewModel, _) {
+        final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
+        return Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            title: Text('My Schedules', style: Utilities.appBarTextStyle),
+            centerTitle: true,
+          ),
+          body: Center(
+            child: RefreshIndicator(
+              onRefresh: scheduleViewModel.refreshData,
+              child: Scrollbar(
+                controller: scheduleViewModel.scheduleListController,
+                thumbVisibility: isLoading ? false : true,
+                child: ListView.builder(
+                  controller: scheduleViewModel.scheduleListController,
+                  physics: isLoading ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                  itemCount: isLoading ? 8 : scheduleViewModel.listSchedule.length,
+                  itemBuilder: (context, i){
+                    if(isLoading){
+                      return ShimmeringCard(
+                        height: 114,
+                        width: double.infinity,
+                        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                        borderRadius: BorderRadius.circular(8),
+                      );
+                    }
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.scheduleScreen),
+                    );
+                  }
+                ),
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      }
     );
   }
 }

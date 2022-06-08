@@ -5,7 +5,17 @@ import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/instructor_model.dart';
 import 'package:gym_membership_apps/utilitites/tab_navigator.dart';
 
+enum HomeViewState {none, loading, error}
+
 class HomeViewModel with ChangeNotifier{
+
+  HomeViewState _state = HomeViewState.none;
+  HomeViewState get state => _state;
+
+  void changeState(HomeViewState s){
+    _state = s;
+    notifyListeners();
+  }
 
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
@@ -100,7 +110,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
-      image: 'assets/weightlifting.png',
+      images: ['assets/weightlifting.png', 'assets/weightlifting1.png', 'assets/weightlifting2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -111,7 +121,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
-      image: 'assets/bodybuilding.png',
+      images: ['assets/bodybuilding.png', 'assets/bodybuilding1.png', 'assets/bodybuilding2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -122,7 +132,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
-      image: 'assets/yoga.png',
+      images: ['assets/yoga.png', 'assets/yoga1.png', 'assets/yoga2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -133,7 +143,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
-      image: 'assets/weightloss.png',
+      images: ['assets/weightloss.png', 'assets/weightloss1.png', 'assets/weightloss2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -144,7 +154,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
-      image: 'assets/zumba.png',
+      images: ['assets/zumba.png', 'assets/zumba1.png', 'assets/zumba2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -155,7 +165,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Offline',
-      image: 'assets/cardio.png',
+      images: ['assets/cardio.png', 'assets/cardio1.png', 'assets/cardio2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -166,7 +176,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
-      image: 'assets/weightlifting.png',
+      images: ['assets/weightlifting.png', 'assets/weightlifting1.png', 'assets/weightlifting2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -177,7 +187,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 0,
       type: 'Online',
-      image: 'assets/bodybuilding.png',
+      images: ['assets/bodybuilding.png', 'assets/bodybuilding1.png', 'assets/bodybuilding2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -188,7 +198,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
-      image: 'assets/yoga.png',
+      images: ['assets/yoga.png', 'assets/yoga1.png', 'assets/yoga2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -199,7 +209,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
-      image: 'assets/weightloss.png',
+      images: ['assets/weightloss.png', 'assets/weightloss1.png', 'assets/weightloss2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -210,7 +220,7 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
-      image: 'assets/zumba.png',
+      images: ['assets/zumba.png', 'assets/zumba1.png', 'assets/zumba2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
@@ -221,12 +231,25 @@ class HomeViewModel with ChangeNotifier{
       endAt: DateTime.now().add(const Duration(hours: 3)),
       qtyUser: 25,
       type: 'Online',
-      image: 'assets/cardio.png',
+      images: ['assets/cardio.png', 'assets/cardio1.png', 'assets/cardio2.png'],
       instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
   ];
 
   List<ClassModel> get classes => _classes;
+
+  Future<void> getInitData() async {
+    changeState(HomeViewState.loading);
+
+    try{
+      await Future.delayed(const Duration(seconds: 5));
+      changeState(HomeViewState.none);
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      changeState(HomeViewState.error);
+    }
+  }
 
   final List<ArticleModel> _articles = [
     ArticleModel(

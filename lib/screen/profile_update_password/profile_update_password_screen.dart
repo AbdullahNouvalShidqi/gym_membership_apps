@@ -86,7 +86,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
                   _hideCurrentPass = !_hideCurrentPass;
                 });
               },
-              icon: _hideCurrentPass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
+              icon: _hideCurrentPass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/icons/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/icons/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
             )
           ),
           validator: (newValue){
@@ -123,7 +123,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
                   _hideNewPass = !_hideNewPass;
                 });
               },
-              icon: _hideNewPass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
+              icon: _hideNewPass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/icons/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/icons/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
             )
           ),
           validator: (newValue){
@@ -160,7 +160,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
                   _hidePassConf = !_hidePassConf;
                 });
               },
-              icon: _hidePassConf ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
+              icon: _hidePassConf ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/icons/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/icons/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
             ),
           ),
           validator: (newValue){

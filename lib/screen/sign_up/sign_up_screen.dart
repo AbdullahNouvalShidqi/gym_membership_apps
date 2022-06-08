@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
+import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -42,18 +43,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final signUpViewModel = Provider.of<SignUpViewModel>(context);
-    final profileViewModel = Provider.of<ProfileViewModel>(context);
     return Form(
       onWillPop: willPopValidation,
       key: _formKey,
       child: Scaffold(
-        body: body(signUpViewModel: signUpViewModel, profileViewModel: profileViewModel)
+        body: body()
       ),
     );
   }
 
-  Widget body({required SignUpViewModel signUpViewModel, required ProfileViewModel profileViewModel}){
+  Widget body(){
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -67,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             passwordFormField(),
             confirmFormField(),       
             rememberMeChekBox(),
-            signUpButton(signUpViewModel: signUpViewModel, profileViewModel: profileViewModel),
+            signUpButton(),
             Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
             googleSiugnUpButton(),
             toSignInButton()
@@ -235,32 +234,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget signUpButton({required SignUpViewModel signUpViewModel, required ProfileViewModel profileViewModel}){
-    final isLoading = signUpViewModel.state == SignUpState.loading;
-    final isError = signUpViewModel.state == SignUpState.error;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30, bottom: 15),
-        child: ElevatedButton(
-          style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
+  Widget signUpButton(){
+    return Consumer3<HomeViewModel, SignUpViewModel, ProfileViewModel>(
+      builder: (context, homeViewModel, signUpViewModel, profileViewModel, _) {
+        final isLoading = signUpViewModel.state == SignUpState.loading;
+        final isError = signUpViewModel.state == SignUpState.error;
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 15),
+            child: 
+            CostumButton(
+              onPressed: () async {
+                if(!_formKey.currentState!.validate())return;
+                if(isError)return;
+                await signUpViewModel.signUpWithEmailAndPassword(username: _usernameCtrl.text, emailAddress: _emailCtrl.text, phoneNumber: _phoneNumberCtrl.text, password: _passwordCtrl.text);
+                if(!mounted)return;
+                homeViewModel.getInitData();
+                ProfileViewModel.setUserData(username: _usernameCtrl.text, emailAddress: _emailCtrl.text, phoneNumber: _phoneNumberCtrl.text, password: _passwordCtrl.text);
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              },
+              height: 45,
+              isLoading: isLoading,
+              childText: 'Sign Up',
+            )
           ),
-          onPressed: isLoading ? null : () async {
-            if(!_formKey.currentState!.validate())return;
-            if(isError)return;
-            await signUpViewModel.signUpWithEmailAndPassword(username: _usernameCtrl.text, emailAddress: _emailCtrl.text, phoneNumber: _phoneNumberCtrl.text, password: _passwordCtrl.text);
-            if(!mounted)return;
-            ProfileViewModel.setUserData(username: _usernameCtrl.text, emailAddress: _emailCtrl.text, phoneNumber: _phoneNumberCtrl.text, password: _passwordCtrl.text);
-            Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-          },
-          child: isLoading ? Center(
-            child: CircularProgressIndicator(
-              color: Utilities.myWhiteColor,
-              strokeWidth: 3,
-            ),
-          ) : Text('Sign Up', style: Utilities.buttonTextStyle,),
-        ),
-      ),
+        );
+      }
     );
   }
 

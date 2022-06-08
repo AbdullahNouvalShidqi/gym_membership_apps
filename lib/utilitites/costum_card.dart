@@ -9,7 +9,8 @@ import 'utilitites.dart';
 
 enum CostumCardFor{
   scheduleScreen,
-  availableClassScreen
+  availableClassScreen,
+  profileScreen
 }
 
 class CostumCard extends StatelessWidget {
@@ -36,7 +37,7 @@ class CostumCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: image(image: classModel.image!)
+              child: image(image: classModel.images!.first)
             ),
             Expanded(
               child: details(classModel: classModel)
@@ -81,7 +82,7 @@ class CostumCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            SvgPicture.asset('assets/gym_icon.svg', color: Colors.grey,),
+            SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey,),
             const SizedBox(width: 5,),
             Text(classModel.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
@@ -134,6 +135,29 @@ class CostumCard extends StatelessWidget {
             child: Text('Pay Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
           )
         ],
+      );
+    }
+    if(whichScreen == CostumCardFor.profileScreen){
+      return Container(
+        height: 14,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: const BoxDecoration(
+          color: Color.fromARGB(255, 254, 241, 241)
+        ),
+        child: Row(
+          children: [
+            Container(
+              height: 8,
+              width: 8,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Utilities.greenColor
+              ),
+            ),
+            const SizedBox(width: 5,),
+            Text('Upcoming', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+          ],
+        ),
       );
     }
     return Column(

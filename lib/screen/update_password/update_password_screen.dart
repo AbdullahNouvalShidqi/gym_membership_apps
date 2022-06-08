@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/otp/otp_succes_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class UpdatePasswordScreen extends StatefulWidget {
@@ -13,8 +14,6 @@ class UpdatePasswordScreen extends StatefulWidget {
 }
 
 class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
-  bool _hideNewPass = true;
-  bool _hidePassConf = true;
   final _formKey = GlobalKey<FormState>();
   final _newPasswordCtrl = TextEditingController();
   final _confirmPasswordCtrl = TextEditingController();
@@ -118,79 +117,45 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   }
 
   Widget newPasswordFormField(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('New Password', style: GoogleFonts.roboto(),),
-        const SizedBox(height: 5,),
-        TextFormField(
-          obscureText: _hideNewPass,
-          controller: _newPasswordCtrl,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.lock_outline),
-            hintText: 'Enter new password',
-            contentPadding: const EdgeInsets.symmetric(vertical: 3),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4)
-            ),
-            suffixIcon: IconButton(
-              onPressed: (){
-                setState(() {
-                  _hideNewPass = !_hideNewPass;
-                });
-              },
-              icon: _hideNewPass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
-            )
-          ),
-          validator: (newValue){
-            if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
-              return 'Please enter a valid password';
-            }
-            return null;
-          },
-        ),
-      ],
+    return CostumFormField(
+      controller: _newPasswordCtrl,
+      label: 'New Password',
+      hintText: 'Enter new password',
+      prefixIcon: const Icon(Icons.lock_outline),
+      useIconHidePassword: true,
+      validator: (newValue){
+        if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
+          return 'Please enter your password';
+        }
+        else if(newValue.length < 6 || !Utilities.passwordExp.hasMatch(newValue)){
+          return 'Please enter a valid password';
+        }
+        return null;
+      },
     );
   }
 
   Widget confirmFormField(){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Confirm Password', style: GoogleFonts.roboto(),),
-        const SizedBox(height: 5,),
-        TextFormField(
-          obscureText: _hidePassConf,
-          controller: _confirmPasswordCtrl,
-          decoration: InputDecoration(
-            prefixIcon: const Icon(Icons.lock_outline),
-            hintText: 'Enter new password',
-            contentPadding: const EdgeInsets.symmetric(vertical: 3),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(4)
-            ),
-            suffixIcon: IconButton(
-              onPressed: (){
-                setState(() {
-                  _hidePassConf = !_hidePassConf;
-                });
-              },
-              icon: _hidePassConf ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
-            ),
-          ),
-          validator: (newValue){
-            if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6 || newValue != _newPasswordCtrl.text){
-              return 'Please enter a valid password';
-            }
-            return null;
-          },
-        ),
-      ],
+    return CostumFormField(
+      controller: _confirmPasswordCtrl,
+      label: 'Confirm Password',
+      hintText: 'Enter new password',
+      prefixIcon: const Icon(Icons.lock_outline),
+      useIconHidePassword: true,
+      validator: (newValue){
+        if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
+            return 'Please enter your password';
+          }
+          else if(newValue != _confirmPasswordCtrl.text){
+            return 'Please enter a same password';
+          }
+          return null;
+      },
     );
   }
 
   Widget continueButton(){
-    return ElevatedButton(
+    return CostumButton(
       onPressed: (){
         if(!_formKey.currentState!.validate())return;
         showModalBottomSheet(
@@ -203,10 +168,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
           }
         );
       },
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40)),
-      ),
-      child: Text('Continue', style: Utilities.buttonTextStyle,)
+      childText: 'Continue'
     );
   }
 }

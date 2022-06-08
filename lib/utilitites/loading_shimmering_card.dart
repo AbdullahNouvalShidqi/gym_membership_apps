@@ -4,7 +4,6 @@ import 'package:gym_membership_apps/utilitites/utilitites.dart';
 class ShimmeringCard extends StatefulWidget {
   const ShimmeringCard({
     Key? key, 
-    required this.isLoading, 
     required this.height, 
     required this.width, 
     this.margin, 
@@ -15,7 +14,6 @@ class ShimmeringCard extends StatefulWidget {
     this.gradientBegin,
     this.gradientEnd
   }) : super(key: key);
-  final bool isLoading;
   final double height;
   final double width;
   final EdgeInsets? margin;
@@ -38,9 +36,7 @@ class _ShimmeringCardState extends State<ShimmeringCard> with SingleTickerProvid
 
   @override
   void initState() {
-    _animationController.addListener(() {
-      changeValue();
-    });
+    _animationController.addListener(changeValue);
     super.initState();
   }
 
@@ -64,7 +60,7 @@ class _ShimmeringCardState extends State<ShimmeringCard> with SingleTickerProvid
       width: widget.width,
       margin: widget.margin,
       decoration: BoxDecoration(
-        borderRadius: widget.borderRadius ?? BorderRadius.circular(8),
+        borderRadius: widget.borderRadius,
         boxShadow: const [
           BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))
         ],

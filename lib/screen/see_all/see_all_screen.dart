@@ -21,109 +21,114 @@ class _SeeAllScrenState extends State<SeeAllScren> {
   @override
   Widget build(BuildContext context) {
     type = ModalRoute.of(context)!.settings.arguments as String;
-    final homeViewModel = Provider.of<HomeViewModel>(context);
-    final user = Provider.of<ProfileViewModel>(context).user;
-    
     return Scaffold(
-      body: body(context: context, type: type, homeViewModel: homeViewModel, user: user),
+      body: body(context: context, type: type),
     );
   }
 
-  Widget body({required BuildContext context, required String type, required HomeViewModel homeViewModel, required UserModel user}){
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Utilities.primaryColor,
-                  radius: 25,
-                  child: const Icon(Icons.person, color: Colors.white,),
-                ),
-                const SizedBox(width: 10,),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+  Widget body({required BuildContext context, required String type}){
+    return Consumer<ProfileViewModel>(
+      builder: (context, profileViewModel, _) {
+        final user = profileViewModel.user;
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
+                child: Row(
                   children: [
-                    Text('Hello,', style: Utilities.greetingHomeStyle,),
-                    Text(user.username, style: Utilities.greetinSubHomeStyle)
+                    CircleAvatar(
+                      backgroundColor: Utilities.primaryColor,
+                      radius: 25,
+                      child: const Icon(Icons.person, color: Colors.white,),
+                    ),
+                    const SizedBox(width: 10,),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Hello,', style: Utilities.greetingHomeStyle,),
+                        Text(user.username, style: Utilities.greetinSubHomeStyle)
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 30, bottom: 12, left: 20, right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Select', style: Utilities.homeViewMainTitleStyle),
-                Text('$type Class', style: Utilities.homeViewMainTitleStyle)
-              ],
-            ),
-          ),
-          costumGridView(homeViewModel: homeViewModel, type: type)
-        ]
-      ),
-    );
-  }
-
-  Widget costumGridView({required HomeViewModel homeViewModel, required String type}){
-    final items = type == 'Online' ? homeViewModel.classes.where((e) => e.type == type).toList() : homeViewModel.classes.where((e) => e.type == type).toList().reversed.toList();
-
-    return GridView.builder(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
-      physics: const ScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: items.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 20,
-        mainAxisSpacing: 20,
-        childAspectRatio: 150/195
-      ),
-      itemBuilder: (context, i){
-        return InkWell(
-          onTap: (){
-            Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
-          },
-          child: Container(
-            height: 195,
-            width: 150,
-            alignment: Alignment.bottomLeft,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: AssetImage(items[i].image!),
-                fit: BoxFit.cover
-              )
-            ),
-            child: Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                gradient: const LinearGradient(
-                  colors: [Colors.black,  Colors.transparent], 
-                  begin: Alignment.bottomCenter,
-                  end: Alignment.center
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+              Padding(
+                padding: const EdgeInsets.only(top: 30, bottom: 12, left: 20, right: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                    Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                    Text('Select', style: Utilities.homeViewMainTitleStyle),
+                    Text('$type Class', style: Utilities.homeViewMainTitleStyle)
                   ],
                 ),
               ),
-            ),
+              costumGridView(type: type)
+            ]
           ),
+        );
+      }
+    );
+  }
+
+  Widget costumGridView({required String type}){
+    return Consumer<HomeViewModel>(
+      builder: (context, homeViewModel, _) {
+        final items = type == 'Online' ? homeViewModel.classes.where((e) => e.type == type).toList() : homeViewModel.classes.where((e) => e.type == type).toList().reversed.toList();
+        return GridView.builder(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
+          physics: const ScrollPhysics(),
+          shrinkWrap: true,
+          itemCount: items.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+            childAspectRatio: 150/195
+          ),
+          itemBuilder: (context, i){
+            return InkWell(
+              onTap: (){
+                Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
+              },
+              child: Container(
+                height: 195,
+                width: 150,
+                alignment: Alignment.bottomLeft,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  image: DecorationImage(
+                    image: AssetImage(items[i].images!.first),
+                    fit: BoxFit.cover
+                  )
+                ),
+                child: Container(
+                  height: double.infinity,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    gradient: const LinearGradient(
+                      colors: [Colors.black,  Colors.transparent], 
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.center
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                        Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
         );
       }
     );

@@ -1,13 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
+import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class SignInScreen extends StatefulWidget {
   static String routeName = '/signInScreen';
@@ -23,7 +24,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordCtrl = TextEditingController();
   DateTime? currentBackPressTime;
   bool _rememberMe = false;
-  bool _hidePass = true;
 
   @override
   void dispose() {
@@ -34,18 +34,19 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final homeViewModel = Provider.of<HomeViewModel>(context);
     return WillPopScope(
       onWillPop: willPopValidation,
       child: Form(
         key: _formKey,
         child: Scaffold(
-          body: body()
+          body: body(homeViewModel: homeViewModel)
         ),
       ),
     );
   }
 
-  Widget body(){
+  Widget body({required HomeViewModel homeViewModel}){
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -172,20 +173,25 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget loginButton(){
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 30, bottom: 25),
-        child: ElevatedButton(
-          style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
+    return Consumer<HomeViewModel>(
+      builder: (context, homeViewModel, _) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 25),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
+              ),
+              child: Text('Login', style: Utilities.buttonTextStyle),
+              onPressed: (){
+                if(!_formKey.currentState!.validate())return;
+                homeViewModel.getInitData();
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              },
+            ),
           ),
-          child: Text('Login', style: Utilities.buttonTextStyle),
-          onPressed: (){
-            if(!_formKey.currentState!.validate())return;
-            Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-          },
-        ),
-      ),
+        );
+      }
     );
   }
 

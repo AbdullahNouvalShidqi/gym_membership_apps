@@ -1,0 +1,43 @@
+import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gym_membership_apps/model/class_model.dart';
+
+enum AvailableClassState {none, loading, error}
+
+class AvailableClassViewModel with ChangeNotifier{
+
+  List<ClassModel> _availableClasses = [];
+  List<ClassModel> get availableClasses => _availableClasses;
+
+  AvailableClassState _state = AvailableClassState.none;
+  AvailableClassState get state => _state;
+
+  void changeState(AvailableClassState s){
+    _state = s;
+    notifyListeners();
+  }
+
+  Future<void> getAvailableClasses() async {
+    changeState(AvailableClassState.loading);
+
+    try{
+      await Future.delayed(const Duration(seconds: 3));
+      changeState(AvailableClassState.none);
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      changeState(AvailableClassState.error);
+    }
+  }
+
+  Future<void> refreshData() async {
+    try{
+      await Future.delayed(const Duration(seconds: 3));
+      changeState(AvailableClassState.none);
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: e.toString());
+      changeState(AvailableClassState.error);
+    }
+  }
+}

@@ -50,7 +50,7 @@ class _BookScreenState extends State<BookScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     image: DecorationImage(
-                      image: AssetImage(item.image!),
+                      image: AssetImage(item.images!.first),
                       fit: BoxFit.cover
                     )
                   ),
@@ -76,7 +76,7 @@ class _BookScreenState extends State<BookScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          SvgPicture.asset('assets/gym_icon.svg', color: Colors.grey,),
+                          SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey,),
                           const SizedBox(width: 5,),
                           Text(item.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
                         ],

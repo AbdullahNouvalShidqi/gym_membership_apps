@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
-import 'package:gym_membership_apps/utilitites/loading_shimmering_card.dart';
+import 'package:gym_membership_apps/utilitites/shimmer_container.dart';
+import 'package:gym_membership_apps/utilitites/shimmer_state.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -32,24 +33,23 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               child: Scrollbar(
                 controller: scheduleViewModel.scheduleListController,
                 thumbVisibility: isLoading ? false : true,
-                child: ListView.builder(
-                  controller: scheduleViewModel.scheduleListController,
-                  physics: isLoading ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-                  itemCount: isLoading ? 8 : scheduleViewModel.listSchedule.length,
-                  itemBuilder: (context, i){
-                    if(isLoading){
-                      return ShimmeringCard(
-                        height: 114,
-                        width: double.infinity,
-                        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                        borderRadius: BorderRadius.circular(8),
+                child: ShimmerLoading(
+                  isLoading: isLoading,
+                  child: ListView.builder(
+                    controller: scheduleViewModel.scheduleListController,
+                    physics: isLoading ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                    itemCount: isLoading ? 8 : scheduleViewModel.listSchedule.length,
+                    itemBuilder: (context, i){
+                      if(isLoading){
+                        return ShimmerContainer(height: 114, width: double.infinity, margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5), borderRadius: BorderRadius.circular(8),);
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.scheduleScreen),
                       );
+                      
                     }
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.scheduleScreen),
-                    );
-                  }
+                  ),
                 ),
               ),
             ),

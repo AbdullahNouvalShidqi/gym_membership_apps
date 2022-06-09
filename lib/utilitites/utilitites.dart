@@ -70,9 +70,9 @@ class Utilities{
   }){
     return LinearGradient(
       colors: colors ?? const [Color.fromRGBO(230, 230, 230, 1), Color.fromRGBO(244, 244, 244, 1), Color.fromRGBO(230, 230, 230, 1),],
-      // stops: const [0.1, 0.3, 0.4],
-      begin: begin ?? const Alignment(-0.3, -0.3),
-      end: end ?? const Alignment(0.3, 0.3),
+      // stops: const [0.1, 0.3, 1],
+      begin: begin ?? const Alignment(0, -0.1),
+      // end: end ?? const Alignment(0.3, 0.3),
       tileMode: TileMode.clamp,
       transform: SlidingGradientTransform(slidePercent: value, context: context),
     );

@@ -1,12 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
-import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
+import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
@@ -79,7 +78,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               const SizedBox(height: 20,),
               costumListItems(context: context, homeViewModel: homeViewModel, type: 'Offline'),
               const SizedBox(height: 20,),
-              tipsCarouselView(homeViewModel: homeViewModel)
+              tipsListView(homeViewModel: homeViewModel)
             ],
           ),
         );
@@ -118,44 +117,49 @@ class _HomePageScreenState extends State<HomePageScreen> {
             itemBuilder: (context, i){
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
-                  },
-                  child: Container(                    
-                    width: 125,
-                    alignment: Alignment.bottomLeft,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: AssetImage(items[i].images!.first),
-                        fit: BoxFit.cover
-                      ),
-                    ),
-                    child: Container(
-                      height: double.infinity,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        gradient: const LinearGradient(
-                          colors: [Colors.black,  Colors.transparent], 
-                          begin: Alignment.bottomCenter,
-                          end: Alignment.center
+                child: Consumer<DetailViewModel>(
+                  builder: (context, detailViewModel, _) {
+                    return InkWell(
+                      onTap: (){
+                        detailViewModel.getDetail();
+                        Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
+                      },
+                      child: Container(                    
+                        width: 125,
+                        alignment: Alignment.bottomLeft,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                            image: AssetImage(items[i].images!.first),
+                            fit: BoxFit.cover
+                          ),
+                        ),
+                        child: Container(
+                          height: double.infinity,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            gradient: const LinearGradient(
+                              colors: [Colors.black,  Colors.transparent], 
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.center
+                            ),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                                Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                            Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                    );
+                  }
                 ),
               );
             }
@@ -165,7 +169,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     );
   }
 
-  Widget tipsCarouselView({required HomeViewModel homeViewModel}){
+  Widget tipsListView({required HomeViewModel homeViewModel}){
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -176,21 +180,22 @@ class _HomePageScreenState extends State<HomePageScreen> {
             child: Text('Tips for you', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
           ),
           const SizedBox(height: 10,),
-          CarouselSlider.builder(
-            itemCount: homeViewModel.articles.length,
-            itemBuilder: (context, itemI, pageI){
-              return InkWell(
-                onTap: tipsItemOnTap(articleUrl: homeViewModel.articles[itemI].url),
-                child: tipsImage(imageUrl: homeViewModel.articles[itemI].imageUrl, title: homeViewModel.articles[itemI].title),
-              );
-            },
-            options: CarouselOptions(
-              autoPlay: true,
-              enlargeCenterPage: true,
-              viewportFraction: 1,
-              height: 250,
-              autoPlayInterval: const Duration(seconds: 5)
-            )
+          SizedBox(
+            height: 129,
+            child: ListView.builder(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              scrollDirection: Axis.horizontal,
+              itemCount: homeViewModel.articles.length,
+              itemBuilder: (context, i){
+                return InkWell(
+                  onTap: tipsItemOnTap(articleUrl: homeViewModel.articles[i].url),
+                  child: SizedBox(
+                    width: 210,
+                    child: tipsImage(imageUrl: homeViewModel.articles[i].imageUrl, title: homeViewModel.articles[i].title),
+                  ),
+                );
+              }
+            ),
           )
         ],
       ),
@@ -211,7 +216,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
   Widget tipsImage({required String imageUrl, required String title}){
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 5),
       child: CachedNetworkImage(
         imageUrl: imageUrl,
         width: 800,
@@ -259,8 +264,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
       height: 60,
       width: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-        child: Text(title, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+        padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
+        child: Text(title, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white),),
       ),
     );
   }

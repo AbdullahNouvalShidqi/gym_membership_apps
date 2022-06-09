@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
+import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -88,45 +88,50 @@ class _SeeAllScrenState extends State<SeeAllScren> {
             childAspectRatio: 150/195
           ),
           itemBuilder: (context, i){
-            return InkWell(
-              onTap: (){
-                Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
-              },
-              child: Container(
-                height: 195,
-                width: 150,
-                alignment: Alignment.bottomLeft,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: AssetImage(items[i].images!.first),
-                    fit: BoxFit.cover
-                  )
-                ),
-                child: Container(
-                  height: double.infinity,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    gradient: const LinearGradient(
-                      colors: [Colors.black,  Colors.transparent], 
-                      begin: Alignment.bottomCenter,
-                      end: Alignment.center
+            return Consumer<DetailViewModel>(
+              builder: (context, detailViewModel, _) {
+                return InkWell(
+                  onTap: (){
+                    detailViewModel.getDetail();
+                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
+                  },
+                  child: Container(
+                    height: 195,
+                    width: 150,
+                    alignment: Alignment.bottomLeft,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      image: DecorationImage(
+                        image: AssetImage(items[i].images!.first),
+                        fit: BoxFit.cover
+                      )
+                    ),
+                    child: Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        gradient: const LinearGradient(
+                          colors: [Colors.black,  Colors.transparent], 
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.center
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                            Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                        Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+                );
+              }
             );
           }
         );

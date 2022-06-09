@@ -5,6 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
+import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
+import 'package:gym_membership_apps/utilitites/detail_shimmer_loading.dart';
+import 'package:gym_membership_apps/utilitites/shimmer_state.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -23,52 +26,60 @@ class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
-    final availableClassViewModel = Provider.of<AvailableClassViewModel>(context);
-
-    return Scaffold(
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    
+    return Consumer<DetailViewModel>(
+      builder: (context, detailViewModel, _) {
+        final isLoading = detailViewModel.state == DetailState.loading;
+        return ShimmerLoading(
+          isLoading: isLoading,
+          loadingChild: const DetailShimmerLoading(),
+          child: Scaffold(
+            body: SafeArea(
+              child: Stack(
                 children: [
-                  Stack(
-                    children: [
-                      carouselSlider(images: item.images!),
-                      Positioned.fill(
-                        bottom: 17,
-                        child: carouselIndicator(images: item.images!)
-                      )
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                  SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 15),
-                        mainTitleStatus(className: item.name, type: item.type),
-                        const SizedBox(height: 5),
-                        price(),
-                        const SizedBox(height: 10),
-                        instructorName(item: item),
-                        const SizedBox(height: 5,),
-                        gymLocation(),
-                        const SizedBox(height: 10,),
-                        classDetail(item: item),
-                        const SizedBox(height: 40,),
-                        seeAvalableClassButton(item: item, availableClassViewModel: availableClassViewModel)
+                        Stack(
+                          children: [
+                            carouselSlider(images: item.images!),
+                            Positioned.fill(
+                              bottom: 17,
+                              child: carouselIndicator(images: item.images!)
+                            )
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 15),
+                              mainTitleStatus(className: item.name, type: item.type),
+                              const SizedBox(height: 5),
+                              price(),
+                              const SizedBox(height: 10),
+                              instructorName(item: item),
+                              const SizedBox(height: 5,),
+                              gymLocation(),
+                              const SizedBox(height: 10,),
+                              classDetail(item: item),
+                              const SizedBox(height: 40,),
+                              seeAvalableClassButton(item: item)
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
+                  costumAppBar()
                 ],
               ),
             ),
-            costumAppBar()
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 
@@ -219,16 +230,20 @@ class _DetailScreenState extends State<DetailScreen> {
     );
   }
 
-  Widget seeAvalableClassButton({required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
-    return ElevatedButton(
-      onPressed: (){
-        availableClassViewModel.getAvailableClasses();
-        Navigator.pushNamed(context, AvailableClassScreen.routeName, arguments: item);
-      },
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
-      ),
-      child: Text('See Available Classes', style: Utilities.buttonTextStyle)
+  Widget seeAvalableClassButton({required ClassModel item}){
+    return Consumer<AvailableClassViewModel>(
+      builder: (context, availableClassViewModel, _) {
+        return ElevatedButton(
+          onPressed: (){
+            availableClassViewModel.getAvailableClasses();
+            Navigator.pushNamed(context, AvailableClassScreen.routeName, arguments: item);
+          },
+          style: ButtonStyle(
+            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
+          ),
+          child: Text('See Available Classes', style: Utilities.buttonTextStyle)
+        );
+      }
     );
   }
 }

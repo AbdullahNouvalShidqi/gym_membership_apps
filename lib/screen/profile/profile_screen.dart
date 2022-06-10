@@ -120,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   Widget itemsToReturn({required ProfileViewModel profileViewModel, required bool myAccountSelected, required HomeViewModel homeViewModel}){
     if(myAccountSelected){
       return SizedBox(
-        height: MediaQuery.of(context).size.height - 440,
+        height: MediaQuery.of(context).size.height,
         child: ListView.builder(
           physics: const NeverScrollableScrollPhysics(),
           itemCount: profileViewModel.myAccountItems.length,

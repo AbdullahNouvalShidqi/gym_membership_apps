@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/screen/otp/otp_succes_screen.dart';
+import 'package:gym_membership_apps/screen/otp/success_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -164,7 +164,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
           ),
           context: context,
           builder: (context){
-            return const OtpSuccesScreen();
+            return const SuccesScreen();
           }
         );
       },

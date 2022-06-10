@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/forgot_password/forgot_password_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   static String routeName = '/forgotPassword';
@@ -88,12 +90,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   }
 
   Widget continueButton(){
-    return CostumButton(
-      onPressed: (){
-        if(!_formKey.currentState!.validate())return;
-        Navigator.pushReplacementNamed(context, OtpScreen.routeName);
-      },
-      childText: 'Continue'
+    return Consumer<ForgotPasswordViewModel>(
+      builder: (context, forgotPasswordViewModel, _) {
+        final isLoading = forgotPasswordViewModel.state == ForgotPasswordState.loading;
+        final isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
+        return CostumButton(
+          isLoading: isLoading,
+          onPressed: () async {
+            if(!_formKey.currentState!.validate())return;
+            await forgotPasswordViewModel.sendOTP(email: _emailCtrl.text);
+            
+            if(!mounted || isError)return;
+            Navigator.pushReplacementNamed(context, OtpScreen.routeName);
+          },
+          childText: 'Continue'
+        );
+      }
     );
   }
 }

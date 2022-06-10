@@ -15,7 +15,7 @@ class HomeScreen extends StatelessWidget {
      return Consumer3<HomeViewModel, ScheduleViewModel, ProfileViewModel>(
        builder: (context, homeViewModel, scheduleViewModel, profileViewModel, _) {
         return WillPopScope(
-          onWillPop: homeViewModel.onWillPop(),
+          onWillPop: homeViewModel.onWillPop,
           child: Scaffold(
             body: Stack(
               alignment: Alignment.bottomCenter,

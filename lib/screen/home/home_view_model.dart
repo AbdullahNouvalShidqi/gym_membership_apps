@@ -74,31 +74,29 @@ class HomeViewModel with ChangeNotifier{
     );
   }
 
-  Future<bool> Function() onWillPop(){
-    return () async {
-      final isNotFirstRouteInCurrentTab = await navigatorKey.currentState!.maybePop();
-      if(isNotFirstRouteInCurrentTab){
-        return false;
-      }
-      else if(_currentPage != "Home"){
-        selectTab("Home", 0);
-        return false;
-      }
-      else{
-        DateTime now = DateTime.now();
-        if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && !isNotFirstRouteInCurrentTab){
-          currentBackPressTime = now;
-          Fluttertoast.cancel();
-          Fluttertoast.showToast(
-            msg: 'Press back again to exit'
-          );
-          return false;
-        }
-        currentBackPressTime = null;
+  Future<bool> onWillPop() async {
+    final isNotFirstRouteInCurrentTab = await navigatorKey.currentState!.maybePop();
+    if(isNotFirstRouteInCurrentTab){
+      return false;
+    }
+    else if(_currentPage != "Home"){
+      selectTab("Home", 0);
+      return false;
+    }
+    else{
+      DateTime now = DateTime.now();
+      if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) && !isNotFirstRouteInCurrentTab){
+        currentBackPressTime = now;
         Fluttertoast.cancel();
-        return true;
+        Fluttertoast.showToast(
+          msg: 'Press back again to exit'
+        );
+        return false;
       }
-    };
+      currentBackPressTime = null;
+      Fluttertoast.cancel();
+      return true;
+    }
   }
 
   final List<ClassModel> _classes = [

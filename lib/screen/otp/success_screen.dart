@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
-class OtpSuccesScreen extends StatelessWidget {
-  const OtpSuccesScreen({Key? key}) : super(key: key);
+class SuccesScreen extends StatelessWidget {
+  const SuccesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

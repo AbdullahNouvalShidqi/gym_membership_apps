@@ -13,7 +13,7 @@ class CostumButton extends StatelessWidget {
     this.backgroundColor,
     this.fontColor
   }) : super(key: key);
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String childText;
   final double? width;
   final double? height;

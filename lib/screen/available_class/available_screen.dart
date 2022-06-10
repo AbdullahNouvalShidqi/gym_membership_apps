@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
+import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
+import 'package:gym_membership_apps/utilitites/shimmer.dart';
 import 'package:gym_membership_apps/utilitites/shimmer_container.dart';
-import 'package:gym_membership_apps/utilitites/shimmer_state.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -33,26 +34,16 @@ class AvailableClassScreen extends StatelessWidget {
         ),
         body: RefreshIndicator(
           onRefresh: availableClassViewModel.refreshData,
-          child: ShimmerLoading(
-            isLoading: isLoading,
-            child: ListView.builder(
-              physics: isLoading ? const NeverScrollableScrollPhysics(parent: BouncingScrollPhysics()) : const BouncingScrollPhysics(),
-              itemCount: 8,
-              itemBuilder: (context, i){
-                if(isLoading){
-                  return ShimmerContainer(
-                    height: 114,
-                    width: double.infinity,
-                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                    borderRadius: BorderRadius.circular(8),
-                  );
-                }
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-                  child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
-                );
-              }
-            ),
+          child: isLoading ? const ListViewShimmerLoading() :
+          ListView.builder(
+            physics: isLoading ? const NeverScrollableScrollPhysics(parent: BouncingScrollPhysics()) : const BouncingScrollPhysics(),
+            itemCount: 8,
+            itemBuilder: (context, i){
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
+              );
+            }
           ),
         ),
       ),

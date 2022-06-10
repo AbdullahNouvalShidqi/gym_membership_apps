@@ -238,16 +238,18 @@ class HomeViewModel with ChangeNotifier{
 
   List<ClassModel> get classes => _classes;
 
-  Future<void> getInitData() async {
+  Future<List<ClassModel>?> getInitData() async {
     changeState(HomeViewState.loading);
 
     try{
       await Future.delayed(const Duration(seconds: 5));
       changeState(HomeViewState.none);
+      return _classes;
     }
     catch(e){
       Fluttertoast.showToast(msg: e.toString());
       changeState(HomeViewState.error);
+      return null;
     }
   }
 

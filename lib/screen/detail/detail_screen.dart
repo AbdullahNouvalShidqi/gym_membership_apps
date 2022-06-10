@@ -7,7 +7,6 @@ import 'package:gym_membership_apps/screen/available_class/available_class_view_
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
 import 'package:gym_membership_apps/utilitites/detail_shimmer_loading.dart';
-import 'package:gym_membership_apps/utilitites/shimmer_state.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -30,10 +29,12 @@ class _DetailScreenState extends State<DetailScreen> {
     return Consumer<DetailViewModel>(
       builder: (context, detailViewModel, _) {
         final isLoading = detailViewModel.state == DetailState.loading;
-        return ShimmerLoading(
-          isLoading: isLoading,
-          loadingChild: const DetailShimmerLoading(),
-          child: Scaffold(
+        
+        if(isLoading){
+          return const DetailShimmerLoading();
+        }
+
+        return Scaffold(
             body: SafeArea(
               child: Stack(
                 children: [
@@ -53,6 +54,7 @@ class _DetailScreenState extends State<DetailScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Column(
+                            mainAxisSize: MainAxisSize.min,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 15),
@@ -64,8 +66,10 @@ class _DetailScreenState extends State<DetailScreen> {
                               const SizedBox(height: 5,),
                               gymLocation(),
                               const SizedBox(height: 10,),
-                              classDetail(item: item),
-                              const SizedBox(height: 40,),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height - 575,
+                                child: classDetail(item: item)
+                              ),
                               seeAvalableClassButton(item: item)
                             ],
                           ),
@@ -77,8 +81,7 @@ class _DetailScreenState extends State<DetailScreen> {
                 ],
               ),
             ),
-          ),
-        );
+          );
       }
     );
   }
@@ -122,7 +125,7 @@ class _DetailScreenState extends State<DetailScreen> {
       itemCount: 3,
       itemBuilder: (context, itemI, pageI){
         return Container(
-          height: 360,
+          height: 315,
           width: double.infinity,
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -134,7 +137,7 @@ class _DetailScreenState extends State<DetailScreen> {
       },
       options: CarouselOptions(
         viewportFraction: 1,
-        height: 360,
+        height: 315,
         enableInfiniteScroll: false,
         autoPlay: false,
         onPageChanged: (index, reason){

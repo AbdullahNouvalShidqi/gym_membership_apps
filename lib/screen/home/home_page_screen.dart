@@ -23,6 +23,15 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
+  List<ClassModel>? classModel;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      classModel = await Provider.of<HomeViewModel>(context, listen: false).getInitData();
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +43,29 @@ class _HomePageScreenState extends State<HomePageScreen> {
   Widget body(){
     return Consumer2<HomeViewModel, ProfileViewModel>(
       builder: (context, homeViewModel, profileViewModel, _) {
-        final isLoading = homeViewModel.state == HomeViewState.loading;
+        final isError = homeViewModel.state == HomeViewState.error;
+        final isLoading = homeViewModel.state == HomeViewState.loading || classModel == null;
         final user = profileViewModel.user;
+
+        if(isError){
+          return RefreshIndicator(
+            onRefresh: () async {
+              await Future.delayed(const Duration(seconds: 1));
+            },
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()) ,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height,
+                child: const Center(child: Text('Error cannot get data, pull to refresh'),)
+              ),
+            ),
+          );
+        }
+
         if(isLoading){
           return const HomeShimmerLoading();
         }
+        
         return SingleChildScrollView(
           controller: homeViewModel.homeScrollController,
           child: Column(
@@ -74,9 +101,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   ],
                 ),
               ),
-              costumListItems(context: context, homeViewModel: homeViewModel, type: 'Online'),
+              costumListItems(context: context, classModel: classModel!, type: 'Online'),
               const SizedBox(height: 20,),
-              costumListItems(context: context, homeViewModel: homeViewModel, type: 'Offline'),
+              costumListItems(context: context, classModel: classModel!, type: 'Offline'),
               const SizedBox(height: 20,),
               tipsListView(homeViewModel: homeViewModel)
             ],
@@ -86,8 +113,8 @@ class _HomePageScreenState extends State<HomePageScreen> {
     );
   }
 
-  Widget costumListItems({required BuildContext context, required HomeViewModel homeViewModel, required String type}){
-    final List<ClassModel> items = type == 'Online' ? homeViewModel.classes.where((e) => e.type == type).toList() : homeViewModel.classes.where((e) => e.type == type).toList().reversed.toList();
+  Widget costumListItems({required BuildContext context, required List<ClassModel> classModel, required String type}){
+    final List<ClassModel> items = type == 'Online' ? classModel.where((e) => e.type == type).toList() : classModel.where((e) => e.type == type).toList().reversed.toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -183,6 +210,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
           SizedBox(
             height: 129,
             child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 15),
               scrollDirection: Axis.horizontal,
               itemCount: homeViewModel.articles.length,

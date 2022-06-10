@@ -196,6 +196,9 @@ class ProfileViewModel with ChangeNotifier{
 
   List<Map<String, Widget>> get myAccountItems => _myAccountItems;
 
+  final ScrollController _listviewController = ScrollController();
+  ScrollController get listViewController => _listviewController;
+
   void changeState(ProfileViewState s){
     _state = s;
     notifyListeners();

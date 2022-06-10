@@ -185,7 +185,7 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Text('Login', style: Utilities.buttonTextStyle),
               onPressed: (){
                 if(!_formKey.currentState!.validate())return;
-                homeViewModel.getInitData();
+                // homeViewModel.getInitData();
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },
             ),

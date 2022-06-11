@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/screen/otp/success_screen.dart';
+import 'package:gym_membership_apps/screen/success_screen/success_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';

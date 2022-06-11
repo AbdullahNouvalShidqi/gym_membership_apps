@@ -53,7 +53,14 @@ class Utilities{
 
   static TextStyle personalDetailValue = GoogleFonts.roboto(fontSize: 16, color: Colors.grey);
 
-  static TextStyle buttonTextStyle = GoogleFonts.roboto(fontSize: 16, color: Colors.white);
+  static TextStyle buttonTextStyle = GoogleFonts.roboto(fontSize: 16, color: myWhiteColor);
+
+  static TextStyle costumSortingButtonStyle(bool isSelected){
+    if(isSelected){
+      return GoogleFonts.roboto(fontSize: 12, color: myWhiteColor);
+    }
+    return GoogleFonts.roboto(fontSize: 12, color: primaryColor);
+  }
 
   static Color greenColor = const Color.fromRGBO(23, 226, 67, 1);
 

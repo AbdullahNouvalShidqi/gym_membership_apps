@@ -88,7 +88,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   Widget costumAppBar(){
     return Container(
-      height: 360/4,
+      height: 80,
       alignment: Alignment.topCenter,
       decoration: BoxDecoration(
         gradient: LinearGradient(

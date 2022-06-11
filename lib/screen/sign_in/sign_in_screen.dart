@@ -5,7 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/sign_in/sign_in_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -173,22 +175,25 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget loginButton(){
-    return Consumer<HomeViewModel>(
-      builder: (context, homeViewModel, _) {
+    return Consumer<SignInViewModel>(
+      builder: (context, signInViewModel, _) {
+        final isLoading = signInViewModel.state == SignInState.loading;
+        final isError = signInViewModel.state == SignInState.error;
+
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 30, bottom: 25),
-            child: ElevatedButton(
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
-              ),
-              child: Text('Login', style: Utilities.buttonTextStyle),
-              onPressed: (){
+            child: CostumButton(
+              isLoading: isLoading,
+              childText: 'Login',
+              onPressed: () async {
                 if(!_formKey.currentState!.validate())return;
-                // homeViewModel.getInitData();
+                await signInViewModel.signIn(email: _emailCtrl.text, password: _passwordCtrl.text);
+                if(isError)return;
+                if(!mounted)return;
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },
-            ),
+            )
           ),
         );
       }

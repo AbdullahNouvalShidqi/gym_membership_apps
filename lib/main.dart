@@ -10,6 +10,7 @@ import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
+import 'package:gym_membership_apps/screen/sign_in/sign_in_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
@@ -44,6 +45,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => SignUpViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SignInViewModel(),
         ),
         ChangeNotifierProvider(
           create: (context) => ScheduleViewModel(),

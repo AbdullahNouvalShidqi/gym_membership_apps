@@ -31,6 +31,14 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+    _listViewController.dispose();
+    _singleListController.dispose();
+    tabController.dispose();
+  }
+
   void costumScroll(){
     if(_listViewController.position.userScrollDirection == ScrollDirection.reverse){
       if(_singleListController.offset + _listViewController.offset - lastOffset <= _singleListController.position.maxScrollExtent && _singleListController.offset + _listViewController.offset - lastOffset >= _singleListController.position.minScrollExtent){
@@ -89,13 +97,6 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
                         ]
                       ),
                       child: TabBar(
-                        onTap: (index){
-                          if(indexBefore == index){
-                            _listViewController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.ease);
-                            _singleListController.animateTo(0, duration: const Duration(milliseconds: 200), curve: Curves.ease);
-                          }
-                          indexBefore = index;
-                        },
                         controller: tabController,
                         indicatorWeight: 0,
                         indicator: BoxDecoration(
@@ -141,6 +142,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
       ),
     );
   }
+
   Widget costumListView({required bool isLoading, required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
     return RefreshIndicator(
       onRefresh: availableClassViewModel.refreshData,

@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
                   scheduleViewModel.isInitDone();
                   return;
                 }
-                else if(index == 1 && onGoToSchedule){
+                else if(index == 1 && onGoToSchedule && !scheduleViewModel.isInit){
                   scheduleViewModel.refreshData();
                 }
               },

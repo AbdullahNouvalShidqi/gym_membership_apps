@@ -23,6 +23,14 @@ class _DetailScreenState extends State<DetailScreen> {
   final _carouselCtrl = CarouselController();
 
   @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      Provider.of<DetailViewModel>(context, listen: false).getDetail();
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     
@@ -35,53 +43,53 @@ class _DetailScreenState extends State<DetailScreen> {
         }
 
         return Scaffold(
-            body: SafeArea(
-              child: Stack(
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
+          body: SafeArea(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        children: [
+                          carouselSlider(images: item.images!),
+                          Positioned.fill(
+                            bottom: 17,
+                            child: carouselIndicator(images: item.images!)
+                          )
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            carouselSlider(images: item.images!),
-                            Positioned.fill(
-                              bottom: 17,
-                              child: carouselIndicator(images: item.images!)
-                            )
+                            const SizedBox(height: 15),
+                            mainTitleStatus(className: item.name, type: item.type),
+                            const SizedBox(height: 5),
+                            price(),
+                            const SizedBox(height: 10),
+                            instructorName(item: item),
+                            const SizedBox(height: 5,),
+                            gymLocation(),
+                            const SizedBox(height: 10,),
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height - 575,
+                              child: classDetail(item: item)
+                            ),
+                            seeAvalableClassButton(item: item)
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 15),
-                              mainTitleStatus(className: item.name, type: item.type),
-                              const SizedBox(height: 5),
-                              price(),
-                              const SizedBox(height: 10),
-                              instructorName(item: item),
-                              const SizedBox(height: 5,),
-                              gymLocation(),
-                              const SizedBox(height: 10,),
-                              SizedBox(
-                                height: MediaQuery.of(context).size.height - 575,
-                                child: classDetail(item: item)
-                              ),
-                              seeAvalableClassButton(item: item)
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  costumAppBar()
-                ],
-              ),
+                ),
+                costumAppBar()
+              ],
             ),
-          );
+          ),
+        );
       }
     );
   }
@@ -122,7 +130,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget carouselSlider({required List<String> images}){
     return CarouselSlider.builder(
       carouselController: _carouselCtrl,
-      itemCount: 3,
+      itemCount: images.length,
       itemBuilder: (context, itemI, pageI){
         return Container(
           height: 315,

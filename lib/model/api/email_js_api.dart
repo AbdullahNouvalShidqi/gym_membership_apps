@@ -7,7 +7,6 @@ class EmailJsAPI {
   static Future<String> sendOTP({
     required String email, 
   }) async {
-    Response<dynamic>? response;
     final dio = Dio();
     String numbers = '0987654321';
     String otp = '';
@@ -15,7 +14,7 @@ class EmailJsAPI {
     for(var i = 0; i < 4; i++){
       otp += numbers[random.nextInt(numbers.length)];
     }
-    response = await dio.post(
+    await dio.post(
       'https://api.emailjs.com/api/v1.0/email/send',
       data: jsonEncode({
         'service_id' : 'service_vgdtrkl',

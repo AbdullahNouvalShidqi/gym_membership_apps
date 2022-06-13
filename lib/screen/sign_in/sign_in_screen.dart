@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
@@ -51,7 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget body({required HomeViewModel homeViewModel}){
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -99,6 +100,7 @@ class _SignInScreenState extends State<SignInScreen> {
       label: 'Email Address',
       hintText: 'Enter your email address',
       prefixIcon: const Icon(Icons.email_outlined),
+      textInputType: TextInputType.emailAddress,
       validator: (newValue){
         if(newValue == null || newValue.isEmpty || newValue == ' '){
           return 'Please enter your email address';
@@ -117,6 +119,7 @@ class _SignInScreenState extends State<SignInScreen> {
       label: 'Password',
       hintText: 'Enter your password',
       prefixIcon: const Icon(Icons.lock_outline),
+      textInputType: TextInputType.visiblePassword,
       validator: (newValue){
         if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
           return 'Please enter your password';
@@ -189,6 +192,14 @@ class _SignInScreenState extends State<SignInScreen> {
               onPressed: () async {
                 if(!_formKey.currentState!.validate())return;
                 await signInViewModel.signIn(email: _emailCtrl.text, password: _passwordCtrl.text);
+                final user =  SignInViewModel.currentUser;
+                if(user!= null){
+                  ProfileViewModel.setUserData(emailAddress: _emailCtrl.text, username: user.username, phoneNumber: user.contact, password: user.password);
+                }
+                else{
+                  Fluttertoast.showToast(msg: 'No such user found in our database, sing up to get account');
+                  return;
+                }
                 if(isError)return;
                 if(!mounted)return;
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);

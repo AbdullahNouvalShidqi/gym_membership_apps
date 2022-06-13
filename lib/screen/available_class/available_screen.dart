@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
 import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -17,13 +18,12 @@ class AvailableClassScreen extends StatefulWidget {
   State<AvailableClassScreen> createState() => _AvailableClassScreenState();
 }
 
-class _AvailableClassScreenState extends State<AvailableClassScreen> with TickerProviderStateMixin {
+class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
 
   final ScrollController _listViewController = ScrollController();
   final ScrollController _singleListController = ScrollController();
   late final tabController = TabController(length: 7, vsync: this);
   double lastOffset = 0;
-  int indexBefore = 0;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
     tabController.dispose();
   }
 
-  void costumScroll(){
+  void costumScroll() async {
     if(_listViewController.position.userScrollDirection == ScrollDirection.reverse){
       if(_singleListController.offset + _listViewController.offset - lastOffset <= _singleListController.position.maxScrollExtent && _singleListController.offset + _listViewController.offset - lastOffset >= _singleListController.position.minScrollExtent){
         _singleListController.jumpTo(_singleListController.offset +  _listViewController.offset - lastOffset);
@@ -50,7 +50,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
         _singleListController.jumpTo(_singleListController.offset + _listViewController.offset - lastOffset);
       }
     }
-    lastOffset = _listViewController.offset;
+    lastOffset = _listViewController.offset;    
   }
 
   @override
@@ -86,7 +86,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Container(
-                      height: 63,
+                      height: 64,
                       width: double.infinity,
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
@@ -103,11 +103,11 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
                           borderRadius: BorderRadius.circular(15),
                           color: Utilities.primaryColor
                         ),
-                        padding: EdgeInsets.zero,
                         indicatorPadding: const EdgeInsets.all(10),
-                        isScrollable: true,
-                        labelColor: Utilities.myWhiteColor,
+                        isScrollable: false,
                         unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
+                        labelColor: Utilities.myWhiteColor,
+                        labelPadding: const EdgeInsets.symmetric(horizontal: 10),
                         tabs: [
                           for(var i = 0; i < 7; i++) ...[
                             Column(
@@ -146,17 +146,19 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Ticker
   Widget costumListView({required bool isLoading, required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
     return RefreshIndicator(
       onRefresh: availableClassViewModel.refreshData,
-      child: ListView.builder(
+      child: Scrollbar(
         controller: _listViewController,
-        padding: const EdgeInsets.only(top: 15),
-        physics: isLoading ? const NeverScrollableScrollPhysics(parent: BouncingScrollPhysics()) : null,
-        itemCount: 8,
-        itemBuilder: (context, i){
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
-          );
-        }
+        child: ListView.builder(
+          controller: _listViewController,
+          padding: const EdgeInsets.only(top: 15),
+          itemCount: 8,
+          itemBuilder: (context, i){
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
+            );
+          }
+        ),
       ),
     );
   }

@@ -44,7 +44,6 @@ class ForgotPasswordViewModel with ChangeNotifier{
       changeState(ForgotPasswordState.none);
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
       changeState(ForgotPasswordState.error);
     }
   }
@@ -57,7 +56,6 @@ class ForgotPasswordViewModel with ChangeNotifier{
       changeState(ForgotPasswordState.none);
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
       changeState(ForgotPasswordState.error);
     }
   }

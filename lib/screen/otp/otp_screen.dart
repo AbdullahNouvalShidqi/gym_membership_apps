@@ -1,12 +1,9 @@
 import 'dart:async';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_view_model.dart';
-import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';

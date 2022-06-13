@@ -3,6 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/book/book_screen.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:intl/intl.dart';
 
 import 'utilitites.dart';
@@ -120,20 +122,20 @@ class CostumCard extends StatelessWidget {
                   width: 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Utilities.yelloColor
+                    color: Utilities.greenColor
                   ),
                 ),
                 const SizedBox(width: 5,),
-                Text('Waiting', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                Text('Joined', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: (){
+          // ElevatedButton(
+          //   onPressed: (){
 
-            },
-            child: Text('Pay Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
-          )
+          //   },
+          //   child: Text('Pay Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
+          // )
         ],
       );
     }
@@ -186,16 +188,33 @@ class CostumCard extends StatelessWidget {
             ],
           ),
         ),
-        ElevatedButton(
-          onPressed: classModel.qtyUser == 0 ? null : (){
+        CostumButton(
+          useFixedSize: false,
+          onPressed: checkItem(item: classModel)['onPressed'] ? (){
             Navigator.pushNamed(context, BookScreen.routeName, arguments: classModel);
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(classModel.qtyUser == 0 ? const Color.fromARGB(255, 188, 188, 188) : Utilities.primaryColor)
-          ),
-          child: Text(classModel.qtyUser == 0 ? 'Full' : 'Book Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
+          } : null,
+          childText: checkItem(item: classModel)['status']
         )
       ],
     );
+  }
+
+  Map<String, dynamic> checkItem({required ClassModel item}){
+    if(ScheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass)){
+      return {
+        'status' : 'Booked',
+        'onPressed' : false
+      };
+    }
+    if(item.qtyUser == 0){
+      return {
+        'status' : 'Full',
+        'onPressed' : false
+      };
+    }
+    return {
+      'status' : 'Book now',
+      'onPressed' : true
+    };
   }
 }

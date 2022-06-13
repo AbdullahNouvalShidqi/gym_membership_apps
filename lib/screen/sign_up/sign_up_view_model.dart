@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 enum SignUpState{
   none,
@@ -30,7 +29,6 @@ class SignUpViewModel with ChangeNotifier{
     }
     catch(e){
       changeState(SignUpState.error);
-      Fluttertoast.showToast(msg: e.toString());
     }
     
   }

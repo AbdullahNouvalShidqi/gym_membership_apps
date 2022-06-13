@@ -8,7 +8,9 @@ class CostumButton extends StatelessWidget {
     Key? key,
     required this.onPressed,
     required this.childText,
+    this.childTextStyle,
     this.isLoading = false,
+    this.useFixedSize = true,
     this.width,
     this.height,
     this.backgroundColor,
@@ -20,6 +22,8 @@ class CostumButton extends StatelessWidget {
   final double? height;
   final Color? backgroundColor;
   final Color? fontColor;
+  final TextStyle? childTextStyle;
+  final bool useFixedSize;
   final bool isLoading;
 
   @override
@@ -27,13 +31,13 @@ class CostumButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: isLoading ? null : onPressed,
       style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(width ?? MediaQuery.of(context).size.width, height ?? 40)),
-        backgroundColor: MaterialStateProperty.all(backgroundColor)
+        fixedSize: useFixedSize ? MaterialStateProperty.all(Size(width ?? MediaQuery.of(context).size.width, height ?? 40)) : null,
+        backgroundColor: MaterialStateProperty.all(onPressed == null ? const Color.fromARGB(255, 188, 188, 188) : null)
       ),
       child: isLoading ? Center(
         child: SpinKitThreeBounce(color: Utilities.myWhiteColor, size: 25, duration: const Duration(seconds: 1),)
       ):
-      Text(childText, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: fontColor),)
+      Text(childText, style: childTextStyle ?? GoogleFonts.roboto(fontSize: useFixedSize ? 16 : 12, fontWeight: FontWeight.w500, color: fontColor ?? Utilities.myWhiteColor),)
     );
   }
 }

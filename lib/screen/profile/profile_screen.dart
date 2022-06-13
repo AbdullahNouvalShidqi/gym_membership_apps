@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
+import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -23,10 +26,11 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProviderStateMixin {
+class _ProfileScreenState extends State<ProfileScreen>{
   ScrollStatus _scrollStatus = ScrollStatus.detached;
-  late final _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
   final _listviewController = ScrollController();
+  final _singleListController = ScrollController();
+  bool isDown = false;
 
   @override
   void initState() {
@@ -35,11 +39,15 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
   }
 
   void _whenToAnimate(){
-    if(_listviewController.position.userScrollDirection == ScrollDirection.reverse && _animationController.status != AnimationStatus.forward && _animationController.status == AnimationStatus.dismissed){
-      _animationController.forward();
+    if(_listviewController.position.userScrollDirection == ScrollDirection.reverse && _singleListController.offset == _singleListController.position.minScrollExtent){
+      _singleListController.animateTo(_singleListController.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+      isDown = true;
     }
-    if(_listviewController.offset < _listviewController.position.minScrollExtent + 10 && _animationController.status != AnimationStatus.reverse && _animationController.status == AnimationStatus.completed){
-      _animationController.reverse();
+    if(_listviewController.position.userScrollDirection == ScrollDirection.forward && _listviewController.offset < _listviewController.position.minScrollExtent){
+      if(isDown){
+        _singleListController.animateTo(_singleListController.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+        isDown = false;
+      }
     }
   }
 
@@ -51,64 +59,63 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         final progressSelected = profileViewModel.progressSelected;
         return Scaffold(
           body: SingleChildScrollView(
+            controller: _singleListController,
             physics: const NeverScrollableScrollPhysics(),
             child: Center(
-              child: SlideTransition(
-                position: Tween(begin: Offset.zero, end: const Offset(0.0, -0.215)).animate(_animationController),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 40),
-                      child: Center(child: Text('Profile', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black),),)
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
+                    child: Center(child: Text('Profile', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black),),)
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 30),
+                    child: CircleAvatar(
+                      radius: 40,
+                      child: Image.asset('assets/profile.png'),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30),
-                      child: CircleAvatar(
-                        radius: 40,
-                        child: Image.asset('assets/profile.png'),
+                  ),
+                  const SizedBox(height: 15,),
+                  Text(profileViewModel.user.username, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+                  const SizedBox(height: 30,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      ElevatedButton(
+                        onPressed: (){
+                          _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+                          if(_scrollStatus == ScrollStatus.attached){
+                            _scrollStatus = ScrollStatus.detached;
+                          }
+                          profileViewModel.myAccountButtonOnTap();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(myAccountSelected ? Colors.white : null),
+                          side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
+                        ),
+                        child: Text('My Account', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: myAccountSelected ? Utilities.myTheme.primaryColor : null),)
                       ),
-                    ),
-                    const SizedBox(height: 15,),
-                    Text(profileViewModel.user.username, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
-                    const SizedBox(height: 30,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                          onPressed: (){
-                            _animationController.reverse();
-                            if(_scrollStatus == ScrollStatus.attached){
-                              _scrollStatus = ScrollStatus.detached;
-                            }
-                            profileViewModel.myAccountButtonOnTap();
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(myAccountSelected ? Colors.white : null),
-                            side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
-                          ),
-                          child: Text('My Account', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: myAccountSelected ? Utilities.myTheme.primaryColor : null),)
+                      const SizedBox(width: 10,),
+                      ElevatedButton(
+                        onPressed: (){
+                          if(_scrollStatus == ScrollStatus.attached){
+                            _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+                            _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+                          }
+                          _scrollStatus = ScrollStatus.attached;  
+                          profileViewModel.progressButtonOnTap();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null),
+                          side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
                         ),
-                        const SizedBox(width: 10,),
-                        ElevatedButton(
-                          onPressed: (){
-                            if(_scrollStatus == ScrollStatus.attached){
-                              _listviewController.animateTo(_listviewController.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.ease);
-                            }
-                            _scrollStatus = ScrollStatus.attached;  
-                            profileViewModel.progressButtonOnTap();
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null),
-                            side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
-                          ),
-                          child: Text('Progress', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: progressSelected ? Utilities.myTheme.primaryColor : null),)
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 15),
-                    itemsToReturn(profileViewModel: profileViewModel, myAccountSelected: myAccountSelected, homeViewModel: homeViewModel)
-                  ],
-                ),
+                        child: Text('Progress', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: progressSelected ? Utilities.myTheme.primaryColor : null),)
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 15),
+                  itemsToReturn(profileViewModel: profileViewModel, myAccountSelected: myAccountSelected, homeViewModel: homeViewModel)
+                ],
               ),
             ),
           ),
@@ -177,9 +184,14 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
           controller: _listviewController,
           itemCount: profileViewModel.progress.length,
           itemBuilder: (context, i){
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: CostumCard(classModel: profileViewModel.progress[i], whichScreen: CostumCardFor.profileScreen)
+            return InkWell(
+              onTap: (){
+                Navigator.pushNamed(context, DetailScreen.routeName, arguments: profileViewModel.progress[i]);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: CostumCard(classModel: profileViewModel.progress[i], whichScreen: CostumCardFor.profileScreen)
+              ),
             );
           }
         ),
@@ -214,28 +226,23 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
         await showDialog(
           context: context,
           builder: (context){
-            return AlertDialog(
-              title: Text('Sign Out?', style: GoogleFonts.roboto(),),
-              content: Text('You sure want to sign out and go to the login screen?', style: GoogleFonts.roboto(),),
-              actions: [
-                TextButton(
-                  onPressed: (){
-                    logOut = true;
-                    Navigator.pop(context);
-                  },
-                  child: Text('Yes', style: GoogleFonts.roboto(),)
-                ),
-                TextButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancel', style: GoogleFonts.roboto(),)
-                ),
-              ],
+            return CostumDialog(
+              title: 'Sign out?',
+              contentText: 'You sure want to sign out and go to the login screen?',
+              trueText: 'Yes',
+              falseText: 'Cancel',
+              trueOnPressed: (){
+                logOut = true;
+                Navigator.pop(context);
+              },
+              falseOnPressed: (){
+                Navigator.pop(context);
+              },
             );
           }
         );
         if(logOut){
+          ScheduleViewModel.logOut();
           profileViewModel.disposeUserData();
           homeViewModel.selectTab('Home', 0);
           if(!mounted)return;

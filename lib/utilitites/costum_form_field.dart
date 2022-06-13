@@ -3,11 +3,21 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CostumFormField extends StatefulWidget {
-  const CostumFormField({Key? key, required this.controller, required this.label, required this.hintText, required this.prefixIcon, this.useIconHidePassword = false, required this.validator}) : super(key: key);
+  const CostumFormField({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.hintText,
+    required this.prefixIcon,
+    this.textInputType,
+    this.useIconHidePassword = false,
+    required this.validator
+  }) : super(key: key);
   final TextEditingController controller;
   final String label;
   final String hintText;
   final Icon prefixIcon;
+  final TextInputType? textInputType;
   final bool useIconHidePassword;
   final String? Function(String?) validator;
 
@@ -27,7 +37,7 @@ class _CostumFormFieldState extends State<CostumFormField> {
         Text(widget.label, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
         const SizedBox(height: 5,),
         TextFormField(
-          keyboardType: TextInputType.visiblePassword,
+          keyboardType: widget.textInputType,
           obscureText: !widget.useIconHidePassword ? false : _hidePass,
           controller: widget.controller,
           decoration: InputDecoration(

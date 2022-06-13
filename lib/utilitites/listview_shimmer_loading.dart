@@ -39,10 +39,9 @@ class ListViewShimmerLoading extends StatelessWidget {
               child: ShimmerContainer(height: 63, width: double.infinity, borderRadius: BorderRadius.circular(10),),
             )
           ],
-          const SizedBox(height: 15,),
           Expanded(
             child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: 8,
               itemBuilder: (context, i){
                 return ShimmerContainer(

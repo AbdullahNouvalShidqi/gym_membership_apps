@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 
 enum AvailableClassState {none, loading, error}
@@ -25,7 +24,6 @@ class AvailableClassViewModel with ChangeNotifier{
       changeState(AvailableClassState.none);
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
       changeState(AvailableClassState.error);
     }
   }
@@ -36,7 +34,6 @@ class AvailableClassViewModel with ChangeNotifier{
       changeState(AvailableClassState.none);
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
       changeState(AvailableClassState.error);
     }
   }

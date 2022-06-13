@@ -27,12 +27,14 @@ class HomeViewModel with ChangeNotifier{
 
   final List<String> _pageKeys = ["Home", "Schedule", "Profile"];
   List<String> get pageKeys => _pageKeys;
+
   final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
     "Home" : GlobalKey<NavigatorState>(),
     "Schedule" : GlobalKey<NavigatorState>(),
     "Profile" : GlobalKey<NavigatorState>(),
   };
 
+  Map<String, GlobalKey<NavigatorState>> get navigatorKeys => _navigatorKeys;
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKeys[_currentPage]!;
 
   final ScrollController _homeScrollController = ScrollController();
@@ -240,15 +242,13 @@ class HomeViewModel with ChangeNotifier{
     changeState(HomeViewState.loading);
 
     try{
-      await Future.delayed(const Duration(seconds: 5));
-      changeState(HomeViewState.none);
-      return _classes;
+      await Future.delayed(const Duration(seconds: 2));
+      changeState(HomeViewState.none);      
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
       changeState(HomeViewState.error);
-      return null;
     }
+    return _classes;
   }
 
   final List<ArticleModel> _articles = [

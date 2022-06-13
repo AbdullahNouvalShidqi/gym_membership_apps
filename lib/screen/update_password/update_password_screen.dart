@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/screen/success_screen/success_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -122,6 +122,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       label: 'New Password',
       hintText: 'Enter new password',
       prefixIcon: const Icon(Icons.lock_outline),
+      textInputType: TextInputType.visiblePassword,
       useIconHidePassword: true,
       validator: (newValue){
         if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
@@ -141,6 +142,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       label: 'Confirm Password',
       hintText: 'Enter new password',
       prefixIcon: const Icon(Icons.lock_outline),
+      textInputType: TextInputType.visiblePassword,
       useIconHidePassword: true,
       validator: (newValue){
         if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
@@ -162,9 +164,17 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(40) , topRight: Radius.circular(40))
           ),
+          isScrollControlled: true,
           context: context,
           builder: (context){
-            return const SuccesScreen();
+            return CostumBottomSheet(
+              title: 'Password Recovery Succesful',
+              content: 'Return to the login screen to enter the application',
+              buttonText: 'Return to login',
+              onPressed: (){
+                Navigator.popUntil(context, (route) => route.isFirst);
+              }
+            );
           }
         );
       },

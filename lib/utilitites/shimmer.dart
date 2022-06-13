@@ -15,7 +15,7 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    _animationController.addListener(changeValue);
+    _animationController.addListener(updateAnimation);
     super.initState();
   }
 
@@ -25,7 +25,7 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  void changeValue(){
+  void updateAnimation(){
     setState(() {});
   }
 

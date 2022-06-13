@@ -9,6 +9,7 @@ import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -121,6 +122,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         label: 'Email Address',
         hintText: 'Enter your email address',
         prefixIcon: const Icon(Icons.email_outlined),
+        textInputType: TextInputType.emailAddress,
         validator: (newValue){
           if(newValue == null || newValue.isEmpty || newValue == ' '){
             return 'Please enter your email address';
@@ -142,6 +144,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         label: 'Phone Number',
         hintText: 'Enter your phone number',
         prefixIcon: const Icon(Icons.phone_outlined),
+        textInputType: TextInputType.phone,
         validator: (newValue){
         if(newValue == null || newValue.isEmpty || newValue == ' '){
           return 'Please enter your phone number';
@@ -163,6 +166,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         label: 'Password',
         hintText: 'Enter your password',
         prefixIcon: const Icon(Icons.lock_outline),
+        textInputType: TextInputType.visiblePassword,
         validator: (newValue){
           if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
             return 'Please enter your password';
@@ -185,6 +189,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         label: 'Confirm Password',
         hintText: 'Enter your password',
         prefixIcon: const Icon(Icons.lock_outline),
+        textInputType: TextInputType.visiblePassword,
         validator: (newValue){
           if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
             return 'Please enter your password';
@@ -303,8 +308,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
               TextSpan(
                 text: 'Log in',
                 style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()..onTap = (){
-                  Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+                recognizer: TapGestureRecognizer()..onTap = () async {
+                  if(_usernameCtrl.text.isNotEmpty ||_emailCtrl.text.isNotEmpty || _phoneNumberCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty){
+                    bool willPop = false;
+                    await showDialog(
+                      context: context,
+                      builder: (context){
+                        return CostumDialog(
+                          title: 'Whoa! Take it easy',
+                          contentText: 'You will lost your input data to sign up, still want to exit?',
+                          trueText: 'Yes',
+                          falseText: 'No',
+                          trueOnPressed: (){
+                            willPop = true;
+                            Navigator.pop(context);
+                          },
+                          falseOnPressed: (){
+                            Navigator.pop(context);
+                          },
+                        );
+                      }
+                    );
+                    if(willPop){
+                      if(!mounted)return;
+                      Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+                    }
+                  }
                 }
               )
             ]
@@ -315,51 +344,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<bool> willPopValidation() async {
-    
     if(_usernameCtrl.text.isNotEmpty ||_emailCtrl.text.isNotEmpty || _phoneNumberCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty){
       bool willPop = false;
       await showDialog(
         context: context,
         builder: (context){
-          return Dialog(
-            child: Container(
-              width: 240,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Utilities.myWhiteColor,
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 17, horizontal: 38),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('Whoa! Take it easy', style: GoogleFonts.roboto(fontSize: 16, color: Utilities.primaryColor),),
-                    const SizedBox(height: 5,),
-                    Text('You will lost your input data to sign up', textAlign:  TextAlign.center, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-                    const SizedBox(height: 18,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: (){
-                            willPop = true;
-                            Navigator.pop(context);
-                          },
-                          child: Text('Yes', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor),),
-                        ),
-                        const SizedBox(width: 25.5,),
-                        ElevatedButton(
-                          onPressed: (){
-                            Navigator.pop(context);
-                          },
-                          child: Text('Cancel', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.myWhiteColor),)
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
+          return CostumDialog(
+            title: 'Whoa! Take it easy',
+            contentText: 'You will lost your input data to sign up, still want to exit?',
+            trueText: 'Yes',
+            falseText: 'No',
+            trueOnPressed: (){
+              willPop = true;
+              Navigator.pop(context);
+            },
+            falseOnPressed: (){
+              Navigator.pop(context);
+            },
           );
         }
       );

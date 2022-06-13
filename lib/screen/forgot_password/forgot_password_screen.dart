@@ -80,6 +80,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       label: 'Email Address',
       hintText: 'Enter your email',
       prefixIcon: const Icon(Icons.email_outlined),
+      textInputType: TextInputType.emailAddress,
       validator: (newValue){
         if(newValue == null || newValue == '' || newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(_emailCtrl.text)){
           return 'Please enter a valid email';

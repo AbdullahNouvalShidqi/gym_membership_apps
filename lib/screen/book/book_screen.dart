@@ -3,7 +3,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
+import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -149,19 +154,86 @@ class _BookScreenState extends State<BookScreen> {
               child: Text('Back to home', style: GoogleFonts.roboto(fontSize: 16, color: Utilities.primaryColor),)
             ),
             const SizedBox(height: 5,),
-            ElevatedButton(
-              onPressed: (){
+            Consumer2<ScheduleViewModel, HomeViewModel>(
+              builder: (context, scheduleViewModel, homeViewModel, _) {
+                final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
+                final isError = scheduleViewModel.state == ScheduleViewState.error;
+                return CostumButton(
+                  isLoading: isLoading,
+                  onPressed: checkItem(item: item)  ? null : 
+                  () async {
+                    bool dontAdd = false;
+                    if(ScheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour)){
+                      await showDialog(
+                        context: context,
+                        builder: (context){
+                          return CostumDialog(
+                            title: 'Watch it!',
+                            contentText: 'You already book another class with the same time as this class, you sure want to book?',
+                            trueText: 'Yes',
+                            falseText: 'No',
+                            trueOnPressed: (){
+                              Navigator.pop(context);
+                            },
+                            falseOnPressed: (){
+                              dontAdd = true;
+                              Navigator.pop(context);
+                            },
+                          );
+                        }
+                      );
+                    }
+                    if(dontAdd){
+                      Fluttertoast.showToast(msg: 'No book has done');
+                      return;
+                    }
 
-              },
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
-              ),
-              child: Text('Booking Now', style: GoogleFonts.roboto(fontSize: 16),)
+                    await scheduleViewModel.addDatBooking(newClass: item);
+
+                    if(isError){
+                      Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
+                      return;
+                    }
+                    bool goToSchedule = false;
+                    
+                    await showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))
+                      ),
+                      isScrollControlled: true,
+                      builder: (context){
+                        return CostumBottomSheet(
+                          title: 'Booking Class Successful',
+                          content: 'Return to Schedule page to see your schedule',
+                          buttonText: 'See Schedule',
+                          onPressed: (){
+                            goToSchedule = true;
+                            Navigator.pop(context);
+                          },
+                        );
+                      }
+                    );
+                    if(goToSchedule){
+                      homeViewModel.selectTab('Schedule', 1);
+                      homeViewModel.navigatorKeys['Home']!.currentState!.popUntil((route) => route.isFirst);
+                    }
+                  },
+                  height: 45,
+                  childText: 'Book now'
+                );
+              }
             ),
             const SizedBox(height: 30,)
           ],
         ),
       ),
     );
+  }
+  bool checkItem({required ClassModel item}){
+    if(ScheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass,)){
+      return true;
+    }
+    return false;
   }
 }

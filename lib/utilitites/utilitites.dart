@@ -66,7 +66,7 @@ class Utilities{
 
   static Color redColor = const Color.fromRGBO(246, 0, 0, 1);
 
-  static Color yelloColor = const Color.fromRGBO(226, 206, 23, 1);
+  static Color yellowColor = const Color.fromRGBO(226, 206, 23, 1);
 
   static LinearGradient gradient({
     required double value, 

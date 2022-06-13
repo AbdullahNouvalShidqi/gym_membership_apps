@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 
 enum DetailState {none, loading, error}
@@ -24,7 +23,6 @@ class DetailViewModel with ChangeNotifier{
       changeState(DetailState.none);
     }
     catch(e){
-      Fluttertoast.showToast(msg: e.toString());
       changeState(DetailState.error);
     }
   }

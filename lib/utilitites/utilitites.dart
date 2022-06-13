@@ -7,7 +7,7 @@ class Utilities{
   static Color subPrimaryColor = const Color.fromRGBO(34, 85, 156, 1);
   static Color myWhiteColor = const Color.fromRGBO(250, 250, 250, 1);
   static RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  static RegExp passwordExp = RegExp(r"^(?=.*?[A-Z])");
+  static RegExp passwordExp = RegExp(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])");
 
   static ThemeData myTheme = ThemeData(
     colorScheme: ThemeData().colorScheme.copyWith(primary: subPrimaryColor, secondary: primaryColor),

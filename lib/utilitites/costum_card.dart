@@ -6,6 +6,7 @@ import 'package:gym_membership_apps/screen/book/book_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import 'utilitites.dart';
 
@@ -188,19 +189,23 @@ class CostumCard extends StatelessWidget {
             ],
           ),
         ),
-        CostumButton(
-          useFixedSize: false,
-          onPressed: checkItem(item: classModel)['onPressed'] ? (){
-            Navigator.pushNamed(context, BookScreen.routeName, arguments: classModel);
-          } : null,
-          childText: checkItem(item: classModel)['status']
+        Consumer<ScheduleViewModel>(
+          builder: (context, scheduleViewModel, _) {
+            return CostumButton(
+              useFixedSize: false,
+              onPressed: checkItem(item: classModel, scheduleViewModel: scheduleViewModel)['onPressed'] ? (){
+                Navigator.pushNamed(context, BookScreen.routeName, arguments: classModel);
+              } : null,
+              childText: checkItem(item: classModel, scheduleViewModel: scheduleViewModel)['status']
+            );
+          }
         )
       ],
     );
   }
 
-  Map<String, dynamic> checkItem({required ClassModel item}){
-    if(ScheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass)){
+  Map<String, dynamic> checkItem({required ClassModel item, required ScheduleViewModel scheduleViewModel}){
+    if(scheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass)){
       return {
         'status' : 'Booked',
         'onPressed' : false

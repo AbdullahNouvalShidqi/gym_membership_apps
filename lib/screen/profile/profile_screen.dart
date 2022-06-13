@@ -132,45 +132,49 @@ class _ProfileScreenState extends State<ProfileScreen>{
           physics: const NeverScrollableScrollPhysics(),
           itemCount: profileViewModel.myAccountItems.length,
           itemBuilder: (context, i){
-            return  Column(
-              children: [
-                if(i < 6) ...[
-                  InkWell(
-                    onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel),
-                    child: Container(
-                      height: 45,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          profileViewModel.myAccountItems[i]['icon']!,
-                          const SizedBox(width: 10,),
-                          profileViewModel.myAccountItems[i]['title']!,
-                        ],
-                      )
-                    ),
-                  ),
-                  Divider(height: 0, color: Utilities.myTheme.primaryColor,),
-                ],
-                
-                if(i==6) ...[
-                  const SizedBox(height: 20,),
-                  InkWell(
-                    onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel),
-                    child: Container(
-                      height: 45,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: Row(
-                        children: [
-                          profileViewModel.myAccountItems[i]['icon']!,
-                          const SizedBox(width: 10,),
-                          profileViewModel.myAccountItems[i]['title']!,
-                        ],
-                      )
-                    ),
-                  ),
-                  Divider(height: 0, color: Utilities.myTheme.primaryColor,) 
-                ],
-              ],
+            return  Consumer<ScheduleViewModel>(
+              builder: (context, scheduleViewModel, _) {
+                return Column(
+                  children: [
+                    if(i < 6) ...[
+                      InkWell(
+                        onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
+                        child: Container(
+                          height: 45,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              profileViewModel.myAccountItems[i]['icon']!,
+                              const SizedBox(width: 10,),
+                              profileViewModel.myAccountItems[i]['title']!,
+                            ],
+                          )
+                        ),
+                      ),
+                      Divider(height: 0, color: Utilities.myTheme.primaryColor,),
+                    ],
+                    
+                    if(i==6) ...[
+                      const SizedBox(height: 20,),
+                      InkWell(
+                        onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
+                        child: Container(
+                          height: 45,
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              profileViewModel.myAccountItems[i]['icon']!,
+                              const SizedBox(width: 10,),
+                              profileViewModel.myAccountItems[i]['title']!,
+                            ],
+                          )
+                        ),
+                      ),
+                      Divider(height: 0, color: Utilities.myTheme.primaryColor,) 
+                    ],
+                  ],
+                );
+              }
             );
           },
         ),
@@ -203,7 +207,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
     required BuildContext context, 
     required int i, 
     required ProfileViewModel profileViewModel,
-    required HomeViewModel homeViewModel
+    required HomeViewModel homeViewModel,
+    required ScheduleViewModel scheduleViewModel
   }){
     return () async {
       if(i == 0){
@@ -242,7 +247,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
           }
         );
         if(logOut){
-          ScheduleViewModel.logOut();
+          scheduleViewModel.logOut();
           profileViewModel.disposeUserData();
           homeViewModel.selectTab('Home', 0);
           if(!mounted)return;

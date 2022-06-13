@@ -160,10 +160,10 @@ class _BookScreenState extends State<BookScreen> {
                 final isError = scheduleViewModel.state == ScheduleViewState.error;
                 return CostumButton(
                   isLoading: isLoading,
-                  onPressed: checkItem(item: item)  ? null : 
+                  onPressed: checkItem(item: item, scheduleViewModel: scheduleViewModel)  ? null : 
                   () async {
                     bool dontAdd = false;
-                    if(ScheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour)){
+                    if(scheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour)){
                       await showDialog(
                         context: context,
                         builder: (context){
@@ -230,8 +230,8 @@ class _BookScreenState extends State<BookScreen> {
       ),
     );
   }
-  bool checkItem({required ClassModel item}){
-    if(ScheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass,)){
+  bool checkItem({required ClassModel item, required ScheduleViewModel scheduleViewModel}){
+    if(scheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass,)){
       return true;
     }
     return false;

@@ -13,8 +13,11 @@ class ScheduleViewModel with ChangeNotifier{
   ScheduleViewState _state = ScheduleViewState.none;
   ScheduleViewState get state => _state;
 
-  static List<ClassModel> listSchedule = [];
-  static List<ClassModel> tempSchedules = [];
+  List<ClassModel> _listSchedule = [];
+  List<ClassModel> get listSchedule => _listSchedule;
+
+  List<ClassModel> _tempSchedules = [];
+  List<ClassModel> get tempSchedules => _tempSchedules;
 
   static bool isInit = true;
 
@@ -67,12 +70,12 @@ class ScheduleViewModel with ChangeNotifier{
 
   Future<void> refreshData() async {
     try{
-      int currentLength = listSchedule.length;
+      int currentLength = _listSchedule.length;
       await Future.delayed(const Duration(seconds: 2));
-      if(listSchedule.length < currentLength){
+      if(_listSchedule.length < currentLength){
         Fluttertoast.showToast(msg: 'Some data are deleted');
       }
-      if(listSchedule.length > currentLength){
+      if(_listSchedule.length > currentLength){
         Fluttertoast.showToast(msg: 'New data added to your schedule');
       }
       changeState(ScheduleViewState.none);
@@ -87,8 +90,8 @@ class ScheduleViewModel with ChangeNotifier{
 
     try{
       await Future.delayed(const Duration(seconds: 1));
-      listSchedule = [newClass, ...listSchedule];
-      tempSchedules = [newClass, ...tempSchedules];
+      _listSchedule = [newClass, ..._listSchedule];
+      _tempSchedules = [newClass, ..._tempSchedules];
       changeState(ScheduleViewState.none);
     }
     catch(e){
@@ -97,13 +100,13 @@ class ScheduleViewModel with ChangeNotifier{
   }
 
   void resetSort(){
-    listSchedule = [...tempSchedules];
+    _listSchedule = [..._tempSchedules];
     notifyListeners();  
   }
 
-  static void logOut(){
-    listSchedule.clear();
-    tempSchedules.clear();
+  void logOut(){
+    _listSchedule.clear();
+    _tempSchedules.clear();
     isInit = true;
   }
 }

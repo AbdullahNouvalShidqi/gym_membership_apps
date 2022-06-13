@@ -333,7 +333,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       if(!mounted)return;
                       Navigator.pushReplacementNamed(context, SignInScreen.routeName);
                     }
+                    return;
                   }
+                  if(!mounted)return;
+                  Navigator.pushReplacementNamed(context, SignInScreen.routeName);
                 }
               )
             ]

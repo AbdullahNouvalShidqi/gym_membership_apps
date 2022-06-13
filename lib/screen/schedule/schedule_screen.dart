@@ -41,7 +41,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
           builder: (context, scheduleViewModel, _) {
             final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
             final isError = scheduleViewModel.state == ScheduleViewState.error;
-            List<ClassModel> allItem = ScheduleViewModel.listSchedule;
+            List<ClassModel> allItem = scheduleViewModel.listSchedule;
             if(isError){}
             if(isLoading){
               return RefreshIndicator(
@@ -108,7 +108,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                           child: ListView.builder(
                             controller: scheduleViewModel.scheduleListController,
                             physics: isLoading ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-                            itemCount: isLoading ? 8 : ScheduleViewModel.listSchedule.length,
+                            itemCount: isLoading ? 8 : scheduleViewModel.listSchedule.length,
                             itemBuilder: (context, i){
                               return InkWell(
                                 onTap: (){
@@ -116,10 +116,9 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 5),
-                                  child: CostumCard(classModel: ScheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.scheduleScreen),
+                                  child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.scheduleScreen),
                                 ),
                               );
-                              
                             }
                           ),
                         ),

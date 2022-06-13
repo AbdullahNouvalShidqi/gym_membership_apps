@@ -15,8 +15,8 @@ class ScheduleViewModel with ChangeNotifier{
 
   static List<ClassModel> listSchedule = [];
   static List<ClassModel> tempSchedules = [];
-  bool _isInit = true;
-  bool get isInit => _isInit;
+
+  static bool isInit = true;
 
   final ScrollController _scheduleListController = ScrollController();
   ScrollController get scheduleListController => _scheduleListController;
@@ -42,8 +42,8 @@ class ScheduleViewModel with ChangeNotifier{
 
   List<Map<String, String?>> get buttonsData => _buttonsData;
 
-  void isInitDone(){
-    _isInit = false;
+  static void isInitDone(){
+    isInit = false;
   }
 
   void changeState(ScheduleViewState s){
@@ -104,5 +104,6 @@ class ScheduleViewModel with ChangeNotifier{
   static void logOut(){
     listSchedule.clear();
     tempSchedules.clear();
+    isInit = true;
   }
 }

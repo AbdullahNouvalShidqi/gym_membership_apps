@@ -34,12 +34,12 @@ class HomeScreen extends StatelessWidget {
               onTap: (index){
                 final onGoToSchedule = homeViewModel.currentPage != 'Schedule';
                 homeViewModel.selectTab(homeViewModel.pageKeys[index], index);
-                if(index == 1 && scheduleViewModel.isInit){
+                if(index == 1 && ScheduleViewModel.isInit){
                   scheduleViewModel.getSchedule(id: '');
-                  scheduleViewModel.isInitDone();
+                  ScheduleViewModel.isInitDone();
                   return;
                 }
-                else if(index == 1 && onGoToSchedule && !scheduleViewModel.isInit){
+                else if(index == 1 && onGoToSchedule && !ScheduleViewModel.isInit){
                   scheduleViewModel.refreshData();
                 }
               },

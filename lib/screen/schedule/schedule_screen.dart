@@ -55,6 +55,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                 key: const Key('scheduleRefresh'),
                 onRefresh: scheduleViewModel.refreshData,
                 child: SingleChildScrollView(
+                  controller: scheduleViewModel.scheduleListController,
                   physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height - 135,

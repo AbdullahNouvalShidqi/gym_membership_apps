@@ -1,10 +1,19 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/instructor_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
+import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
+import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
+import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
+import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
+import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
+import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 
 enum ProfileViewState{
   none,
@@ -166,11 +175,7 @@ class ProfileViewModel with ChangeNotifier{
   final List<Map<String, Widget>> _myAccountItems = [
     {
       'icon' : SvgPicture.asset('assets/icons/personal_detail.svg'),
-      'title' : Text('Personal Details', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),)
-    },
-    {
-      'icon' : SvgPicture.asset('assets/icons/payment.svg'),
-      'title' : Text('Payment', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),)
+      'title' : Text('Personal Details', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),),
     },
     {
       'icon' : SvgPicture.asset('assets/icons/update_password.svg'),
@@ -222,5 +227,73 @@ class ProfileViewModel with ChangeNotifier{
     _myAccountSelected = false;
     _progressSelected = true;
     notifyListeners();
+  }
+
+  Future<void> refreshProgress() async {
+    try{
+      await Future.delayed(const Duration(seconds: 2));
+      changeState(ProfileViewState.none);
+    }
+    catch(e){
+      Fluttertoast.showToast(msg: 'Error cannot get data, check you internet connection');
+      changeState(ProfileViewState.error);
+    }
+  }
+  
+
+  dynamic onTap({
+    required BuildContext context,
+    required int i,
+    required ScheduleViewModel scheduleViewModel,
+    required ProfileViewModel profileViewModel,
+    required HomeViewModel homeViewModel,
+    required bool mounted
+  }){
+    final List onTap = [
+      () async {
+        Navigator.pushNamed(context, PersonalDetail.routeName);
+      },
+      () async {
+        Navigator.pushNamed(context, ProfileUpdatePasswordScreen.routeName);
+      },
+      () async {
+        Navigator.pushNamed(context, FeedbackScreen.routeName);
+      },
+      () async {
+        Navigator.pushNamed(context, TermsAndConditionsScreen.routeName);
+      },
+      () async {
+        Navigator.pushNamed(context, FaqScreen.routeName);
+      },
+      () async {
+        bool logOut = false;
+        await showDialog(
+          context: context,
+          builder: (context){
+            return CostumDialog(
+              title: 'Sign out?',
+              contentText: 'You sure want to sign out and go to the login screen?',
+              trueText: 'Yes',
+              falseText: 'Cancel',
+              trueOnPressed: (){
+                logOut = true;
+                Navigator.pop(context);
+              },
+              falseOnPressed: (){
+                Navigator.pop(context);
+              },
+            );
+          }
+        );
+        if(logOut){
+          scheduleViewModel.logOut();
+          profileViewModel.disposeUserData();
+          homeViewModel.selectTab('Home', 0);
+          if(!mounted)return;
+          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(SignInScreen.routeName, (route) => false);
+        }
+      }
+    ];
+    return onTap[i];
   }
 }

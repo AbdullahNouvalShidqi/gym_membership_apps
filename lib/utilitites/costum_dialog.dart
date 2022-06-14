@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class CostumDialog extends StatelessWidget {
@@ -10,13 +11,13 @@ class CostumDialog extends StatelessWidget {
     required this.trueText,
     required this.falseText,
     required this.trueOnPressed,
-    required this.falseOnPressed
+    this.falseOnPressed
   }) : super(key: key);
   final String title;
   final String contentText;
   final String trueText;
   final String? falseText;
-  final void Function()? trueOnPressed;
+  final void Function() trueOnPressed;
   final void Function()? falseOnPressed;
 
   @override
@@ -37,6 +38,14 @@ class CostumDialog extends StatelessWidget {
               const SizedBox(height: 5,),
               Text(contentText, textAlign:  TextAlign.center, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
               const SizedBox(height: 15,),
+              falseText == null || falseOnPressed == null ? 
+              Center(
+                child: CostumButton(
+                  onPressed: trueOnPressed, 
+                  childText: trueText
+                ),
+              )
+              :
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

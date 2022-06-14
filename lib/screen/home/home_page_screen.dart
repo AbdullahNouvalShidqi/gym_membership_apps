@@ -4,11 +4,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
-import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
-import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
-import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_home_card.dart';
 import 'package:gym_membership_apps/utilitites/home_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -101,98 +99,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   ],
                 ),
               ),
-              costumListItems(context: context, classModel: classModel!, type: 'Online'),
+              CostumHomeCard(classModels: homeViewModel.classes.where((element) => element.type == 'Online').toList(), height: 164, width: 125,),
               const SizedBox(height: 20,),
-              costumListItems(context: context, classModel: classModel!, type: 'Offline'),
+              CostumHomeCard(classModels: homeViewModel.classes.where((element) => element.type == 'Offline').toList(), height: 164, width: 125),
               const SizedBox(height: 20,),
               tipsListView(homeViewModel: homeViewModel)
             ],
           ),
         );
       }
-    );
-  }
-
-  Widget costumListItems({required BuildContext context, required List<ClassModel> classModel, required String type}){
-    final List<ClassModel> items = type == 'Online' ? classModel.where((e) => e.type == type).toList() : classModel.where((e) => e.type == type).toList().reversed.toList();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('$type Class', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
-              InkWell(
-                onTap: (){
-                  Navigator.pushNamed(context, SeeAllScren.routeName, arguments: type);
-                },
-                child: Text('See All', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).primaryColor),)
-              )
-            ],
-          ),
-        ),
-        const SizedBox(height: 5,),
-        SizedBox(
-          height: 164,
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            physics: const BouncingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            itemCount: items.length,
-            itemBuilder: (context, i){
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: Consumer<DetailViewModel>(
-                  builder: (context, detailViewModel, _) {
-                    return InkWell(
-                      onTap: (){
-                        detailViewModel.getDetail();
-                        Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
-                      },
-                      child: Container(                    
-                        width: 125,
-                        alignment: Alignment.bottomLeft,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: AssetImage(items[i].images!.first),
-                            fit: BoxFit.cover
-                          ),
-                        ),
-                        child: Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            gradient: const LinearGradient(
-                              colors: [Colors.black,  Colors.transparent], 
-                              begin: Alignment.bottomCenter,
-                              end: Alignment.center
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                                Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                ),
-              );
-            }
-          ),
-        ),
-      ],
     );
   }
 

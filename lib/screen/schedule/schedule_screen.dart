@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
+import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/single_child_widget.dart';
 
 class ScheduleScreen extends StatefulWidget {
   static String routeName = '/schedule';
@@ -51,27 +50,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
               );
             }
             if(allItem.isEmpty){
-              return RefreshIndicator(
-                key: const Key('scheduleRefresh'),
-                onRefresh: scheduleViewModel.refreshData,
-                child: SingleChildScrollView(
-                  controller: scheduleViewModel.scheduleListController,
-                  physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height - 135,
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset('assets/icons/empty_list.svg'),
-                          const SizedBox(height: 30,),
-                          Text('Ooops, your schedule is still empity', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700))
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              );
+              return const EmptyListView();
             }
             return RefreshIndicator(
               key: const Key('scheduleRefresh'),

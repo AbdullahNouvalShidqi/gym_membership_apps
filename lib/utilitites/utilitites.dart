@@ -6,6 +6,7 @@ class Utilities{
   static Color primaryColor = const Color.fromRGBO(242, 115, 112, 1);
   static Color subPrimaryColor = const Color.fromRGBO(34, 85, 156, 1);
   static Color myWhiteColor = const Color.fromRGBO(250, 250, 250, 1);
+  static Color myGreyColor = const Color.fromRGBO(112, 112, 112, 1);
   static RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
   static RegExp passwordExp = RegExp(r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])");
 
@@ -54,6 +55,10 @@ class Utilities{
   static TextStyle personalDetailValue = GoogleFonts.roboto(fontSize: 16, color: Colors.grey);
 
   static TextStyle buttonTextStyle = GoogleFonts.roboto(fontSize: 16, color: myWhiteColor);
+
+  static TextStyle faqTitleStyle = GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500);
+
+  static TextStyle faqSubTitleStyle = GoogleFonts.roboto(fontSize: 10, color: myGreyColor);
 
   static TextStyle costumSortingButtonStyle(bool isSelected){
     if(isSelected){

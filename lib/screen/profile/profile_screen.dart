@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
-import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
-import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
-import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
-import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
-import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
-import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
-import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
+import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -114,7 +108,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                     ],
                   ),
                   const SizedBox(height: 15),
-                  itemsToReturn(profileViewModel: profileViewModel, myAccountSelected: myAccountSelected, homeViewModel: homeViewModel)
+                  itemsToReturn(myAccountSelected: myAccountSelected)
                 ],
               ),
             ),
@@ -124,19 +118,19 @@ class _ProfileScreenState extends State<ProfileScreen>{
     );
   }
 
-  Widget itemsToReturn({required ProfileViewModel profileViewModel, required bool myAccountSelected, required HomeViewModel homeViewModel}){
-    if(myAccountSelected){
-      return SizedBox(
-        height: MediaQuery.of(context).size.height,
-        child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          itemCount: profileViewModel.myAccountItems.length,
-          itemBuilder: (context, i){
-            return  Consumer<ScheduleViewModel>(
-              builder: (context, scheduleViewModel, _) {
+  Widget itemsToReturn({required bool myAccountSelected}){
+    return Consumer3<ScheduleViewModel, HomeViewModel, ProfileViewModel>(
+      builder: (context, scheduleViewModel, homeViewModel, profileViewModel, _){
+        if(myAccountSelected){
+          return SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: ListView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: profileViewModel.myAccountItems.length,
+              itemBuilder: (context, i){
                 return Column(
                   children: [
-                    if(i < 6) ...[
+                    if(i < 5) ...[
                       InkWell(
                         onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
                         child: Container(
@@ -154,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                       Divider(height: 0, color: Utilities.myTheme.primaryColor,),
                     ],
                     
-                    if(i==6) ...[
+                    if(i==5) ...[
                       const SizedBox(height: 20,),
                       InkWell(
                         onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
@@ -175,31 +169,34 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   ],
                 );
               }
-            );
-          },
-        ),
-      );
-    }
-    return SizedBox(
-      height: MediaQuery.of(context).size.height - 150,
-      child: Center(
-        child: ListView.builder(
-          physics: const BouncingScrollPhysics(),
-          controller: _listviewController,
-          itemCount: profileViewModel.progress.length,
-          itemBuilder: (context, i){
-            return InkWell(
-              onTap: (){
-                Navigator.pushNamed(context, DetailScreen.routeName, arguments: profileViewModel.progress[i]);
-              },
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: CostumCard(classModel: profileViewModel.progress[i], whichScreen: CostumCardFor.profileScreen)
-              ),
-            );
-          }
-        ),
-      ),
+            ),
+          );
+        }
+        if(scheduleViewModel.listSchedule.isEmpty){
+          return const EmptyListView(forProgress: true,);
+        }
+        return SizedBox(
+          height: MediaQuery.of(context).size.height - 150,
+          child: Center(
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              controller: _listviewController,
+              itemCount: scheduleViewModel.listSchedule.length,
+              itemBuilder: (context, i){
+                return InkWell(
+                  onTap: (){
+                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: scheduleViewModel.listSchedule[i]);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.profileScreen)
+                  ),
+                );
+              }
+            ),
+          ),
+        );  
+      }
     );
   }
 
@@ -210,50 +207,13 @@ class _ProfileScreenState extends State<ProfileScreen>{
     required HomeViewModel homeViewModel,
     required ScheduleViewModel scheduleViewModel
   }){
-    return () async {
-      if(i == 0){
-        Navigator.pushNamed(context, PersonalDetail.routeName);
-      }
-      if(i == 2){
-        Navigator.pushNamed(context, ProfileUpdatePasswordScreen.routeName);
-      }
-      if(i == 3){
-        Navigator.pushNamed(context, FeedbackScreen.routeName);
-      }
-      if(i == 4){
-        Navigator.pushNamed(context, TermsAndConditionsScreen.routeName);
-      }
-      if(i == 5){
-        Navigator.pushNamed(context, FaqScreen.routeName);
-      }
-      if(i == 6){
-        bool logOut = false;
-        await showDialog(
-          context: context,
-          builder: (context){
-            return CostumDialog(
-              title: 'Sign out?',
-              contentText: 'You sure want to sign out and go to the login screen?',
-              trueText: 'Yes',
-              falseText: 'Cancel',
-              trueOnPressed: (){
-                logOut = true;
-                Navigator.pop(context);
-              },
-              falseOnPressed: (){
-                Navigator.pop(context);
-              },
-            );
-          }
-        );
-        if(logOut){
-          scheduleViewModel.logOut();
-          profileViewModel.disposeUserData();
-          homeViewModel.selectTab('Home', 0);
-          if(!mounted)return;
-          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(SignInScreen.routeName, (route) => false);
-        }
-      }
-    };
+    return profileViewModel.onTap(
+      context: context,
+      i: i,
+      scheduleViewModel: scheduleViewModel,
+      profileViewModel: profileViewModel,
+      homeViewModel: homeViewModel,
+      mounted: mounted
+    );
   }
 }

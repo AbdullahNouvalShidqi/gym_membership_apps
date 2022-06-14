@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:intl/intl.dart';
 
 class TermsAndConditionsScreen extends StatelessWidget {
   static String routeName = '/termsAndConditions';
@@ -19,23 +20,31 @@ class TermsAndConditionsScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 35, horizontal: 20),
-        child: Container(
-          height: 320,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Utilities.primaryColor)
-          ),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est, lectus sit dictum etiam fringilla faucibus. Duis interdum suscipit mi vitae sagittis, semper a ullamcorper viverra. Sed lacus aliquam diam eget magna tempor, senectus dignissim. Sodales malesuada odio montes, morbi interdum maecenas.',
-                style: GoogleFonts.roboto(),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 302,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: Utilities.primaryColor)
+              ),
+              margin: const EdgeInsets.only(top: 10),
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(
+                    "A-A Gym is Indonesia's leading healthy lifestyle application that provides easy access and solutions for your healthy lifestyle. search, book, order, and be healthier with your healthy life partner.",
+                    style: GoogleFonts.roboto(fontSize: 12, color: const Color.fromRGBO(112, 112, 112, 1)),
+                  ),
+                ),
               ),
             ),
-          ),
+            const SizedBox(height: 23,),
+            Text('Last updated: ${DateFormat('MMMM d, y').format(DateTime(2021, 6, 1))}', style: GoogleFonts.roboto(fontSize: 12, color: const Color.fromRGBO(153, 153, 153, 1)),)
+          ],
         ),
       ),
     );

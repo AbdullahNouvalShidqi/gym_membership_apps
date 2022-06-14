@@ -78,7 +78,7 @@ class CostumCard extends StatelessWidget {
           children: [
             const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('${DateFormat('d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text('${DateFormat('EEEE, d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -96,7 +96,7 @@ class CostumCard extends StatelessWidget {
           children: [
             const Icon(Icons.location_on_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('Gym center, Jakarta', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text(classModel.type == "Online" ? 'Zoom Meeting' : 'Room X', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
       ],
@@ -104,13 +104,46 @@ class CostumCard extends StatelessWidget {
   }
 
   Widget statusAndButton({required BuildContext context, required ClassModel classModel}){
-    if(whichScreen == CostumCardFor.scheduleScreen){
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
+    return Consumer<ScheduleViewModel>(
+      builder: (context, scheduleViewModel, _){
+        if(whichScreen == CostumCardFor.scheduleScreen){
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 14,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 254, 241, 241)
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 8,
+                      width: 8,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['color']
+                      ),
+                    ),
+                    const SizedBox(width: 5,),
+                    Text(checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'], style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                  ],
+                ),
+              ),
+              // ElevatedButton(
+              //   onPressed: (){
+
+              //   },
+              //   child: Text('Pay Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
+              // )
+            ],
+          );
+        }
+        if(whichScreen == CostumCardFor.profileScreen){
+          return Container(
             height: 14,
             padding: const EdgeInsets.symmetric(horizontal: 10),
             decoration: const BoxDecoration(
@@ -123,95 +156,62 @@ class CostumCard extends StatelessWidget {
                   width: 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Utilities.greenColor
+                    color: checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['color']
                   ),
                 ),
                 const SizedBox(width: 5,),
-                Text('Joined', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                Text(checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'], style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
               ],
             ),
-          ),
-          // ElevatedButton(
-          //   onPressed: (){
-
-          //   },
-          //   child: Text('Pay Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
-          // )
-        ],
-      );
-    }
-    if(whichScreen == CostumCardFor.profileScreen){
-      return Container(
-        height: 14,
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        decoration: const BoxDecoration(
-          color: Color.fromARGB(255, 254, 241, 241)
-        ),
-        child: Row(
+          );
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisSize: MainAxisSize.max,
           children: [
             Container(
-              height: 8,
-              width: 8,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Utilities.greenColor
+              height: 14,
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 254, 241, 241)
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    height: 8,
+                    width: 8,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: classModel.qtyUser == 0 ? Utilities.redColor : Utilities.greenColor
+                    ),
+                  ),
+                  const SizedBox(width: 5,),
+                  Text(classModel.qtyUser == 0 ? 'Full' : 'Available', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                ],
               ),
             ),
-            const SizedBox(width: 5,),
-            Text('Upcoming', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
-          ],
-        ),
-      );
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        Container(
-          height: 14,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: const BoxDecoration(
-            color: Color.fromARGB(255, 254, 241, 241)
-          ),
-          child: Row(
-            children: [
-              Container(
-                height: 8,
-                width: 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: classModel.qtyUser == 0 ? Utilities.redColor : Utilities.greenColor
-                ),
-              ),
-              const SizedBox(width: 5,),
-              Text(classModel.qtyUser == 0 ? 'Full' : 'Available', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
-            ],
-          ),
-        ),
-        Consumer<ScheduleViewModel>(
-          builder: (context, scheduleViewModel, _) {
-            return CostumButton(
+            CostumButton(
               useFixedSize: false,
-              onPressed: checkItem(item: classModel, scheduleViewModel: scheduleViewModel)['onPressed'] ? (){
+              onPressed: checkItem(classModel: classModel, scheduleViewModel: scheduleViewModel)['onPressed'] ? (){
                 Navigator.pushNamed(context, BookScreen.routeName, arguments: classModel);
               } : null,
-              childText: checkItem(item: classModel, scheduleViewModel: scheduleViewModel)['status']
-            );
-          }
-        )
-      ],
+              childText: checkItem(classModel: classModel, scheduleViewModel: scheduleViewModel)['status']
+            )
+          ],
+        );  
+      }
     );
   }
 
-  Map<String, dynamic> checkItem({required ClassModel item, required ScheduleViewModel scheduleViewModel}){
-    if(scheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass)){
+  Map<String, dynamic> checkItem({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
+    if(scheduleViewModel.listSchedule.any((element) => element.idClass == classModel.idClass)){
       return {
         'status' : 'Booked',
         'onPressed' : false
       };
     }
-    if(item.qtyUser == 0){
+    if(classModel.qtyUser == 0){
       return {
         'status' : 'Full',
         'onPressed' : false
@@ -220,6 +220,19 @@ class CostumCard extends StatelessWidget {
     return {
       'status' : 'Book now',
       'onPressed' : true
+    };
+  }
+
+  Map<String, dynamic> checkScheduleStatus({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
+    if(classModel.endAt.compareTo(DateTime.now()) <= 0){
+      return {
+        'status' : 'Ended',
+        'color' : Utilities.redColor
+      };
+    }
+    return {
+      'status' : 'Joined',
+      'color' : Utilities.greenColor
     };
   }
 }

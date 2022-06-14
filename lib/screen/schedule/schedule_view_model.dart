@@ -75,8 +75,11 @@ class ScheduleViewModel with ChangeNotifier{
       if(_listSchedule.length < currentLength){
         Fluttertoast.showToast(msg: 'Some data are deleted');
       }
-      if(_listSchedule.length > currentLength){
+      else if(_listSchedule.length > currentLength){
         Fluttertoast.showToast(msg: 'New data added to your schedule');
+      }
+      else{
+        Fluttertoast.showToast(msg: 'No new data found in your schedule');
       }
       changeState(ScheduleViewState.none);
     }

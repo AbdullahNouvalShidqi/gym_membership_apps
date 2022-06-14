@@ -3,7 +3,6 @@ import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
-import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
 import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -131,7 +130,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                   controller: tabController,
                   children: [
                     for(var i = 0; i < 7; i++) ...[
-                      costumListView(isLoading: isLoading, item: item, availableClassViewModel: availableClassViewModel),
+                      costumListView(item: item, availableClassViewModel: availableClassViewModel),
                     ]
                   ],
                 ),
@@ -143,7 +142,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
     );
   }
 
-  Widget costumListView({required bool isLoading, required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
+  Widget costumListView({required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
     return RefreshIndicator(
       onRefresh: availableClassViewModel.refreshData,
       child: Scrollbar(

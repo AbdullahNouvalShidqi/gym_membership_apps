@@ -63,7 +63,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
             return Column(
               children: [
                 costumMainCard(i: i, titleWidget: faqScreenModel.mainData[i]['title']!),
-                costumSubCard(i: i, value: faqScreenModel.mainData[i]['value']!)
+                costumSubCard(i: i, faqViewModel: faqScreenModel)
               ],
             );
           }
@@ -102,7 +102,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
     );
   }
 
-  Widget costumSubCard({required int i, required Widget value}){
+  Widget costumSubCard({required int i, required FaqViewModel faqViewModel}){
     return Padding(
       padding: EdgeInsets.symmetric(vertical: _isShown[i] ? 10 : 5),
       child: SlideTransition(
@@ -110,11 +110,12 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
         child: FadeTransition(
           opacity: _animationControllers[i],
           child: AnimatedContainer(
+            alignment: Alignment.center,
             duration: const Duration(milliseconds: 200),
             width: MediaQuery.of(context).size.width,
-            height: _isShown[i] ? 150 : 0,
+            height: _isShown[i] ? faqViewModel.mainData[i]['height'] : 0,
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 232, 232, 232),
+              color: const Color.fromRGBO(232, 232, 232, 1),
               borderRadius: BorderRadius.circular(8)
             ),
             child: Padding(
@@ -124,7 +125,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                 controller: _scrollControllers[i],
                 child: SingleChildScrollView(
                   controller: _scrollControllers[i],
-                  child: value,
+                  child: faqViewModel.mainData[i]['value'],
                 )
               )
             ),

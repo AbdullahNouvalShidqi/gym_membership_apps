@@ -179,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
           height: MediaQuery.of(context).size.height - 150,
           child: Center(
             child: ListView.builder(
-              physics: const BouncingScrollPhysics(),
+              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
               controller: _listviewController,
               itemCount: scheduleViewModel.listSchedule.length,
               itemBuilder: (context, i){

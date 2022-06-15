@@ -204,7 +204,7 @@ class _BookScreenState extends State<BookScreen> {
                       isScrollControlled: true,
                       builder: (context){
                         return CostumBottomSheet(
-                          title: 'Booking Class Successful',
+                          title: 'Booking Class',
                           content: 'Return to Schedule page to see your schedule',
                           buttonText: 'See Schedule',
                           onPressed: (){

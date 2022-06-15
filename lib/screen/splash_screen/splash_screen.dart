@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
+import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
     else if(isFirstTime){
       Navigator.pushReplacementNamed(context, SplashScreenIntroduction.routeName);
     }else{
-      Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+      Navigator.pushReplacementNamed(context, LogInScreen.routeName);
     }
   }
 

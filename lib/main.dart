@@ -9,8 +9,8 @@ import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
-import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
-import 'package:gym_membership_apps/screen/sign_in/sign_in_view_model.dart';
+import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
+import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SignUpViewModel(),
         ),
         ChangeNotifierProvider(
-          create: (context) => SignInViewModel(),
+          create: (context) => LogInViewModel(),
         ),
         ChangeNotifierProvider(
           create: (context) => ScheduleViewModel(),
@@ -81,10 +81,10 @@ class MyApp extends StatelessWidget {
               }
             );
           }
-          if(settings.name == SignInScreen.routeName){
+          if(settings.name == LogInScreen.routeName){
             return PageRouteBuilder(
               settings: settings,
-              pageBuilder: (context, animation, secondaryAnimation) => const SignInScreen(),
+              pageBuilder: (context, animation, secondaryAnimation) => const LogInScreen(),
               transitionsBuilder: (context, animation, secondaryAnimation, child){
                 const begin = Offset(-1.0, 0.0);
                 const end = Offset.zero;

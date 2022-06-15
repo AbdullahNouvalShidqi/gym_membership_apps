@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class ProfileUpdatePasswordScreen extends StatefulWidget {
   static String routeName = '/profileUpdatePassword';
@@ -60,22 +62,26 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
   }
 
   Widget currentPasswordFormField(){
-    return CostumFormField(
-      controller: _currentPwCtrl,
-      label: 'Current Password',
-      hintText: 'Enter your password',
-      useIconHidePassword: true,
-      prefixIcon: const Icon(Icons.lock_outline),
-      textInputType: TextInputType.emailAddress,
-      validator: (newValue){
-         if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
-            return 'Please enter your password';
-          }
-          else if(newValue.length < 6 || !Utilities.passwordExp.hasMatch(newValue)){
-            return 'Please enter a valid password';
-          }
-          return null;
-      },
+    return Consumer<ProfileViewModel>(
+      builder: (context, profileViewModel, _) {
+        return CostumFormField(
+          controller: _currentPwCtrl,
+          label: 'Current Password',
+          hintText: 'Enter your password',
+          useIconHidePassword: true,
+          prefixIcon: const Icon(Icons.lock_outline),
+          textInputType: TextInputType.emailAddress,
+          validator: (newValue){
+            if(newValue == null || newValue.isEmpty || newValue == ' '){
+              return 'Please enter your password';
+            }
+            else if(newValue != profileViewModel.user.password){
+              return 'Please enter your current password';
+            }
+            return null;
+          },
+        );
+      }
     );
   }
 
@@ -88,13 +94,25 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.emailAddress,
       validator: (newValue){
-         if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
-            return 'Please enter your new password';
-          }
-          else if(newValue.length < 6 || !Utilities.passwordExp.hasMatch(newValue)){
-            return 'Please enter a valid password';
-          }
-          return null;
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
+          return 'Please enter your password';
+        }
+        else if(newValue.contains('  ')){
+          return 'Your password contains double space, please remove it';
+        }
+        else if(newValue.length < 6){
+          return 'The minimal length of password is 6';
+        }
+        else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one non alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+          return 'Please enter at least one number in your password';
+        }
+        return null;
       },
     );
   }
@@ -108,13 +126,16 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.visiblePassword,
       validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
-            return 'Please enter your password';
-          }
-          else if(newValue != _newPwCtrl.text){
-            return 'Please enter a same password';
-          }
-          return null;
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
+          return 'Please enter your password';
+        }
+        else if(newValue.contains('  ')){
+          return 'Please enter a valid password';
+        }
+        else if(newValue != _newPwCtrl.text){
+          return 'Please enter a same password';
+        }
+        return null;
       },
     );
   }

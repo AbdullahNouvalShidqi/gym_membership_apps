@@ -40,7 +40,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
           builder: (context, scheduleViewModel, _) {
             final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
             final isError = scheduleViewModel.state == ScheduleViewState.error;
-            List<ClassModel> allItem = scheduleViewModel.listSchedule;
+            List<ClassModel> allItem = [...scheduleViewModel.listSchedule];
             if(isError){}
             if(isLoading){
               return RefreshIndicator(

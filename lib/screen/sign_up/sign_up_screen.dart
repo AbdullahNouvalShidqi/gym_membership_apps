@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
-import 'package:gym_membership_apps/screen/sign_in/sign_in_screen.dart';
+import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
@@ -168,11 +168,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
         prefixIcon: const Icon(Icons.lock_outline),
         textInputType: TextInputType.visiblePassword,
         validator: (newValue){
-          if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
+          if(newValue == null || newValue.isEmpty || newValue == ' '){
             return 'Please enter your password';
           }
-          else if(newValue.length < 6 || !Utilities.passwordExp.hasMatch(newValue)){
-            return 'Please enter a valid password';
+          else if(newValue.contains('  ')){
+            return 'Your password contains double space, please remove it';
+          }
+          else if(newValue.length < 6){
+            return 'The minimal length of password is 6';
+          }
+          else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+            return 'Please enter at least one alphabet letter in your password';
+          }
+          else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+            return 'Please enter at least one non alphabet letter in your password';
+          }
+          else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+            return 'Please enter at least one number in your password';
           }
           return null;
         },
@@ -191,8 +203,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
         prefixIcon: const Icon(Icons.lock_outline),
         textInputType: TextInputType.visiblePassword,
         validator: (newValue){
-          if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
+          if(newValue == null || newValue.isEmpty || newValue == ' '){
             return 'Please enter your password';
+          }
+          else if(newValue.contains('  ')){
+            return 'Please enter a valid password';
           }
           else if(newValue != _passwordCtrl.text){
             return 'Please enter a same password';
@@ -251,11 +266,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             CostumButton(
               onPressed: () async {
                 if(!_formKey.currentState!.validate())return;
-                if(isError)return;
                 await signUpViewModel.signUpWithEmailAndPassword(username: _usernameCtrl.text, emailAddress: _emailCtrl.text, phoneNumber: _phoneNumberCtrl.text, password: _passwordCtrl.text);
+                if(isError){
+                  Fluttertoast.showToast(msg: 'Check your internet connection');
+                  return;
+                }
                 if(!mounted)return;
-                homeViewModel.getInitData();
                 ProfileViewModel.setUserData(username: _usernameCtrl.text, emailAddress: _emailCtrl.text, phoneNumber: _phoneNumberCtrl.text, password: _passwordCtrl.text);
+                Fluttertoast.showToast(msg: 'Sign up succesful!');
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },
               height: 45,
@@ -331,12 +349,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     );
                     if(willPop){
                       if(!mounted)return;
-                      Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+                      Navigator.pushReplacementNamed(context, LogInScreen.routeName);
                     }
                     return;
                   }
                   if(!mounted)return;
-                  Navigator.pushReplacementNamed(context, SignInScreen.routeName);
+                  Navigator.pushReplacementNamed(context, LogInScreen.routeName);
                 }
               )
             ]

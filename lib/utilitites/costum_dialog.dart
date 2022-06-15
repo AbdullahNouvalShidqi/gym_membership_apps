@@ -9,15 +9,15 @@ class CostumDialog extends StatelessWidget {
     required this.title,
     required this.contentText,
     required this.trueText,
-    required this.falseText,
     required this.trueOnPressed,
+    this.falseText,
     this.falseOnPressed
   }) : super(key: key);
   final String title;
   final String contentText;
   final String trueText;
-  final String? falseText;
   final void Function() trueOnPressed;
+  final String? falseText;
   final void Function()? falseOnPressed;
 
   @override
@@ -54,10 +54,10 @@ class CostumDialog extends StatelessWidget {
                     child: Text(trueText, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor),),
                   ),
                   const SizedBox(width: 25.5,),
-                  falseText != null ? ElevatedButton(
+                  ElevatedButton(
                     onPressed: falseOnPressed,
                     child: Text(falseText!, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.myWhiteColor),)
-                  ) : const SizedBox()
+                  )
                 ],
               )
             ],

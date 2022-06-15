@@ -6,22 +6,22 @@ import 'package:gym_membership_apps/screen/forgot_password/forgot_password_scree
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
-import 'package:gym_membership_apps/screen/sign_in/sign_in_view_model.dart';
+import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
-class SignInScreen extends StatefulWidget {
-  static String routeName = '/signInScreen';
-  const SignInScreen({Key? key}) : super(key: key);
+class LogInScreen extends StatefulWidget {
+  static String routeName = '/logInScreen';
+  const LogInScreen({Key? key}) : super(key: key);
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<LogInScreen> createState() => _LogInScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
+class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -121,11 +121,23 @@ class _SignInScreenState extends State<SignInScreen> {
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.visiblePassword,
       validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
           return 'Please enter your password';
         }
-        else if(newValue.length < 6 || !Utilities.passwordExp.hasMatch(newValue)){
-          return 'Please enter a valid password';
+        else if(newValue.contains('  ')){
+          return 'Your password contains double space, please remove it';
+        }
+        else if(newValue.length < 6){
+          return 'The minimal length of password is 6';
+        }
+        else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one non alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+          return 'Please enter at least one number in your password';
         }
         return null;
       },
@@ -178,10 +190,10 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   Widget loginButton(){
-    return Consumer<SignInViewModel>(
-      builder: (context, signInViewModel, _) {
-        final isLoading = signInViewModel.state == SignInState.loading;
-        final isError = signInViewModel.state == SignInState.error;
+    return Consumer<LogInViewModel>(
+      builder: (context, logInViewModel, _) {
+        final isLoading = logInViewModel.state == LogInState.loading;
+        final isError = logInViewModel.state == LogInState.error;
 
         return Center(
           child: Padding(
@@ -191,8 +203,8 @@ class _SignInScreenState extends State<SignInScreen> {
               childText: 'Login',
               onPressed: () async {
                 if(!_formKey.currentState!.validate())return;
-                await signInViewModel.signIn(email: _emailCtrl.text, password: _passwordCtrl.text);
-                final user =  SignInViewModel.currentUser;
+                await logInViewModel.signIn(email: _emailCtrl.text, password: _passwordCtrl.text);
+                final user =  LogInViewModel.currentUser;
                 if(user!= null){
                   ProfileViewModel.setUserData(emailAddress: _emailCtrl.text, username: user.username, phoneNumber: user.contact, password: user.password);
                 }
@@ -202,6 +214,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 }
                 if(isError)return;
                 if(!mounted)return;
+                Fluttertoast.showToast(msg: 'Log in successful!');
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },
             )

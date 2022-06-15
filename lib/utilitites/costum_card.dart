@@ -45,7 +45,7 @@ class CostumCard extends StatelessWidget {
             Expanded(
               child: details(classModel: classModel)
             ),
-            statusAndButton(context: context, classModel: classModel)
+            statusAndButton(classModel: classModel)
           ],
         ),
       ),
@@ -78,7 +78,7 @@ class CostumCard extends StatelessWidget {
           children: [
             const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('${DateFormat('EEEE, d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text('${DateFormat('d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -103,7 +103,7 @@ class CostumCard extends StatelessWidget {
     );
   }
 
-  Widget statusAndButton({required BuildContext context, required ClassModel classModel}){
+  Widget statusAndButton({required ClassModel classModel}){
     return Consumer<ScheduleViewModel>(
       builder: (context, scheduleViewModel, _){
         if(whichScreen == CostumCardFor.scheduleScreen){
@@ -125,20 +125,14 @@ class CostumCard extends StatelessWidget {
                       width: 8,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['color']
+                        color: Utilities.greenColor
                       ),
                     ),
                     const SizedBox(width: 5,),
-                    Text(checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'], style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                    Text('Approved', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
                   ],
                 ),
               ),
-              // ElevatedButton(
-              //   onPressed: (){
-
-              //   },
-              //   child: Text('Pay Now', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.white),)
-              // )
             ],
           );
         }
@@ -156,11 +150,11 @@ class CostumCard extends StatelessWidget {
                   width: 8,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['color']
+                    color: checkProgressStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['color']
                   ),
                 ),
                 const SizedBox(width: 5,),
-                Text(checkScheduleStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'], style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                Text(checkProgressStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'], style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
               ],
             ),
           );
@@ -223,7 +217,7 @@ class CostumCard extends StatelessWidget {
     };
   }
 
-  Map<String, dynamic> checkScheduleStatus({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
+  Map<String, dynamic> checkProgressStatus({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
     if(classModel.endAt.compareTo(DateTime.now()) <= 0){
       return {
         'status' : 'Ended',

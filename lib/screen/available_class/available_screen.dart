@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
@@ -18,7 +17,6 @@ class AvailableClassScreen extends StatefulWidget {
 }
 
 class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
-
   final ScrollController _listViewController = ScrollController();
   final ScrollController _singleListController = ScrollController();
   late final tabController = TabController(length: 7, vsync: this);
@@ -39,17 +37,8 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   }
 
   void costumScroll() async {
-    if(_listViewController.position.userScrollDirection == ScrollDirection.reverse){
-      if(_singleListController.offset + _listViewController.offset - lastOffset <= _singleListController.position.maxScrollExtent && _singleListController.offset + _listViewController.offset - lastOffset >= _singleListController.position.minScrollExtent){
-        _singleListController.jumpTo(_singleListController.offset +  _listViewController.offset - lastOffset);
-      }
-    }
-    if(_listViewController.position.userScrollDirection == ScrollDirection.forward){
-      if(_singleListController.offset + _listViewController.offset - lastOffset <= _singleListController.position.maxScrollExtent && _singleListController.offset + _listViewController.offset - lastOffset >= _singleListController.position.minScrollExtent){
-        _singleListController.jumpTo(_singleListController.offset + _listViewController.offset - lastOffset);
-      }
-    }
-    lastOffset = _listViewController.offset;    
+    _singleListController.position.pointerScroll(_listViewController.offset - lastOffset);
+    lastOffset = _listViewController.offset;   
   }
 
   @override
@@ -67,7 +56,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
       child: Scaffold(
         body: SingleChildScrollView(
           controller: _singleListController,
-          physics: const NeverScrollableScrollPhysics(),
+          physics: isLoading ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
           child: Column(
             children: [
               SafeArea(
@@ -82,58 +71,62 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                   if(isLoading){
                     return SizedBox(height: MediaQuery.of(context).size.height, child: const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen,));
                   }
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Container(
-                      height: 64,
-                      width: double.infinity,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))
-                        ]
-                      ),
-                      child: TabBar(
-                        controller: tabController,
-                        indicatorWeight: 0,
-                        indicator: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Utilities.primaryColor
-                        ),
-                        indicatorPadding: const EdgeInsets.all(10),
-                        isScrollable: false,
-                        unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
-                        labelColor: Utilities.myWhiteColor,
-                        labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                        tabs: [
-                          for(var i = 0; i < 7; i++) ...[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-                                const SizedBox(height: 5,),
-                                Text(DateFormat('d').format(item.startAt.add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
-                              ],
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Container(
+                          height: 64,
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
+                            boxShadow: const [
+                              BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))
+                            ]
+                          ),
+                          child: TabBar(
+                            controller: tabController,
+                            indicatorWeight: 0,
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Utilities.primaryColor
                             ),
-                          ]
-                        ],
+                            indicatorPadding: const EdgeInsets.all(10),
+                            isScrollable: false,
+                            unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
+                            labelColor: Utilities.myWhiteColor,
+                            labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+                            tabs: [
+                              for(var i = 0; i < 7; i++) ...[
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
+                                    const SizedBox(height: 5,),
+                                    Text(DateFormat('d').format(item.startAt.add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+                                  ],
+                                ),
+                              ]
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height - 150,
+                        child: TabBarView(
+                          controller: tabController,
+                          children: [
+                            for(var i = 0; i < 7; i++) ...[
+                              costumListView(item: item, availableClassViewModel: availableClassViewModel, i: i),
+                            ]
+                          ],
+                        ),
+                      ),
+                    ],
                   );
                 }
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height - 150,
-                child: TabBarView(
-                  controller: tabController,
-                  children: [
-                    for(var i = 0; i < 7; i++) ...[
-                      costumListView(item: item, availableClassViewModel: availableClassViewModel),
-                    ]
-                  ],
-                ),
               ),
             ],
           )
@@ -142,21 +135,25 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
     );
   }
 
-  Widget costumListView({required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
+  Widget costumListView({required ClassModel item, required AvailableClassViewModel availableClassViewModel, required int i}){
     return RefreshIndicator(
       onRefresh: availableClassViewModel.refreshData,
       child: Scrollbar(
         controller: _listViewController,
-        child: ListView.builder(
-          controller: _listViewController,
-          padding: const EdgeInsets.only(top: 15),
-          itemCount: 8,
-          itemBuilder: (context, i){
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
-            );
-          }
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height - 150,
+          child: ListView.builder(
+            key: PageStorageKey('listViewKey$i'),
+            controller: _listViewController,
+            padding: const EdgeInsets.only(top: 15),
+            itemCount: 10,
+            itemBuilder: (context, i){
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
+              );
+            }
+          ),
         ),
       ),
     );

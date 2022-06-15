@@ -125,11 +125,23 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       textInputType: TextInputType.visiblePassword,
       useIconHidePassword: true,
       validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ') || newValue.length < 6){
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
           return 'Please enter your password';
         }
-        else if(newValue.length < 6 || !Utilities.passwordExp.hasMatch(newValue)){
-          return 'Please enter a valid password';
+        else if(newValue.contains('  ')){
+          return 'Your password contains double space, please remove it';
+        }
+        else if(newValue.length < 6){
+          return 'The minimal length of password is 6';
+        }
+        else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one non alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+          return 'Please enter at least one number in your password';
         }
         return null;
       },
@@ -145,13 +157,16 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       textInputType: TextInputType.visiblePassword,
       useIconHidePassword: true,
       validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' ' || newValue.contains('  ')){
-            return 'Please enter your password';
-          }
-          else if(newValue != _confirmPasswordCtrl.text){
-            return 'Please enter a same password';
-          }
-          return null;
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
+          return 'Please enter your password';
+        }
+        else if(newValue.contains('  ')){
+          return 'Please enter a valid password';
+        }
+        else if(newValue != _confirmPasswordCtrl.text){
+          return 'Please enter a same password';
+        }
+        return null;
       },
     );
   }
@@ -168,7 +183,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
           context: context,
           builder: (context){
             return CostumBottomSheet(
-              title: 'Password Recovery Succesful',
+              title: 'Password Recovery',
               content: 'Return to the login screen to enter the application',
               buttonText: 'Return to login',
               onPressed: (){

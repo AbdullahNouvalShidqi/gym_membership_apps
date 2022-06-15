@@ -25,24 +25,27 @@ class CostumBottomSheet extends StatelessWidget {
           children: [
             SvgPicture.asset('assets/icons/otp_success_logo.svg'),
             const SizedBox(height: 15,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 103),
-              child: Text(title, textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 24, fontWeight: FontWeight.w500),),
+            SizedBox(
+              width: 252,
+              child: Column(
+                children: [
+                  Text(title, textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 24, fontWeight: FontWeight.w500),),
+                  Text('Succesful', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 24, fontWeight: FontWeight.w500),),
+                ],
+              ),
             ),
             const SizedBox(height: 10,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 50),
-              child: Text(content, textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400),),
+            SizedBox(
+              width: 252,
+              child: Text(content, textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400),)
             ),
             const SizedBox(height: 25,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 54),
-              child: CostumButton(
-                onPressed: onPressed,
-                height: 56,
-                childTextStyle: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w700),
-                childText: buttonText
-              ),
+            CostumButton(
+              width: 252,
+              onPressed: onPressed,
+              height: 56,
+              childTextStyle: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w700),
+              childText: buttonText
             )
           ],
         ),

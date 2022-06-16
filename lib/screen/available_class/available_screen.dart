@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
@@ -17,28 +18,67 @@ class AvailableClassScreen extends StatefulWidget {
 }
 
 class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
-  final ScrollController _listViewController = ScrollController();
   final ScrollController _singleListController = ScrollController();
+  final List<ScrollController> _listViewControllers = [
+    ScrollController(),
+    ScrollController(),
+    ScrollController(),
+    ScrollController(),
+    ScrollController(),
+    ScrollController(),
+    ScrollController(),
+  ];
   late final tabController = TabController(length: 7, vsync: this);
   double lastOffset = 0;
+  double height = 0;
+  bool init = true;
+  bool isScrollable = false;
 
   @override
   void initState() {
-    _listViewController.addListener(costumScroll);
     super.initState();
+    for(var i in _listViewControllers){
+      i.addListener(_costumScroll);
+    }
+    tabController.addListener(_tabListener);
+  }
+
+  @override
+  void didChangeDependencies() {    
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if(_listViewControllers[tabController.index].position.maxScrollExtent == 0){
+        setState(() {
+          isScrollable = true;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _listViewController.dispose();
+    for(var i in _listViewControllers){
+      i.dispose();
+    }
     _singleListController.dispose();
     tabController.dispose();
   }
 
-  void costumScroll() async {
-    _singleListController.position.pointerScroll(_listViewController.offset - lastOffset);
-    lastOffset = _listViewController.offset;   
+  void _costumScroll() async {
+    _singleListController.position.pointerScroll(_listViewControllers[tabController.index].offset - lastOffset);
+    lastOffset = _listViewControllers[tabController.index].offset;
+  }
+
+  void _tabListener(){
+    if(!tabController.indexIsChanging){
+      if(_listViewControllers[tabController.index].position.maxScrollExtent == 0){
+        setState(() {
+          isScrollable = true; 
+        });
+      }
+    }    
+    lastOffset = 0;
   }
 
   @override
@@ -56,7 +96,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
       child: Scaffold(
         body: SingleChildScrollView(
           controller: _singleListController,
-          physics: isLoading ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
+          physics: isLoading || !isScrollable ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
           child: Column(
             children: [
               SafeArea(
@@ -69,7 +109,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
               Builder(
                 builder: (context) {
                   if(isLoading){
-                    return SizedBox(height: MediaQuery.of(context).size.height, child: const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen,));
+                    return SizedBox(height: MediaQuery.of(context).size.height, child: ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen, controller: _listViewControllers[tabController.index],));
                   }
                   return Column(
                     children: [
@@ -139,14 +179,14 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
     return RefreshIndicator(
       onRefresh: availableClassViewModel.refreshData,
       child: Scrollbar(
-        controller: _listViewController,
+        controller: _listViewControllers[i],
         child: SizedBox(
           height: MediaQuery.of(context).size.height - 150,
           child: ListView.builder(
             key: PageStorageKey('listViewKey$i'),
-            controller: _listViewController,
+            controller: _listViewControllers[i],
             padding: const EdgeInsets.only(top: 15),
-            itemCount: 10,
+            itemCount: i == 1 ? 8 : 5,
             itemBuilder: (context, i){
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),

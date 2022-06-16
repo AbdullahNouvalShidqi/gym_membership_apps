@@ -125,11 +125,11 @@ class CostumCard extends StatelessWidget {
                       width: 8,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Utilities.greenColor
+                        color: Utilities.yellowColor
                       ),
                     ),
                     const SizedBox(width: 5,),
-                    Text('Approved', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                    Text('Waiting', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
                   ],
                 ),
               ),

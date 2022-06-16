@@ -6,8 +6,9 @@ import 'shimmer_container.dart';
 enum ShimmeringLoadingFor {scheduleScreen, availableScreen}
 
 class ListViewShimmerLoading extends StatelessWidget {
-  const ListViewShimmerLoading({Key? key, required this.shimmeringLoadingFor}) : super(key: key);
+  const ListViewShimmerLoading({Key? key, required this.shimmeringLoadingFor, this.controller}) : super(key: key);
   final ShimmeringLoadingFor shimmeringLoadingFor;
+  final ScrollController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +42,7 @@ class ListViewShimmerLoading extends StatelessWidget {
           ],
           Expanded(
             child: ListView.builder(
+              controller: controller,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: 8,
               itemBuilder: (context, i){

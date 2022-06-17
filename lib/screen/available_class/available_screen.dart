@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,67 +19,13 @@ class AvailableClassScreen extends StatefulWidget {
 }
 
 class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
-  final ScrollController _singleListController = ScrollController();
-  final List<ScrollController> _listViewControllers = [
-    ScrollController(),
-    ScrollController(),
-    ScrollController(),
-    ScrollController(),
-    ScrollController(),
-    ScrollController(),
-    ScrollController(),
-  ];
+
   late final tabController = TabController(length: 7, vsync: this);
-  double lastOffset = 0;
-  double height = 0;
-  bool init = true;
-  bool isScrollable = false;
-
-  @override
-  void initState() {
-    super.initState();
-    for(var i in _listViewControllers){
-      i.addListener(_costumScroll);
-    }
-    tabController.addListener(_tabListener);
-  }
-
-  @override
-  void didChangeDependencies() {    
-    super.didChangeDependencies();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if(_listViewControllers[tabController.index].position.maxScrollExtent == 0){
-        setState(() {
-          isScrollable = true;
-        });
-      }
-    });
-  }
 
   @override
   void dispose() {
     super.dispose();
-    for(var i in _listViewControllers){
-      i.dispose();
-    }
-    _singleListController.dispose();
     tabController.dispose();
-  }
-
-  void _costumScroll() async {
-    _singleListController.position.pointerScroll(_listViewControllers[tabController.index].offset - lastOffset);
-    lastOffset = _listViewControllers[tabController.index].offset;
-  }
-
-  void _tabListener(){
-    if(!tabController.indexIsChanging){
-      if(_listViewControllers[tabController.index].position.maxScrollExtent == 0){
-        setState(() {
-          isScrollable = true; 
-        });
-      }
-    }    
-    lastOffset = 0;
   }
 
   @override
@@ -86,7 +33,6 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     final availableClassViewModel = Provider.of<AvailableClassViewModel>(context);
     final isLoading = availableClassViewModel.state == AvailableClassState.loading;
-    
 
     return WillPopScope(
       onWillPop: () async {
@@ -94,107 +40,101 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
         return true;
       },
       child: Scaffold(
-        body: SingleChildScrollView(
-          controller: _singleListController,
-          physics: isLoading || !isScrollable ? const NeverScrollableScrollPhysics() : const ScrollPhysics(),
-          child: Column(
-            children: [
-              SafeArea(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: costumAppBar(item: item)
-                )
-              ),
-              const SizedBox(height: 15,),
-              Builder(
-                builder: (context) {
-                  if(isLoading){
-                    return SizedBox(height: MediaQuery.of(context).size.height, child: ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen, controller: _listViewControllers[tabController.index],));
-                  }
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
-                          height: 64,
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
-                            boxShadow: const [
-                              BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))
-                            ]
-                          ),
-                          child: TabBar(
-                            controller: tabController,
-                            indicatorWeight: 0,
-                            indicator: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              color: Utilities.primaryColor
-                            ),
-                            indicatorPadding: const EdgeInsets.all(10),
-                            isScrollable: false,
-                            unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
-                            labelColor: Utilities.myWhiteColor,
-                            labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                            tabs: [
-                              for(var i = 0; i < 7; i++) ...[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-                                    const SizedBox(height: 5,),
-                                    Text(DateFormat('d').format(item.startAt.add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
-                                  ],
-                                ),
-                              ]
-                            ],
-                          ),
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle,),
+                leading: IconButton(
+                  onPressed: (){
+
+                  },
+                  icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,),
+                ),
+                centerTitle: true,
+              )
+            ];
+          },
+          body: Builder(
+            builder: (context) {
+              if(isLoading){
+                return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen,);
+              }
+              return Column(
+                children: [
+                  SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Container(
+                        height: 64,
+                        width: double.infinity,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.white,
+                          boxShadow: const [
+                            BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))
+                          ]
                         ),
-                      ),
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height - 150,
-                        child: TabBarView(
+                        child: TabBar(
                           controller: tabController,
-                          children: [
+                          indicatorWeight: 0,
+                          indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                            color: Utilities.primaryColor
+                          ),
+                          indicatorPadding: const EdgeInsets.all(10),
+                          isScrollable: false,
+                          unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
+                          labelColor: Utilities.myWhiteColor,
+                          labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+                          tabs: [
                             for(var i = 0; i < 7; i++) ...[
-                              costumListView(item: item, availableClassViewModel: availableClassViewModel, i: i),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
+                                  const SizedBox(height: 5,),
+                                  Text(DateFormat('d').format(item.startAt.add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+                                ],
+                              ),
                             ]
                           ],
                         ),
                       ),
+                    ),
+                  ),
+                  Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      for(var i = 0; i < 7; i++) ...[
+                        costumListView(item: item, availableClassViewModel: availableClassViewModel),
+                      ]
                     ],
-                  );
-                }
-              ),
-            ],
-          )
+                  ),
+                ),
+                ],
+              );
+            }
+          ),
         ),
       ),
     );
   }
 
-  Widget costumListView({required ClassModel item, required AvailableClassViewModel availableClassViewModel, required int i}){
+  Widget costumListView({required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
     return RefreshIndicator(
       onRefresh: availableClassViewModel.refreshData,
-      child: Scrollbar(
-        controller: _listViewControllers[i],
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height - 150,
-          child: ListView.builder(
-            key: PageStorageKey('listViewKey$i'),
-            controller: _listViewControllers[i],
-            padding: const EdgeInsets.only(top: 15),
-            itemCount: i == 1 ? 8 : 5,
-            itemBuilder: (context, i){
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
-              );
-            }
-          ),
-        ),
+      child: ListView.builder(
+        padding: const EdgeInsets.only(top: 15),
+        itemCount: 8,
+        itemBuilder: (context, i){
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
+          );
+        }
       ),
     );
   }

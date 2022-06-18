@@ -42,7 +42,6 @@ class ListViewShimmerLoading extends StatelessWidget {
           ],
           Expanded(
             child: ListView.builder(
-              controller: controller,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: 8,
               itemBuilder: (context, i){

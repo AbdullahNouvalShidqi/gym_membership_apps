@@ -101,7 +101,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
               ),
               CostumHomeCard(classModels: homeViewModel.classes.where((element) => element.type == 'Online').toList(), height: 164, width: 125,),
               const SizedBox(height: 20,),
-              CostumHomeCard(classModels: homeViewModel.classes.where((element) => element.type == 'Offline').toList(), height: 164, width: 125),
+              CostumHomeCard(classModels: homeViewModel.classes.where((element) => element.type == 'Offline').toList().reversed.toList(), height: 164, width: 125),
               const SizedBox(height: 20,),
               tipsListView(homeViewModel: homeViewModel)
             ],

@@ -5,6 +5,7 @@ import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_page_screen.dart';
+import 'package:gym_membership_apps/screen/payment_instruction/payment_instruction_screen.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_screen.dart';
 import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
@@ -180,6 +181,23 @@ class TabNavigator extends StatelessWidget {
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const BookScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child){
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              final tween = Tween(begin: begin, end: end);
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            }
+          );
+        }
+        if(settings.name == PaymentInstructionScreen.routeName){
+          return PageRouteBuilder(
+            transitionDuration: const Duration(milliseconds: 200),
+            reverseTransitionDuration: const Duration(milliseconds: 200),
+            settings: settings,
+            pageBuilder: (context, animation, secondaryAnimation) => const PaymentInstructionScreen(),
             transitionsBuilder: (context, animation, secondaryAnimation, child){
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;

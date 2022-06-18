@@ -43,14 +43,10 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
             List<ClassModel> allItem = [...scheduleViewModel.listSchedule];
             if(isError){}
             if(isLoading){
-              return RefreshIndicator(
-                key: const Key('scheduleRefresh'),
-                onRefresh: scheduleViewModel.refreshData,
-                child: const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.scheduleScreen,)
-              );
+              return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.scheduleScreen,);
             }
             if(allItem.isEmpty){
-              return const EmptyListView();
+              return EmptyListView(svgAssetLink: 'assets/icons/empty_list.svg', emptyListViewFor: EmptyListViewFor.schedule, onRefresh: scheduleViewModel.refreshData, controller: scheduleViewModel.scheduleListController,);
             }
             return RefreshIndicator(
               key: const Key('scheduleRefresh'),
@@ -64,6 +60,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                     SizedBox(
                       height: 35,
                       child: ListView.builder(
+                        controller: scheduleViewModel.scheduleListController,
                         padding: const EdgeInsets.symmetric(horizontal: 15.5),
                         scrollDirection: Axis.horizontal,
                         itemCount: scheduleViewModel.buttonsData.length,

@@ -11,17 +11,34 @@ class FaqViewModel with ChangeNotifier{
           style: Utilities.faqSubTitleStyle,
         ),
       ),
-      'height' : 60.0
-    },{
+    },
+    {
       'title' : Text('Is the trainer professional?', style: Utilities.faqTitleStyle,),
       'value' : RichText(
         text: TextSpan(
-          text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Est, lectus sit dictum etiam fringilla faucibus. Duis interdum suscipit mi vitae sagittis, semper a ullamcorper viverra. Sed lacus aliquam diam eget magna tempor, senectus dignissim. Sodales malesuada odio montes, morbi interdum maecenas.',
+          text: 'All trainers in the A-A gym are professional trainers in their fields because we want all those who attend the A-A gym class to be able to apply the right exercise according to their goals.',
           style: Utilities.faqSubTitleStyle,
         ),
       ),
-      'height' : 100.0
-    }
+    },
+    {
+      'title' : Text('How to book?', style: Utilities.faqTitleStyle,),
+      'value' : RichText(
+        text: TextSpan(
+          text: 'You can choose a gym class first on the homepage, after that you can choose the available gym class schedule and then you can book a class and make payments at the gym.',
+          style: Utilities.faqSubTitleStyle,
+        ),
+      ),
+    },
+    {
+      'title' : Text('How to joined class from home?', style: Utilities.faqTitleStyle,),
+      'value' : RichText(
+        text: TextSpan(
+          text: 'you can choose a gym class online first on the homepage, after that you can choose the available gym class online schedule and then you can book a class and make payments at the gym.',
+          style: Utilities.faqSubTitleStyle,
+        ),
+      ),
+    },
   ];
 
   List<Map<String, dynamic>> get mainData => _mainData;

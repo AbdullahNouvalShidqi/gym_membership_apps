@@ -113,7 +113,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
             alignment: Alignment.center,
             duration: const Duration(milliseconds: 200),
             width: MediaQuery.of(context).size.width,
-            height: _isShown[i] ? faqViewModel.mainData[i]['height'] : 0,
+            height: _isShown[i] ? 60 : 0,
             decoration: BoxDecoration(
               color: const Color.fromRGBO(232, 232, 232, 1),
               borderRadius: BorderRadius.circular(8)

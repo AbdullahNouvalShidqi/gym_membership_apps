@@ -8,6 +8,7 @@ import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/payment_instruction/payment_instruction_screen.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
 import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
@@ -178,6 +179,10 @@ class ProfileViewModel with ChangeNotifier{
       'title' : Text('Personal Details', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),),
     },
     {
+      'icon' : SvgPicture.asset('assets/icons/payment.svg'),
+      'title' : Text('Payment Instruction', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),),
+    },
+    {
       'icon' : SvgPicture.asset('assets/icons/update_password.svg'),
       'title' : Text('Update Password', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),)
     },
@@ -254,6 +259,9 @@ class ProfileViewModel with ChangeNotifier{
         Navigator.pushNamed(context, PersonalDetail.routeName);
       },
       () async {
+        Navigator.pushNamed(context, PaymentInstructionScreen.routeName);
+      },
+      () async {
         Navigator.pushNamed(context, ProfileUpdatePasswordScreen.routeName);
       },
       () async {
@@ -271,8 +279,8 @@ class ProfileViewModel with ChangeNotifier{
           context: context,
           builder: (context){
             return CostumDialog(
-              title: 'Sign out?',
-              contentText: 'You sure want to sign out and go to the login screen?',
+              title: 'Log out?',
+              contentText: 'You sure want to log out and go to the login screen?',
               trueText: 'Yes',
               falseText: 'Cancel',
               trueOnPressed: (){

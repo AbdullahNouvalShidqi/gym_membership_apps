@@ -130,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
               itemBuilder: (context, i){
                 return Column(
                   children: [
-                    if(i < 5) ...[
+                    if(i < 6) ...[
                       InkWell(
                         onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
                         child: Container(
@@ -148,7 +148,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                       Divider(height: 0, color: Utilities.myTheme.primaryColor,),
                     ],
                     
-                    if(i==5) ...[
+                    if(i==6) ...[
                       const SizedBox(height: 20,),
                       InkWell(
                         onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
@@ -173,7 +173,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
           );
         }
         if(scheduleViewModel.listSchedule.isEmpty){
-          return const EmptyListView(forProgress: true,);
+          return EmptyListView(forProgress: true, svgAssetLink: 'assets/icons/empty_list.svg', emptyListViewFor: EmptyListViewFor.progress, onRefresh: scheduleViewModel.refreshData,);
         }
         return SizedBox(
           height: MediaQuery.of(context).size.height - 150,

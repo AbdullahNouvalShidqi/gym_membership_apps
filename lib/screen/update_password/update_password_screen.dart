@@ -104,21 +104,27 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 40,),
-              newPasswordFormField(),
+              NewPasswordFormField(newPasswordCtrl: _newPasswordCtrl),
               const SizedBox(height: 20,),
-              confirmFormField(),
+              ConfirmFormField(confirmPasswordCtrl: _confirmPasswordCtrl),
               const SizedBox(height: 30,),
-              continueButton()
+              ContinueButton(formKey: _formKey,)
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget newPasswordFormField(){
+class NewPasswordFormField extends StatelessWidget {
+  const NewPasswordFormField({Key? key, required this.newPasswordCtrl}) : super(key: key);
+  final TextEditingController newPasswordCtrl;
+
+  @override
+  Widget build(BuildContext context) {
     return CostumFormField(
-      controller: _newPasswordCtrl,
+      controller: newPasswordCtrl,
       label: 'New Password',
       hintText: 'Enter new password',
       prefixIcon: const Icon(Icons.lock_outline),
@@ -147,10 +153,16 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       },
     );
   }
+}
 
-  Widget confirmFormField(){
+class ConfirmFormField extends StatelessWidget {
+  const ConfirmFormField({Key? key, required this.confirmPasswordCtrl}) : super(key: key);
+  final TextEditingController confirmPasswordCtrl;
+
+  @override
+  Widget build(BuildContext context) {
     return CostumFormField(
-      controller: _confirmPasswordCtrl,
+      controller: confirmPasswordCtrl,
       label: 'Confirm Password',
       hintText: 'Enter new password',
       prefixIcon: const Icon(Icons.lock_outline),
@@ -163,18 +175,24 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
         else if(newValue.contains('  ')){
           return 'Please enter a valid password';
         }
-        else if(newValue != _confirmPasswordCtrl.text){
+        else if(newValue != confirmPasswordCtrl.text){
           return 'Please enter a same password';
         }
         return null;
       },
     );
   }
+}
 
-  Widget continueButton(){
+class ContinueButton extends StatelessWidget {
+  const ContinueButton({Key? key, required this.formKey}) : super(key: key);
+  final GlobalKey<FormState> formKey;
+
+  @override
+  Widget build(BuildContext context) {
     return CostumButton(
       onPressed: (){
-        if(!_formKey.currentState!.validate())return;
+        if(!formKey.currentState!.validate())return;
         showModalBottomSheet(
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(topLeft: Radius.circular(40) , topRight: Radius.circular(40))

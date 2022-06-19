@@ -103,15 +103,21 @@ class _HomePageScreenState extends State<HomePageScreen> {
               const SizedBox(height: 20,),
               CostumHomeCard(classModels: homeViewModel.classes.where((element) => element.type == 'Offline').toList().reversed.toList(), height: 164, width: 125),
               const SizedBox(height: 20,),
-              tipsListView(homeViewModel: homeViewModel)
+              TipsListView(homeViewModel: homeViewModel)
             ],
           ),
         );
       }
     );
   }
+}
 
-  Widget tipsListView({required HomeViewModel homeViewModel}){
+class TipsListView extends StatelessWidget {
+  const TipsListView({Key? key, required this.homeViewModel}) : super(key: key);
+  final HomeViewModel homeViewModel;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10),
       child: Column(
@@ -131,10 +137,18 @@ class _HomePageScreenState extends State<HomePageScreen> {
               itemCount: homeViewModel.articles.length,
               itemBuilder: (context, i){
                 return InkWell(
-                  onTap: tipsItemOnTap(articleUrl: homeViewModel.articles[i].url),
+                  onTap: () async {
+                    var url = Uri.parse(homeViewModel.articles[i].url);
+                    if(await canLaunchUrl(url)){
+                      await launchUrl(url, mode: LaunchMode.inAppWebView);
+                    }
+                    else{
+                      Fluttertoast.showToast(msg: 'Error: Cannot open url');
+                    }  
+                  },
                   child: SizedBox(
                     width: 210,
-                    child: tipsImage(imageUrl: homeViewModel.articles[i].imageUrl, title: homeViewModel.articles[i].title),
+                    child: TipsImage(imageUrl: homeViewModel.articles[i].imageUrl, title: homeViewModel.articles[i].title),
                   ),
                 );
               }
@@ -144,20 +158,15 @@ class _HomePageScreenState extends State<HomePageScreen> {
       ),
     );
   }
+}
 
-  Future<void> Function() tipsItemOnTap({required String articleUrl}){
-    return () async {
-      var url = Uri.parse(articleUrl);
-      if(await canLaunchUrl(url)){
-        await launchUrl(url, mode: LaunchMode.inAppWebView);
-      }
-      else{
-        Fluttertoast.showToast(msg: 'Error: Cannot open url');
-      }
-    };
-  }
+class TipsImage extends StatelessWidget {
+  const TipsImage({Key? key, required this.imageUrl, required this.title}) : super(key: key);
+  final String imageUrl;
+  final String title;
 
-  Widget tipsImage({required String imageUrl, required String title}){
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: CachedNetworkImage(
@@ -186,14 +195,20 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 fit: BoxFit.cover
               ),
             ),
-            child: carouselTitle(title: title)
+            child: CarouselTitle(title: title)
           );
         },
       ),
     );
   }
+}
 
-  Widget carouselTitle({required String title}){
+class CarouselTitle extends StatelessWidget {
+  const CarouselTitle({Key? key, required this.title}) : super(key: key);
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomLeft,
       decoration: BoxDecoration(

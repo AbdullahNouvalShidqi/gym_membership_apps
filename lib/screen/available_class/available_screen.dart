@@ -28,6 +28,14 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      await Provider.of<AvailableClassViewModel>(context, listen: false).getAvailableClasses();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     final availableClassViewModel = Provider.of<AvailableClassViewModel>(context);
@@ -109,7 +117,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                       controller: _tabController,
                       children: [
                         for(var i = 0; i < 7; i++) ...[
-                          costumListView(isEmpty: isEmpty, item: item, availableClassViewModel: availableClassViewModel),
+                          CostumListView(isEmpty: isEmpty, item: item, availableClassViewModel: availableClassViewModel),
                         ]
                       ],
                     ),
@@ -122,8 +130,16 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
       ),
     );
   }
+}
 
-  Widget costumListView({required bool isEmpty, required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
+class CostumListView extends StatelessWidget {
+  const CostumListView({Key? key, required this.isEmpty, required this.item, required this.availableClassViewModel}) : super(key: key);
+  final bool isEmpty;
+  final ClassModel item;
+  final AvailableClassViewModel availableClassViewModel;
+
+  @override
+  Widget build(BuildContext context) {
     // if(isEmpty){
     //   return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
     // }
@@ -138,29 +154,6 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
             child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
           );
         }
-      ),
-    );
-  }
-
-  Widget costumAppBar({required ClassModel item}){
-    return Container(
-      height: 60,
-      color: Utilities.myWhiteColor,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          SizedBox(
-            width: 24,
-            child: IconButton(
-              onPressed: (){
-                Navigator.pop(context);
-              },
-              icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,)
-            ),
-          ),
-          Expanded(child: Center(child: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle,))),
-          const SizedBox(width: 24,)
-        ],
       ),
     );
   }

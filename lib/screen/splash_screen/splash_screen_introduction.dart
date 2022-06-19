@@ -36,15 +36,28 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
     return Center(
       child: Stack(
         children: [
-          carouselSlider(splashScreenViewModel: splashScreenViewModel),
+          MainCarousel(carouselCtrl: _carouselCtrl, splashScreenViewModel: splashScreenViewModel, onPageChanged: (i, reason) => setState(() {_currentIndex = i;})),
           Positioned.fill(
             bottom: 100,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                carouselIndicator(splashScreenViewModel: splashScreenViewModel),
+                CarouselIndicator(carouselCtrl: _carouselCtrl, currentIndex: _currentIndex, splashScreenViewModel: splashScreenViewModel),
                 const SizedBox(height: 10,),
-                getStartedButton(splashScreenViewModel: splashScreenViewModel)
+                GetStartedButton(
+                  carouselCtrl: _carouselCtrl,
+                  currentIndex: _currentIndex,
+                  onPressed: (){
+                    _currentIndex += 1;
+                    if(_currentIndex < splashScreenViewModel.introductionData.length){
+                      _carouselCtrl.animateToPage(_currentIndex);
+                    }
+                    else{
+                      splashScreenViewModel.doneFirstTime();
+                      Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                    }
+                  },
+                )
               ],
             )
           )
@@ -53,9 +66,29 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
     );
   }
 
-  Widget carouselSlider({required SplashScreenViewModel splashScreenViewModel}){
+  Future<bool> willPopValidation() async {
+    DateTime now = DateTime.now();
+    if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst){
+      currentBackPressTime = now;
+      Fluttertoast.showToast(
+        msg: 'Press back again to exit'
+      );
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+}
+
+class MainCarousel extends StatelessWidget {
+  const MainCarousel({Key? key, required this.carouselCtrl, required this.splashScreenViewModel, required this.onPageChanged}) : super(key: key);
+  final CarouselController carouselCtrl;
+  final SplashScreenViewModel splashScreenViewModel;
+  final dynamic Function(int, CarouselPageChangedReason) onPageChanged;
+
+  @override
+  Widget build(BuildContext context) {
     return CarouselSlider.builder(
-      carouselController: _carouselCtrl,
+      carouselController: carouselCtrl,
       itemCount: splashScreenViewModel.introductionData.length,
       itemBuilder: (context, itemI, pageViewIndex){
         return Stack(
@@ -92,22 +125,26 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
         enableInfiniteScroll: false,
         autoPlay: false,
         initialPage: 0,
-        onPageChanged: (i, reason){
-          setState(() {
-            _currentIndex = i;  
-          });
-        }
+        onPageChanged: onPageChanged
       ),
     );
   }
+}
 
-  Widget carouselIndicator({required SplashScreenViewModel splashScreenViewModel}){
+class CarouselIndicator extends StatelessWidget {
+  const CarouselIndicator({Key? key, required this.carouselCtrl, required this.currentIndex, required this.splashScreenViewModel}) : super(key: key);
+  final CarouselController carouselCtrl;
+  final SplashScreenViewModel splashScreenViewModel;
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: splashScreenViewModel.introductionData.asMap().entries.map((e) {
         return GestureDetector(
-          onTap: () => _carouselCtrl.animateToPage(e.key),
+          onTap: () => carouselCtrl.animateToPage(e.key),
           child: Container(
             width: 12,
             height: 12,
@@ -116,28 +153,27 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
               border: Border.all(color: Colors.white),
               shape: BoxShape.circle,
               color: (Colors.white)
-              .withOpacity(_currentIndex == e.key ? 0.9 : 0),
+              .withOpacity(currentIndex == e.key ? 0.9 : 0),
             ),
           ),
         );
       }).toList(),
     );
   }
+}
 
-  Widget getStartedButton({required SplashScreenViewModel splashScreenViewModel}){
+class GetStartedButton extends StatelessWidget {
+  const GetStartedButton({Key? key, required this.currentIndex, required this.carouselCtrl, required this.onPressed}) : super(key: key);
+  final int currentIndex;
+  final CarouselController carouselCtrl;
+  final void Function() onPressed;
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 55),
       child: ElevatedButton(
-        onPressed: (){
-          _currentIndex += 1;
-          if(_currentIndex < splashScreenViewModel.introductionData.length){
-            _carouselCtrl.animateToPage(_currentIndex);
-          }
-          else{
-            splashScreenViewModel.doneFirstTime();
-            Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
-          }
-        },
+        onPressed: onPressed,
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 34, 85, 156)),
           fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 50)),
@@ -145,17 +181,5 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
         child: Text('Get Started', style: GoogleFonts.roboto(fontSize: 24, color: Colors.white,)),
       ),
     );
-  }
-
-  Future<bool> willPopValidation() async {
-    DateTime now = DateTime.now();
-    if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst){
-      currentBackPressTime = now;
-      Fluttertoast.showToast(
-        msg: 'Press back again to exit'
-      );
-      return Future.value(false);
-    }
-    return Future.value(true);
   }
 }

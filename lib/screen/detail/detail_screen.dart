@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
-import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
 import 'package:gym_membership_apps/utilitites/detail_shimmer_loading.dart';
@@ -52,10 +51,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Stack(
                         children: [
-                          carouselSlider(images: item.images!),
+                          MainCarousel(images: item.images!, carouselCtrl: _carouselCtrl, onPageChanged: (index, reason){setState(() => _currentIndex = index);}),
                           Positioned.fill(
                             bottom: 17,
-                            child: carouselIndicator(images: item.images!)
+                            child: CarouselIndicator(images: item.images!, carouselCtrl: _carouselCtrl, currentIndex: _currentIndex,)
                           )
                         ],
                       ),
@@ -66,26 +65,26 @@ class _DetailScreenState extends State<DetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 15),
-                            mainTitleStatus(className: item.name, type: item.type),
+                            MainTitleStatus(className: item.name, type: item.type),
                             const SizedBox(height: 5),
-                            price(),
+                            const Price(),
                             const SizedBox(height: 10),
-                            instructorName(item: item),
+                            InstructorName(item: item),
                             const SizedBox(height: 5,),
-                            gymLocation(),
+                            const GymLocation(),
                             const SizedBox(height: 10,),
                             SizedBox(
                               height: MediaQuery.of(context).size.height - 575,
-                              child: classDetail(item: item)
+                              child: ClassDetail(item: item)
                             ),
-                            seeAvalableClassButton(item: item)
+                            SeeAvalableClassButton(item: item)
                           ],
                         ),
                       ),
                     ],
                   ),
                 ),
-                costumAppBar()
+                const CostumAppBar()
               ],
             ),
           ),
@@ -93,8 +92,13 @@ class _DetailScreenState extends State<DetailScreen> {
       }
     );
   }
+}
 
-  Widget costumAppBar(){
+class CostumAppBar extends StatelessWidget {
+  const CostumAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: 80,
       alignment: Alignment.topCenter,
@@ -126,10 +130,18 @@ class _DetailScreenState extends State<DetailScreen> {
       ),
     );
   }
+}
 
-  Widget carouselSlider({required List<String> images}){
+class MainCarousel extends StatelessWidget {
+  const MainCarousel({Key? key, required this.images, required this.carouselCtrl, required this.onPageChanged}) : super(key: key);
+  final CarouselController carouselCtrl;
+  final List<String> images;
+  final dynamic Function(int, CarouselPageChangedReason) onPageChanged;
+
+  @override
+  Widget build(BuildContext context) {
     return CarouselSlider.builder(
-      carouselController: _carouselCtrl,
+      carouselController: carouselCtrl,
       itemCount: images.length,
       itemBuilder: (context, itemI, pageI){
         return Container(
@@ -148,39 +160,50 @@ class _DetailScreenState extends State<DetailScreen> {
         height: 315,
         enableInfiniteScroll: false,
         autoPlay: false,
-        onPageChanged: (index, reason){
-          setState(() {
-            _currentIndex = index;
-          });
-        }
+        onPageChanged: onPageChanged
       ),
     );
   }
+}
 
-  Widget carouselIndicator({required List<String> images}){
+class CarouselIndicator extends StatelessWidget {
+  const CarouselIndicator({Key? key, required this.images, required this.carouselCtrl, required this.currentIndex}) : super(key: key);
+  final List<String> images;
+  final CarouselController carouselCtrl;
+  final int currentIndex;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: images.asMap().entries.map((e) {
         return GestureDetector(
-          onTap: () => _carouselCtrl.animateToPage(e.key),
+          onTap: () => carouselCtrl.animateToPage(e.key),
           child: Container(
             width: 12,
             height: 12,
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             decoration: BoxDecoration(
-              border: Border.all(color: _currentIndex == e.key ? const Color.fromRGBO(242, 115, 112, 1) : Colors.white),
+              border: Border.all(color: currentIndex == e.key ? const Color.fromRGBO(242, 115, 112, 1) : Colors.white),
               shape: BoxShape.circle,
               color: const Color.fromRGBO(242, 115, 112, 1)
-              .withOpacity(_currentIndex == e.key ? 1.0 : 0),
+              .withOpacity(currentIndex == e.key ? 1.0 : 0),
             ),
           ),
         );
       }).toList(),
     );
   }
+}
 
-  Widget mainTitleStatus({required String className, required String type}){
+class MainTitleStatus extends StatelessWidget {
+  const MainTitleStatus({Key? key, required this.className, required this.type}) : super(key: key);
+  final String className;
+  final String type;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -198,8 +221,13 @@ class _DetailScreenState extends State<DetailScreen> {
       ],
     );
   }
+}
 
-  Widget price(){
+class Price extends StatelessWidget {
+  const Price({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Text(
       'Rp. 300.000',
       style: GoogleFonts.roboto(
@@ -209,8 +237,14 @@ class _DetailScreenState extends State<DetailScreen> {
       )
     );
   }
+}
 
-  Widget instructorName ({required ClassModel item}){
+class InstructorName extends StatelessWidget {
+  const InstructorName({Key? key, required this.item}) : super(key: key);
+  final ClassModel item;
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey),
@@ -219,8 +253,13 @@ class _DetailScreenState extends State<DetailScreen> {
       ],
     );
   }
+}
 
-  Widget gymLocation(){
+class GymLocation extends StatelessWidget {
+  const GymLocation({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         SvgPicture.asset('assets/icons/location_icon.svg', color: Colors.grey),
@@ -229,8 +268,14 @@ class _DetailScreenState extends State<DetailScreen> {
       ],
     );
   }
+}
 
-  Widget classDetail({required ClassModel item}){
+class ClassDetail extends StatelessWidget {
+  const ClassDetail({Key? key, required this.item}) : super(key: key);
+  final ClassModel item;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -240,21 +285,22 @@ class _DetailScreenState extends State<DetailScreen> {
       ],
     );
   }
+}
 
-  Widget seeAvalableClassButton({required ClassModel item}){
-    return Consumer<AvailableClassViewModel>(
-      builder: (context, availableClassViewModel, _) {
-        return ElevatedButton(
-          onPressed: (){
-            availableClassViewModel.getAvailableClasses();
-            Navigator.pushNamed(context, AvailableClassScreen.routeName, arguments: item);
-          },
-          style: ButtonStyle(
-            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
-          ),
-          child: Text('See Available Classes', style: Utilities.buttonTextStyle)
-        );
-      }
+class SeeAvalableClassButton extends StatelessWidget {
+  const SeeAvalableClassButton({Key? key, required this.item}) : super(key: key);
+  final ClassModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: (){
+        Navigator.pushNamed(context, AvailableClassScreen.routeName, arguments: item);
+      },
+      style: ButtonStyle(
+        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
+      ),
+      child: Text('See Available Classes', style: Utilities.buttonTextStyle)
     );
   }
 }

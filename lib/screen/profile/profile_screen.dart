@@ -58,57 +58,22 @@ class _ProfileScreenState extends State<ProfileScreen>{
             child: Center(
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40),
-                    child: Center(child: Text('Profile', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black),),)
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 30),
-                    child: CircleAvatar(
-                      radius: 40,
-                      child: Image.asset('assets/profile.png'),
-                    ),
-                  ),
-                  const SizedBox(height: 15,),
-                  Text(profileViewModel.user.username, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+                  MainProfile(profileViewModel: profileViewModel),
                   const SizedBox(height: 30,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      ElevatedButton(
-                        onPressed: (){
-                          _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
-                          if(_scrollStatus == ScrollStatus.attached){
-                            _scrollStatus = ScrollStatus.detached;
-                          }
-                          profileViewModel.myAccountButtonOnTap();
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(myAccountSelected ? Colors.white : null),
-                          side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
-                        ),
-                        child: Text('My Account', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: myAccountSelected ? Utilities.myTheme.primaryColor : null),)
-                      ),
-                      const SizedBox(width: 10,),
-                      ElevatedButton(
-                        onPressed: (){
-                          if(_scrollStatus == ScrollStatus.attached){
-                            _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
-                            _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
-                          }
-                          _scrollStatus = ScrollStatus.attached;  
-                          profileViewModel.progressButtonOnTap();
-                        },
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null),
-                          side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
-                        ),
-                        child: Text('Progress', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: progressSelected ? Utilities.myTheme.primaryColor : null),)
-                      ),
-                    ],
+                  TabButton(
+                    myAccountSelected: myAccountSelected,
+                    progressSelected: progressSelected,
+                    listviewController: _listviewController,
+                    singleListController: _singleListController,
+                    myAccountOnTap: myAccountOnTap(profileViewModel: profileViewModel),
+                    progressOnTap: progressOnTap(profileViewModel: profileViewModel),
                   ),
                   const SizedBox(height: 15),
-                  itemsToReturn(myAccountSelected: myAccountSelected)
+                  ItemsToReturn(
+                    myAccountSelected: myAccountSelected,
+                    listviewController: _listviewController,
+                    mounted: mounted,
+                  )
                 ],
               ),
             ),
@@ -118,7 +83,106 @@ class _ProfileScreenState extends State<ProfileScreen>{
     );
   }
 
-  Widget itemsToReturn({required bool myAccountSelected}){
+  void Function() myAccountOnTap({required ProfileViewModel profileViewModel}){
+    return (){
+      _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+      if(_scrollStatus == ScrollStatus.attached){
+        _scrollStatus = ScrollStatus.detached;
+      }
+      profileViewModel.myAccountButtonOnTap();
+    };
+  }
+
+  void Function() progressOnTap({required ProfileViewModel profileViewModel}){
+    return (){
+      if(_scrollStatus == ScrollStatus.attached){
+        _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+        _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      }
+      _scrollStatus = ScrollStatus.attached;  
+      profileViewModel.progressButtonOnTap();
+    };
+  }
+}
+
+class MainProfile extends StatelessWidget {
+  const MainProfile({Key? key, required this.profileViewModel}) : super(key: key);
+  final ProfileViewModel profileViewModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 40),
+          child: Center(child: Text('Profile', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black),),)
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 30),
+          child: CircleAvatar(
+            radius: 40,
+            child: Image.asset('assets/profile.png'),
+          ),
+        ),
+        const SizedBox(height: 15,),
+        Text(profileViewModel.user.username, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+      ],
+    );
+  }
+}
+
+class TabButton extends StatelessWidget {
+  const TabButton({
+    Key? key,
+    required this.myAccountSelected,
+    required this.progressSelected,
+    required this.singleListController,
+    required this.listviewController,
+    required this.myAccountOnTap,
+    required this.progressOnTap
+  }) : super(key: key);
+  final bool myAccountSelected;
+  final bool progressSelected;
+  final ScrollController singleListController;
+  final ScrollController listviewController;
+  final void Function() myAccountOnTap;
+  final void Function() progressOnTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(
+          onPressed: myAccountOnTap,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(myAccountSelected ? Colors.white : null),
+            side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
+          ),
+          child: Text('My Account', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: myAccountSelected ? Utilities.myTheme.primaryColor : null),)
+        ),
+        const SizedBox(width: 10,),
+        ElevatedButton(
+          onPressed: progressOnTap,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null),
+            side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
+          ),
+          child: Text('Progress', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: progressSelected ? Utilities.myTheme.primaryColor : null),)
+        ),
+      ],
+    );
+  }
+}
+
+class ItemsToReturn extends StatelessWidget {
+  const ItemsToReturn({Key? key, required this.myAccountSelected, required this.listviewController, required this.mounted}) : super(key: key);
+  final bool myAccountSelected;
+  final ScrollController listviewController;
+  final bool mounted;
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer3<ScheduleViewModel, HomeViewModel, ProfileViewModel>(
       builder: (context, scheduleViewModel, homeViewModel, profileViewModel, _){
         if(myAccountSelected){
@@ -132,7 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                   children: [
                     if(i < 6) ...[
                       InkWell(
-                        onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
+                        onTap: listTileOntap(context: context, i: i, homeViewModel: homeViewModel, profileViewModel: profileViewModel, scheduleViewModel: scheduleViewModel, mounted: mounted),
                         child: Container(
                           height: 45,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -151,7 +215,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                     if(i==6) ...[
                       const SizedBox(height: 20,),
                       InkWell(
-                        onTap: listTileOntap(context: context, i: i, profileViewModel: profileViewModel, homeViewModel: homeViewModel, scheduleViewModel: scheduleViewModel),
+                        onTap: listTileOntap(context: context, i: i, homeViewModel: homeViewModel, profileViewModel: profileViewModel, scheduleViewModel: scheduleViewModel, mounted: mounted),
                         child: Container(
                           height: 45,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -180,7 +244,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
           child: Center(
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-              controller: _listviewController,
+              controller: listviewController,
               itemCount: scheduleViewModel.listSchedule.length,
               itemBuilder: (context, i){
                 return InkWell(
@@ -199,13 +263,14 @@ class _ProfileScreenState extends State<ProfileScreen>{
       }
     );
   }
-
-  Future<void> Function() listTileOntap({
+  
+   Future<void> Function() listTileOntap({
     required BuildContext context, 
     required int i, 
     required ProfileViewModel profileViewModel,
     required HomeViewModel homeViewModel,
-    required ScheduleViewModel scheduleViewModel
+    required ScheduleViewModel scheduleViewModel,
+    required bool mounted
   }){
     return profileViewModel.onTap(
       context: context,

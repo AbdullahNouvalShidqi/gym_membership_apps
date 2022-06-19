@@ -41,39 +41,61 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             children: [
               Text('What do you think of the app?', style: GoogleFonts.roboto(fontSize: 12),),
               const SizedBox(height: 6,),
-              ratingStarBar(),
+              RatingStarBar(
+                rating: _rating,
+                onRatingUpdate: (newRating){
+                  _rating = newRating;
+                },
+              ),
               const SizedBox(height: 31,),
               Text('What do you think of the app?', style: GoogleFonts.roboto(fontSize: 12),),
               const SizedBox(height: 5,),
-              feedbackFormField(),
+              FeedbackFormField(
+                formKey: _formKey,
+                reviewCtrl: _reviewCtrl,
+              ),
               const SizedBox(height: 20,),
-              submitButton()
+              SubmitButton(
+                formKey: _formKey,
+              )
             ],
           ),
         ),
       ),
     );
   }
+}
 
-  Widget ratingStarBar(){
+class RatingStarBar extends StatelessWidget {
+  const RatingStarBar({Key? key, required this.rating, required this.onRatingUpdate}) : super(key: key);
+  final double rating;
+  final void Function(double) onRatingUpdate;
+
+  @override
+  Widget build(BuildContext context) {
     return RatingBar.builder(
       itemPadding: const EdgeInsets.only(right: 3),
-      initialRating: _rating,
+      initialRating: rating,
       itemCount: 5,
       itemBuilder: (context, i){
         return Icon(Icons.star, color: Utilities.primaryColor,);
       },
-      onRatingUpdate: (rating){
-        _rating = rating;
-      }
+      onRatingUpdate: onRatingUpdate
     );
   }
+}
 
-  Widget feedbackFormField(){
+class FeedbackFormField extends StatelessWidget {
+  const FeedbackFormField({Key? key, required this.formKey, required this.reviewCtrl}) : super(key: key);
+  final GlobalKey<FormState> formKey;
+  final TextEditingController reviewCtrl;
+
+  @override
+  Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: formKey,
       child: TextFormField(
-        controller: _reviewCtrl,
+        controller: reviewCtrl,
         decoration: InputDecoration(
           hintText: 'Type your feedback 500 character left',
           hintStyle: GoogleFonts.roboto(),
@@ -90,11 +112,17 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
       ),
     );
   }
+}
 
-  Widget submitButton(){
+class SubmitButton extends StatelessWidget {
+  const SubmitButton({Key? key, required this.formKey}) : super(key: key);
+  final GlobalKey<FormState> formKey;
+
+  @override
+  Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: (){
-        if(_formKey.currentState!.validate())return;
+        if(formKey.currentState!.validate())return;
       },
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))

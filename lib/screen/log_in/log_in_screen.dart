@@ -56,171 +56,46 @@ class _LogInScreenState extends State<LogInScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            mainTitle(),
-            emailFormField(),
+            const MainTitle(),
+            EmailFormField(
+              emailCtrl: _emailCtrl,
+            ),
             const SizedBox(height: 10,),
-            passwordFormField(),
+            PasswordFormField(
+              passwordCtrl: _passwordCtrl,
+            ),
             const SizedBox(height: 15,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                rememberMeChekBox(),
-                forgotPassword()
+                RememberMeCheckBox(
+                  rememberMe: _rememberMe,
+                  onChanged: (newValue){
+                    setState(() {
+                      _rememberMe = newValue!;
+                    });
+                  },
+                  onTap: (){
+                    setState(() {
+                      _rememberMe = !_rememberMe;
+                    });
+                  },
+                ),
+                const ForgotPassword()
               ],
             ),
-            loginButton(),
+            LoginButton(
+              formKey: _formKey,
+              emailCtrl: _emailCtrl,
+              passwordCtrl: _passwordCtrl,
+              mounted: mounted,
+            ),
             Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
             googleLoginButton(),
-            toSignUpButton()
+            const ToSignUpButton()
           ],
         ),
       ),
-    );
-  }
-
-  Widget mainTitle(){
-    return Padding(
-      padding: const EdgeInsets.only(top: 35, bottom: 50),
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Hello! Welcome back!', style: Utilities.signInSignUpMainTitleStyle,),
-            const SizedBox(height: 4,),
-            Text("Hello again, You've been missed!", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget emailFormField(){
-    return CostumFormField(
-      controller: _emailCtrl,
-      label: 'Email Address',
-      hintText: 'Enter your email address',
-      prefixIcon: const Icon(Icons.email_outlined),
-      textInputType: TextInputType.emailAddress,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
-          return 'Please enter your email address';
-        }
-        else if(!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')){
-          return 'Please enter a valid email address';
-        }
-        return null;
-      }
-    );
-  }
-
-  Widget passwordFormField(){
-    return CostumFormField(
-      controller: _passwordCtrl,
-      label: 'Password',
-      hintText: 'Enter your password',
-      prefixIcon: const Icon(Icons.lock_outline),
-      textInputType: TextInputType.visiblePassword,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
-          return 'Please enter your password';
-        }
-        else if(newValue.contains('  ')){
-          return 'Your password contains double space, please remove it';
-        }
-        else if(newValue.length < 6){
-          return 'The minimal length of password is 6';
-        }
-        else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
-          return 'Please enter at least one alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
-          return 'Please enter at least one non alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
-          return 'Please enter at least one number in your password';
-        }
-        return null;
-      },
-      useIconHidePassword: true,
-    );
-  }
-
-  Widget rememberMeChekBox(){
-    return  Row(
-      children: [
-        Transform.scale(
-          scale: 1.2,
-          child: SizedBox(
-            height: 24,
-            width: 24,
-            child: Checkbox(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              value: _rememberMe,
-              onChanged: (newValue){
-                setState(() {
-                  _rememberMe = newValue!;
-                });
-              }
-            ),
-          ),
-        ),
-        const SizedBox(width: 5,),
-        GestureDetector(
-          onTap: (){
-            setState(() {
-              _rememberMe = !_rememberMe;
-            });
-          },
-          child: Text('Remember Me', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold,))
-        )
-      ],
-    );
-  }
-
-  Widget forgotPassword(){
-    return InkWell(
-      onTap: (){
-        Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
-      },
-      child: Text('Forgot Password', style: GoogleFonts.roboto(fontSize: 12, color: Colors.red))
-    );
-  }
-
-  Widget loginButton(){
-    return Consumer<LogInViewModel>(
-      builder: (context, logInViewModel, _) {
-        final isLoading = logInViewModel.state == LogInState.loading;
-        final isError = logInViewModel.state == LogInState.error;
-
-        return Center(
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30, bottom: 25),
-            child: CostumButton(
-              isLoading: isLoading,
-              childText: 'Login',
-              onPressed: () async {
-                if(!_formKey.currentState!.validate())return;
-                await logInViewModel.signIn(email: _emailCtrl.text, password: _passwordCtrl.text);
-                final user =  LogInViewModel.currentUser;
-                if(user!= null){
-                  ProfileViewModel.setUserData(emailAddress: _emailCtrl.text, username: user.username, phoneNumber: user.contact, password: user.password);
-                }
-                else{
-                  Fluttertoast.showToast(msg: 'No such user found in our database, sing up to get account');
-                  return;
-                }
-                if(isError)return;
-                if(!mounted)return;
-                Fluttertoast.showToast(msg: 'Log in successful!');
-                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-              },
-            )
-          ),
-        );
-      }
     );
   }
 
@@ -249,29 +124,6 @@ class _LogInScreenState extends State<LogInScreen> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget toSignUpButton(){
-    return Padding(
-      padding: const EdgeInsets.only(top: 15),
-      child: Center(
-        child: RichText(
-          text: TextSpan(
-            text: "Don't have an account? ",
-            style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
-            children: [
-              TextSpan(
-                text: 'Sign Up',
-                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()..onTap = (){
-                  Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
-                }
-              )
-            ]
-          )
-        ),
-      )
     );
   }
 
@@ -317,5 +169,210 @@ class _LogInScreenState extends State<LogInScreen> {
       }
       return Future.value(true);
     }
+  }
+}
+
+class PasswordFormField extends StatelessWidget {
+  const PasswordFormField({Key? key, required this.passwordCtrl}) : super(key: key);
+  final TextEditingController passwordCtrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return CostumFormField(
+      controller: passwordCtrl,
+      label: 'Password',
+      hintText: 'Enter your password',
+      prefixIcon: const Icon(Icons.lock_outline),
+      textInputType: TextInputType.visiblePassword,
+      validator: (newValue){
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
+          return 'Please enter your password';
+        }
+        else if(newValue.contains('  ')){
+          return 'Your password contains double space, please remove it';
+        }
+        else if(newValue.length < 6){
+          return 'The minimal length of password is 6';
+        }
+        else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+          return 'Please enter at least one non alphabet letter in your password';
+        }
+        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+          return 'Please enter at least one number in your password';
+        }
+        return null;
+      },
+      useIconHidePassword: true,
+    );
+  }
+}
+
+class MainTitle extends StatelessWidget {
+  const MainTitle({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 35, bottom: 50),
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Hello! Welcome back!', style: Utilities.signInSignUpMainTitleStyle,),
+            const SizedBox(height: 4,),
+            Text("Hello again, You've been missed!", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class EmailFormField extends StatelessWidget {
+  const EmailFormField({Key? key, required this.emailCtrl}) : super(key: key);
+  final TextEditingController emailCtrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return CostumFormField(
+      controller: emailCtrl,
+      label: 'Email Address',
+      hintText: 'Enter your email address',
+      prefixIcon: const Icon(Icons.email_outlined),
+      textInputType: TextInputType.emailAddress,
+      validator: (newValue){
+        if(newValue == null || newValue.isEmpty || newValue == ' '){
+          return 'Please enter your email address';
+        }
+        else if(!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')){
+          return 'Please enter a valid email address';
+        }
+        return null;
+      }
+    );
+  }
+}
+
+class RememberMeCheckBox extends StatelessWidget {
+  const RememberMeCheckBox({Key? key, required this.rememberMe, required this.onChanged, required this.onTap}) : super(key: key);
+  final bool rememberMe;
+  final void Function(bool?) onChanged;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return  Row(
+      children: [
+        Transform.scale(
+          scale: 1.2,
+          child: SizedBox(
+            height: 24,
+            width: 24,
+            child: Checkbox(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(5),
+              ),
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              value: rememberMe,
+              onChanged: onChanged
+            ),
+          ),
+        ),
+        const SizedBox(width: 5,),
+        GestureDetector(
+          onTap: onTap,
+          child: Text('Remember Me', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold,))
+        )
+      ],
+    );
+  }
+}
+
+class ForgotPassword extends StatelessWidget {
+  const ForgotPassword({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: (){
+        Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
+      },
+      child: Text('Forgot Password', style: GoogleFonts.roboto(fontSize: 12, color: Colors.red))
+    );
+  }
+}
+
+class LoginButton extends StatelessWidget {
+  const LoginButton({Key? key, required this.formKey, required this.emailCtrl, required this.passwordCtrl, required this.mounted}) : super(key: key);
+  final GlobalKey<FormState> formKey;
+  final TextEditingController emailCtrl;
+  final TextEditingController passwordCtrl;
+  final bool mounted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<LogInViewModel>(
+      builder: (context, logInViewModel, _) {
+        final isLoading = logInViewModel.state == LogInState.loading;
+        final isError = logInViewModel.state == LogInState.error;
+
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30, bottom: 25),
+            child: CostumButton(
+              isLoading: isLoading,
+              childText: 'Login',
+              onPressed: () async {
+                if(!formKey.currentState!.validate())return;
+                await logInViewModel.signIn(email: emailCtrl.text, password: passwordCtrl.text);
+                final user =  LogInViewModel.currentUser;
+                if(user!= null){
+                  ProfileViewModel.setUserData(emailAddress: emailCtrl.text, username: user.username, phoneNumber: user.contact, password: user.password);
+                }
+                else{
+                  Fluttertoast.showToast(msg: 'No such user found in our database, sing up to get account');
+                  return;
+                }
+                if(isError)return;
+                if(!mounted)return;
+                Fluttertoast.showToast(msg: 'Log in successful!');
+                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+              },
+            )
+          ),
+        );
+      }
+    );
+  }
+}
+
+class ToSignUpButton extends StatelessWidget {
+  const ToSignUpButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: Center(
+        child: RichText(
+          text: TextSpan(
+            text: "Don't have an account? ",
+            style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
+            children: [
+              TextSpan(
+                text: 'Sign Up',
+                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
+                recognizer: TapGestureRecognizer()..onTap = (){
+                  Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                }
+              )
+            ]
+          )
+        ),
+      )
+    );
   }
 }

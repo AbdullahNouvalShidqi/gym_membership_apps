@@ -61,12 +61,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                       scrollDirection: Axis.horizontal,
                       itemCount: scheduleViewModel.buttonsData.length,
                       itemBuilder: (context, i){
-                        return costumSortingButton(
+                        return CostumSortingButton(
                           icon: scheduleViewModel.buttonsData[i]['icon'],
                           name: scheduleViewModel.buttonsData[i]['name']!,
-                          scheduleViewModel: scheduleViewModel,
+                          currentIndex: _currentIndex,
                           i: i,
-                          allItem: allItem,
+                          onTap: sortingButtonOnTap(allItem: allItem, i: i, scheduleViewModel: scheduleViewModel),
                         );
                       }
                     ),
@@ -108,51 +108,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
     );
   }
 
-  Widget costumSortingButton({
-    String? icon,
-    required String name,
-    required int i,
-    required List<ClassModel> allItem,
-    required ScheduleViewModel scheduleViewModel
-  }){
-    return Padding(
-      padding: const EdgeInsets.only(right: 4.5),
-      child: GestureDetector(
-        onTap: () {
-          if(_currentIndex != i){
-            setState(() {
-              _currentIndex = i;
-            });
+  void Function() sortingButtonOnTap({required int i, required List<ClassModel> allItem, required ScheduleViewModel scheduleViewModel}){
+    return (){
+      if(_currentIndex != i){
+        setState(() {
+          _currentIndex = i;
+        });
 
-            _animationController.reverse().then(
-              (value) => checkSchedules(allItem: allItem, currentIndex: _currentIndex, scheduleViewModel: scheduleViewModel)
-            ).then(
-              (value) => 
-              _animationController.forward()
-            );
-          }
-        },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          width: i == 0 ? 43 : 62,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15),
-            color: _currentIndex == i ? Utilities.primaryColor : Utilities.myWhiteColor,
-            border: Border.all(color: Utilities.primaryColor)
-          ),
-          child: icon == null ? Text(name, style: Utilities.costumSortingButtonStyle(i == _currentIndex)) :
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(icon, color: i == _currentIndex ? Utilities.myWhiteColor : Utilities.primaryColor,),
-              const SizedBox(width: 5,),
-              Text(name, style: Utilities.costumSortingButtonStyle(i == _currentIndex))
-            ],
-          ),
-        ),
-      ),
-    );
+        _animationController.reverse().then(
+          (value) => checkSchedules(allItem: allItem, currentIndex: _currentIndex, scheduleViewModel: scheduleViewModel)
+        ).then(
+          (value) => 
+          _animationController.forward()
+        );
+      }
+    };
   }
 
   void checkSchedules({required List<ClassModel> allItem, required int currentIndex, required ScheduleViewModel scheduleViewModel}){
@@ -171,5 +141,50 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
     setState(() {
       
     });
+  }
+}
+
+class CostumSortingButton extends StatelessWidget {
+  const CostumSortingButton({Key? key,
+    required this.currentIndex,
+    required this.i,
+    this.icon,
+    required this.name,
+    required this.onTap
+    
+  }) : super(key: key);
+  final int currentIndex;
+  final int i;
+  final String? icon;
+  final String name;
+  final void Function() onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 4.5),
+      child: GestureDetector(
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          width: i == 0 ? 43 : 62,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: currentIndex == i ? Utilities.primaryColor : Utilities.myWhiteColor,
+            border: Border.all(color: Utilities.primaryColor)
+          ),
+          child: icon == null ? Text(name, style: Utilities.costumSortingButtonStyle(i == currentIndex)) :
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset(icon!, color: i == currentIndex ? Utilities.myWhiteColor : Utilities.primaryColor,),
+              const SizedBox(width: 5,),
+              Text(name, style: Utilities.costumSortingButtonStyle(i == currentIndex))
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

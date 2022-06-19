@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
+import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class PaymentInstructionScreen extends StatefulWidget {
   static String routeName = '/paymentInstruction';
@@ -15,9 +24,11 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
   late final _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 200));
   final _scrollController = ScrollController();
   bool _isShown = false;
+  DateTime? currentBackPressTime;
   
   @override
   Widget build(BuildContext context) {
+    final item = ModalRoute.of(context)!.settings.arguments as ClassModel?;
     return Scaffold(
       appBar: AppBar(
         title: Text('Payment Instruction', style: Utilities.appBarTextStyle,),
@@ -86,7 +97,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
                       alignment: Alignment.bottomCenter,
                       child: InkWell(
                         onTap: () async {
-
+                          Clipboard.setData(const ClipboardData(text: '1234 5678 910')).then((value) => Fluttertoast.showToast(msg: 'Copied to clipboard'));
                         },
                         child: Text('Copy', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Utilities.primaryColor),),
                       ),
@@ -97,7 +108,106 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
             ),
             const SizedBox(height: 15,),
             costumMainCard(),
-            costumSubCard()
+            costumSubCard(),
+            const Expanded(child: SizedBox(),),
+            item == null ? const SizedBox() :
+            Column(
+              children: [
+                CostumButton(
+                  onPressed: () async {
+                    DateTime now = DateTime.now();
+                    if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000))){
+                      currentBackPressTime = now;
+                      Fluttertoast.cancel();
+                      Fluttertoast.showToast(
+                        msg: "Press back to home again, to go back to home"
+                      );
+                      return;
+                    }
+                    currentBackPressTime = null;
+                    Fluttertoast.cancel();
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  height: 45,
+                  backgroundColor: Utilities.myWhiteColor,
+                  borderColor: Utilities.primaryColor,
+                  fontColor: Utilities.primaryColor,
+                  childText: 'Back to home'
+                ),
+                const SizedBox(height: 5,),
+                Consumer2<ScheduleViewModel, HomeViewModel>(
+                  builder: (context, scheduleViewModel, homeViewModel, _) {
+                    final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
+                    final isError = scheduleViewModel.state == ScheduleViewState.error;
+                    return CostumButton(
+                      isLoading: isLoading,
+                      onPressed: scheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass && element.type == item.type)  ? null : 
+                      () async {
+                        bool dontAdd = false;
+                        if(scheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour)){
+                          await showDialog(
+                            context: context,
+                            builder: (context){
+                              return CostumDialog(
+                                title: 'Watch it!',
+                                contentText: 'You already book another class with the same time as this class, you sure want to book?',
+                                trueText: 'Yes',
+                                falseText: 'No',
+                                trueOnPressed: (){
+                                  Navigator.pop(context);
+                                },
+                                falseOnPressed: (){
+                                  dontAdd = true;
+                                  Navigator.pop(context);
+                                },
+                              );
+                            }
+                          );
+                        }
+                        if(dontAdd){
+                          Fluttertoast.showToast(msg: 'No book has done');
+                          return;
+                        }
+
+                        await scheduleViewModel.addDatBooking(newClass: item);
+
+                        if(isError){
+                          Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
+                          return;
+                        }
+                        bool goToSchedule = false;
+                        
+                        await showModalBottomSheet(
+                          context: context,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))
+                          ),
+                          isScrollControlled: true,
+                          builder: (context){
+                            return CostumBottomSheet(
+                              title: 'Booking Class',
+                              content: 'Return to Schedule page to see your schedule',
+                              buttonText: 'See Schedule',
+                              onPressed: (){
+                                goToSchedule = true;
+                                Navigator.pop(context);
+                              },
+                            );
+                          }
+                        );
+                        if(goToSchedule){
+                          homeViewModel.selectTab('Schedule', 1);
+                          homeViewModel.navigatorKeys['Home']!.currentState!.popUntil((route) => route.isFirst);
+                        }
+                      },
+                      height: 45,
+                      childText: 'Book now'
+                    );
+                  }
+                ),
+              ],
+            ),
+            const SizedBox(height: 15,)
           ],
         ),
       ),

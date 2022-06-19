@@ -40,7 +40,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
           builder: (context, scheduleViewModel, _) {
             final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
             final isError = scheduleViewModel.state == ScheduleViewState.error;
-            List<ClassModel> allItem = [...scheduleViewModel.listSchedule];
+            List<ClassModel> allItem = scheduleViewModel.tempSchedules;
             if(isError){}
             if(isLoading){
               return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.scheduleScreen,);
@@ -51,36 +51,34 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
             return RefreshIndicator(
               key: const Key('scheduleRefresh'),
               onRefresh: scheduleViewModel.refreshData,
-              child: Scrollbar(
-                controller: scheduleViewModel.scheduleListController,
-                thumbVisibility: true,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 5,),
-                    SizedBox(
-                      height: 35,
-                      child: ListView.builder(
-                        controller: scheduleViewModel.scheduleListController,
-                        padding: const EdgeInsets.symmetric(horizontal: 15.5),
-                        scrollDirection: Axis.horizontal,
-                        itemCount: scheduleViewModel.buttonsData.length,
-                        itemBuilder: (context, i){
-                          return costumSortingButton(
-                            icon: scheduleViewModel.buttonsData[i]['icon'],
-                            name: scheduleViewModel.buttonsData[i]['name']!,
-                            scheduleViewModel: scheduleViewModel,
-                            i: i,
-                            allItem: allItem,
-                          );
-                        }
-                      ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 5,),
+                  SizedBox(
+                    height: 35,
+                    child: ListView.builder(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.5),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: scheduleViewModel.buttonsData.length,
+                      itemBuilder: (context, i){
+                        return costumSortingButton(
+                          icon: scheduleViewModel.buttonsData[i]['icon'],
+                          name: scheduleViewModel.buttonsData[i]['name']!,
+                          scheduleViewModel: scheduleViewModel,
+                          i: i,
+                          allItem: allItem,
+                        );
+                      }
                     ),
-                    const SizedBox(height: 15,),
-                    Expanded(
-                      child: FadeTransition(
-                        opacity: Tween(begin: 0.8, end: 1.0).animate(_animationController),
-                        child: ScaleTransition(
-                          scale: Tween(begin: 0.9, end: 1.0).animate(_animationController),
+                  ),
+                  const SizedBox(height: 15,),
+                  Expanded(
+                    child: FadeTransition(
+                      opacity: Tween(begin: 0.8, end: 1.0).animate(_animationController),
+                      child: ScaleTransition(
+                        scale: Tween(begin: 0.9, end: 1.0).animate(_animationController),
+                        child: Scrollbar(
+                          controller: scheduleViewModel.scheduleListController,
                           child: ListView.builder(
                             controller: scheduleViewModel.scheduleListController,
                             physics: isLoading ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
@@ -92,7 +90,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 5),
-                                  child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.scheduleScreen),
+                                  child: CostumCard(classModel: allItem[i], whichScreen: CostumCardFor.scheduleScreen),
                                 ),
                               );
                             }
@@ -100,8 +98,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }
@@ -127,7 +125,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
             });
 
             _animationController.reverse().then(
-              (value) => setState((){checkSchedules(allItem: allItem, currentIndex: _currentIndex, scheduleViewModel: scheduleViewModel);}) 
+              (value) => checkSchedules(allItem: allItem, currentIndex: _currentIndex, scheduleViewModel: scheduleViewModel)
             ).then(
               (value) => 
               _animationController.forward()
@@ -170,5 +168,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
     if(currentIndex == 3){
       allItem.sort((a, b) => b.name.compareTo(a.name),);
     }
+    setState(() {
+      
+    });
   }
 }

@@ -124,9 +124,9 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   }
 
   Widget costumListView({required bool isEmpty, required ClassModel item, required AvailableClassViewModel availableClassViewModel}){
-    if(isEmpty){
-      return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
-    }
+    // if(isEmpty){
+    //   return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
+    // }
     return RefreshIndicator(
       onRefresh: availableClassViewModel.refreshData,
       child: ListView.builder(

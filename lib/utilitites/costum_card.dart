@@ -199,7 +199,7 @@ class CostumCard extends StatelessWidget {
   }
 
   Map<String, dynamic> checkItem({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
-    if(scheduleViewModel.listSchedule.any((element) => element.idClass == classModel.idClass)){
+    if(scheduleViewModel.listSchedule.any((element) => element.idClass == classModel.idClass && element.type == classModel.type)){
       return {
         'status' : 'Booked',
         'onPressed' : false

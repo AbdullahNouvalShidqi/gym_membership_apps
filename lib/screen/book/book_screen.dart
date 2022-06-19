@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/payment_instruction/payment_instruction_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
@@ -131,7 +132,7 @@ class _BookScreenState extends State<BookScreen> {
                 ],
               ),
             ),
-            ElevatedButton(
+            CostumButton(
               onPressed: () async {
                 DateTime now = DateTime.now();
                 if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000))){
@@ -146,94 +147,24 @@ class _BookScreenState extends State<BookScreen> {
                 Fluttertoast.cancel();
                 Navigator.popUntil(context, (route) => route.isFirst);
               },
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Utilities.myWhiteColor),
-                side: MaterialStateProperty.all(BorderSide(color: Utilities.primaryColor)),
-                fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
-              ),
-              child: Text('Back to home', style: GoogleFonts.roboto(fontSize: 16, color: Utilities.primaryColor),)
+              height: 45,
+              backgroundColor: Utilities.myWhiteColor,
+              borderColor: Utilities.primaryColor,
+              fontColor: Utilities.primaryColor,
+              childText: 'Back to home'
             ),
             const SizedBox(height: 5,),
-            Consumer2<ScheduleViewModel, HomeViewModel>(
-              builder: (context, scheduleViewModel, homeViewModel, _) {
-                final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
-                final isError = scheduleViewModel.state == ScheduleViewState.error;
-                return CostumButton(
-                  isLoading: isLoading,
-                  onPressed: checkItem(item: item, scheduleViewModel: scheduleViewModel)  ? null : 
-                  () async {
-                    bool dontAdd = false;
-                    if(scheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour)){
-                      await showDialog(
-                        context: context,
-                        builder: (context){
-                          return CostumDialog(
-                            title: 'Watch it!',
-                            contentText: 'You already book another class with the same time as this class, you sure want to book?',
-                            trueText: 'Yes',
-                            falseText: 'No',
-                            trueOnPressed: (){
-                              Navigator.pop(context);
-                            },
-                            falseOnPressed: (){
-                              dontAdd = true;
-                              Navigator.pop(context);
-                            },
-                          );
-                        }
-                      );
-                    }
-                    if(dontAdd){
-                      Fluttertoast.showToast(msg: 'No book has done');
-                      return;
-                    }
-
-                    await scheduleViewModel.addDatBooking(newClass: item);
-
-                    if(isError){
-                      Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
-                      return;
-                    }
-                    bool goToSchedule = false;
-                    
-                    await showModalBottomSheet(
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))
-                      ),
-                      isScrollControlled: true,
-                      builder: (context){
-                        return CostumBottomSheet(
-                          title: 'Booking Class',
-                          content: 'Return to Schedule page to see your schedule',
-                          buttonText: 'See Schedule',
-                          onPressed: (){
-                            goToSchedule = true;
-                            Navigator.pop(context);
-                          },
-                        );
-                      }
-                    );
-                    if(goToSchedule){
-                      homeViewModel.selectTab('Schedule', 1);
-                      homeViewModel.navigatorKeys['Home']!.currentState!.popUntil((route) => route.isFirst);
-                    }
-                  },
-                  height: 45,
-                  childText: 'Book now'
-                );
-              }
+            CostumButton(
+              onPressed: (){
+                Navigator.pushNamed(context, PaymentInstructionScreen.routeName, arguments: item);
+              },
+              height: 45,
+              childText: 'Payment Instruction'
             ),
             const SizedBox(height: 30,)
           ],
         ),
       ),
     );
-  }
-  bool checkItem({required ClassModel item, required ScheduleViewModel scheduleViewModel}){
-    if(scheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass,)){
-      return true;
-    }
-    return false;
   }
 }

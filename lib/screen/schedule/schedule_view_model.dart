@@ -103,7 +103,7 @@ class ScheduleViewModel with ChangeNotifier{
   }
 
   void resetSort(){
-    _listSchedule = [..._tempSchedules];
+    _tempSchedules = [..._listSchedule];
     notifyListeners();  
   }
 

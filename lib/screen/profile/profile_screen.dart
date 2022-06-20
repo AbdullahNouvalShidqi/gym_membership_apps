@@ -47,8 +47,8 @@ class _ProfileScreenState extends State<ProfileScreen>{
 
   @override
   Widget build(BuildContext context) {    
-    return Consumer2<HomeViewModel, ProfileViewModel>(
-      builder: (context, homeViewModel, profileViewModel, _) {
+    return Consumer2<ScheduleViewModel, ProfileViewModel>(
+      builder: (context, scheduleViewModel, profileViewModel, _) {
         final myAccountSelected = profileViewModel.myAccountSelected;
         final progressSelected = profileViewModel.progressSelected;
         return Scaffold(
@@ -66,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                     listviewController: _listviewController,
                     singleListController: _singleListController,
                     myAccountOnTap: myAccountOnTap(profileViewModel: profileViewModel),
-                    progressOnTap: progressOnTap(profileViewModel: profileViewModel),
+                    progressOnTap: progressOnTap(profileViewModel: profileViewModel, scheduleViewModel: scheduleViewModel),
                   ),
                   const SizedBox(height: 15),
                   ItemsToReturn(
@@ -93,13 +93,13 @@ class _ProfileScreenState extends State<ProfileScreen>{
     };
   }
 
-  void Function() progressOnTap({required ProfileViewModel profileViewModel}){
+  void Function() progressOnTap({required ProfileViewModel profileViewModel, required ScheduleViewModel scheduleViewModel}){
     return (){
-      if(_scrollStatus == ScrollStatus.attached){
+      if(_scrollStatus == ScrollStatus.attached && scheduleViewModel.listSchedule.isNotEmpty){
         _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
         _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
       }
-      _scrollStatus = ScrollStatus.attached;  
+      _scrollStatus = ScrollStatus.attached;
       profileViewModel.progressButtonOnTap();
     };
   }

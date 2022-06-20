@@ -103,10 +103,10 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
         else if(newValue.length < 6){
           return 'The minimal length of password is 6';
         }
-        else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+        else if(!Utilities.pwNeedOneCapital.hasMatch(newValue)){
           return 'Please enter at least one alphabet letter in your password';
         }
-        else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+        else if(!Utilities.pwNeedOneNonCapital.hasMatch(newValue)){
           return 'Please enter at least one non alphabet letter in your password';
         }
         else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){

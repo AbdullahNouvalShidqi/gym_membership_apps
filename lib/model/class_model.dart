@@ -1,5 +1,20 @@
 import 'package:gym_membership_apps/model/instructor_model.dart';
 
+class ClassApiModel {
+  bool success;
+  String message;
+  List<ClassModel> data;
+
+  ClassApiModel({required this.success, required this.message, required this.data});
+
+  ClassApiModel.fromJson(Map<String, dynamic> json)
+  :
+    success = json['success'],
+    message = json['message'],
+    data = (json['data'] as List).map((e) => ClassModel.fromJson(e)).toList()
+  ;
+}
+
 class ClassModel {
   int idClass;
   String name;
@@ -24,7 +39,8 @@ class ClassModel {
   });
 
   ClassModel.fromJson(Map<String, dynamic> json)
-  : idClass = json['id_class'],
+  : 
+    idClass = json['id_class'],
     name = json['name'],
     description = json['description'],
     startAt = DateTime.parse(json['start_at']),

@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
+import 'package:gym_membership_apps/model/user_model.dart';
 
 enum SignUpState{
   none,
@@ -11,6 +13,11 @@ class SignUpViewModel with ChangeNotifier{
   SignUpState _state = SignUpState.none;
   SignUpState get state => _state;
 
+  UserModel? _user;
+  UserModel? get user => _user;
+
+  List<UserModel> _allUser = [];
+
   void changeState(SignUpState s){
     _state = s;
     notifyListeners();
@@ -18,18 +25,31 @@ class SignUpViewModel with ChangeNotifier{
   
   Future<void> signUpWithEmailAndPassword({
     required String username, 
-    required String emailAddress, 
-    required String phoneNumber, 
+    required String email, 
+    required String contact, 
     required String password
   }) async {
     changeState(SignUpState.loading);
     try{
-      await Future.delayed(const Duration(seconds: 3));
+      _user = await MainAPI().signUp(username: username, email: email, contact: contact, password: password);
       changeState(SignUpState.none);
     }
     catch(e){
       changeState(SignUpState.error);
     }
     
+  }
+
+  Future<List<UserModel>> getAllUser() async {
+    changeState(SignUpState.loading);
+
+    try{
+      _allUser = await MainAPI().getAllUser();
+      changeState(SignUpState.none);
+    }catch(e){
+      print(e);
+      changeState(SignUpState.error);
+    }
+    return _allUser;
   }
 }

@@ -47,7 +47,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/weightlifting.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 1,
@@ -58,7 +58,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/bodybuilding.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 2,
@@ -69,7 +69,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/yoga.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 3,
@@ -80,7 +80,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/weightloss.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 4,
@@ -91,7 +91,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/zumba.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 5,
@@ -102,7 +102,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/cardio.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 0,
@@ -113,7 +113,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/weightlifting.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 1,
@@ -124,7 +124,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 0,
       type: 'Online',
       images: ['assets/bodybuilding.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 2,
@@ -135,7 +135,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/yoga.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 3,
@@ -146,7 +146,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/weightloss.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 4,
@@ -157,7 +157,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/zumba.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 5,
@@ -168,7 +168,7 @@ class ProfileViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/cardio.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
   ];
   List<ClassModel> get progress => _progress;
@@ -214,8 +214,8 @@ class ProfileViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  static void setUserData({required String username, required String emailAddress, required String phoneNumber, required String password}){
-    _user = UserModel(email: emailAddress, username: username, contact: phoneNumber, password: password);
+  static void setUserData({required UserModel currentUser}){
+    _user = currentUser;
   }
 
   void disposeUserData(){

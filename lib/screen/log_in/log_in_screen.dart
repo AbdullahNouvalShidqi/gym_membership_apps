@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
@@ -194,10 +195,10 @@ class PasswordFormField extends StatelessWidget {
         else if(newValue.length < 6){
           return 'The minimal length of password is 6';
         }
-        else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+        else if(!Utilities.pwNeedOneCapital.hasMatch(newValue)){
           return 'Please enter at least one alphabet letter in your password';
         }
-        else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+        else if(!Utilities.pwNeedOneNonCapital.hasMatch(newValue)){
           return 'Please enter at least one non alphabet letter in your password';
         }
         else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
@@ -327,16 +328,22 @@ class LoginButton extends StatelessWidget {
               childText: 'Login',
               onPressed: () async {
                 if(!formKey.currentState!.validate())return;
-                await logInViewModel.signIn(email: emailCtrl.text, password: passwordCtrl.text);
-                final user =  LogInViewModel.currentUser;
-                if(user!= null){
-                  ProfileViewModel.setUserData(emailAddress: emailCtrl.text, username: user.username, phoneNumber: user.contact, password: user.password);
-                }
-                else{
-                  Fluttertoast.showToast(msg: 'No such user found in our database, sing up to get account');
+                final allUser = await logInViewModel.getAllUser();
+
+                if(isError){
+                  Fluttertoast.showToast(msg: 'Error: cannot get data, check your internet connection');
                   return;
                 }
-                if(isError)return;
+
+                final userData = allUser.where((element) => element.email == emailCtrl.text).toList();
+
+                if(userData.isEmpty || userData.length > 1 || userData.first.password != passwordCtrl.text){
+                  Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
+                  return;
+                }
+
+                ProfileViewModel.setUserData(currentUser: userData.first);
+
                 if(!mounted)return;
                 Fluttertoast.showToast(msg: 'Log in successful!');
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);

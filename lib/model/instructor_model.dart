@@ -1,18 +1,19 @@
 class InstructorModel {
-  int idInstructor;
+  int id;
   String name;
   String contact;
   String email;
 
   InstructorModel({
-    required this.idInstructor,
+    required this.id,
     required this.name,
     required this.contact,
     required this.email
   });
 
   InstructorModel.fromJson(Map<String, dynamic> json)
-  : idInstructor = json['id_instructor'],
+  : 
+    id = json['id'],
     name = json['name'],
     contact = json['contact'],
     email = json['email']

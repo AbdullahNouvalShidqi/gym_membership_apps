@@ -3,6 +3,8 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
+import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
@@ -31,6 +33,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordCtrl = TextEditingController();
   DateTime? currentBackPressTime;
   bool _rememberMe = false;
+  List<UserModel> _allUser = [];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      _allUser = await Provider.of<SignUpViewModel>(context, listen: false).getAllUser();
+      setState(() {
+        
+      });
+    });
+  }
   
   @override
   void dispose() {
@@ -63,9 +77,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const MainTitle(),
             UsernameFormField(
               usernameCtrl: _usernameCtrl,
+              allUser: _allUser,
             ),
             EmailFormField(
               emailCtrl: _emailCtrl,
+              allUser: _allUser,
             ),
             PhoneNumberFormField(
               phoneNumberCtrl: _phoneNumberCtrl,
@@ -199,8 +215,9 @@ class MainTitle extends StatelessWidget {
 }
 
 class UsernameFormField extends StatelessWidget {
-  const UsernameFormField({Key? key, required this.usernameCtrl}) : super(key: key);
+  const UsernameFormField({Key? key, required this.usernameCtrl, required this.allUser}) : super(key: key);
   final TextEditingController usernameCtrl;
+  final List<UserModel> allUser;
 
   @override
   Widget build(BuildContext context) {
@@ -218,6 +235,9 @@ class UsernameFormField extends StatelessWidget {
           else if(newValue.contains('  ')){
             return 'Please enter a valid username';
           }
+          else if(allUser.any((element) => element.username == newValue)){
+            return 'Username already userd by other user';
+          }
           return null;
         }
       )
@@ -226,8 +246,9 @@ class UsernameFormField extends StatelessWidget {
 }
 
 class EmailFormField extends StatelessWidget {
-  const EmailFormField({Key? key, required this.emailCtrl}) : super(key: key);
+  const EmailFormField({Key? key, required this.emailCtrl, required this.allUser}) : super(key: key);
   final TextEditingController emailCtrl;
+  final List<UserModel> allUser;
 
   @override
   Widget build(BuildContext context) {
@@ -243,8 +264,11 @@ class EmailFormField extends StatelessWidget {
           if(newValue == null || newValue.isEmpty || newValue == ' '){
             return 'Please enter your email address';
           }
-          else if(newValue.contains('  ') || !Utilities.emailRegExp.hasMatch(emailCtrl.text)){
+          else if(newValue.contains('  ') || !Utilities.emailRegExp.hasMatch(newValue)){
             return 'Please enter a valid email address';
+          }
+          else if(allUser.any((element) => element.email == newValue)){
+            return 'Email address is already used by other user';
           }
           return null;
         },
@@ -305,10 +329,10 @@ class PasswordFormField extends StatelessWidget {
           else if(newValue.length < 6){
             return 'The minimal length of password is 6';
           }
-          else if(!Utilities.pwNeedOneAlphabet.hasMatch(newValue)){
+          else if(!Utilities.pwNeedOneCapital.hasMatch(newValue)){
             return 'Please enter at least one alphabet letter in your password';
           }
-          else if(!Utilities.pwNeedOneNonAlphabet.hasMatch(newValue)){
+          else if(!Utilities.pwNeedOneNonCapital.hasMatch(newValue)){
             return 'Please enter at least one non alphabet letter in your password';
           }
           else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
@@ -420,13 +444,14 @@ class SignUpButton extends StatelessWidget {
             CostumButton(
               onPressed: () async {
                 if(!formKey.currentState!.validate())return;
-                await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, emailAddress: emailCtrl.text, phoneNumber: phoneNumberCtrl.text, password: passwordCtrl.text);
+                await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, email: emailCtrl.text, contact: phoneNumberCtrl.text, password: passwordCtrl.text);
                 if(isError){
                   Fluttertoast.showToast(msg: 'Check your internet connection');
                   return;
                 }
                 if(!mounted)return;
-                ProfileViewModel.setUserData(username: usernameCtrl.text, emailAddress: emailCtrl.text, phoneNumber: phoneNumberCtrl.text, password: passwordCtrl.text);
+                final user = signUpViewModel.user;
+                ProfileViewModel.setUserData(currentUser: user!);
                 Fluttertoast.showToast(msg: 'Sign up succesful!');
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },

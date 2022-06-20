@@ -8,8 +8,8 @@ class Utilities{
   static Color myWhiteColor = const Color.fromRGBO(250, 250, 250, 1);
   static Color myGreyColor = const Color.fromRGBO(112, 112, 112, 1);
   static RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
-  static RegExp pwNeedOneAlphabet = RegExp(r"^(?=.*?[A-Z])");
-  static RegExp pwNeedOneNonAlphabet = RegExp(r"^(?=.*?[a-z])");
+  static RegExp pwNeedOneCapital = RegExp(r"^(?=.*?[A-Z])");
+  static RegExp pwNeedOneNonCapital = RegExp(r"^(?=.*?[a-z])");
   static RegExp pwNeedOneNumber = RegExp(r"^(?=.*?[0-9])");
   
 

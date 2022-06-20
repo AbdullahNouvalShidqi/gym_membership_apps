@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/instructor_model.dart';
@@ -101,7 +103,7 @@ class HomeViewModel with ChangeNotifier{
     }
   }
 
-  final List<ClassModel> _classes = [
+  List<ClassModel> _classes = [
     ClassModel(
       idClass: 0,
       name: 'Weight Lifting',
@@ -111,7 +113,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/weightlifting.png', 'assets/weightlifting1.png', 'assets/weightlifting2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 1,
@@ -122,7 +124,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/bodybuilding.png', 'assets/bodybuilding1.png', 'assets/bodybuilding2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 2,
@@ -133,7 +135,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/yoga.png', 'assets/yoga1.png', 'assets/yoga2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 3,
@@ -144,7 +146,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/weightloss.png', 'assets/weightloss1.png', 'assets/weightloss2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 4,
@@ -155,7 +157,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/zumba.png', 'assets/zumba1.png', 'assets/zumba2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 5,
@@ -166,7 +168,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Offline',
       images: ['assets/cardio.png', 'assets/cardio1.png', 'assets/cardio2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 0,
@@ -177,7 +179,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/weightlifting.png', 'assets/weightlifting1.png', 'assets/weightlifting2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 1,
@@ -188,7 +190,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 0,
       type: 'Online',
       images: ['assets/bodybuilding.png', 'assets/bodybuilding1.png', 'assets/bodybuilding2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 2,
@@ -199,7 +201,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/yoga.png', 'assets/yoga1.png', 'assets/yoga2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 3,
@@ -210,7 +212,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/weightloss.png', 'assets/weightloss1.png', 'assets/weightloss2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 4,
@@ -221,7 +223,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/zumba.png', 'assets/zumba1.png', 'assets/zumba2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
     ClassModel(
       idClass: 5,
@@ -232,7 +234,7 @@ class HomeViewModel with ChangeNotifier{
       qtyUser: 25,
       type: 'Online',
       images: ['assets/cardio.png', 'assets/cardio1.png', 'assets/cardio2.png'],
-      instructor: InstructorModel(idInstructor: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
+      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
     ),
   ];
 
@@ -242,10 +244,13 @@ class HomeViewModel with ChangeNotifier{
     changeState(HomeViewState.loading);
 
     try{
-      await Future.delayed(const Duration(seconds: 2));
+      // _classes = await MainAPI().getAllClass();
       changeState(HomeViewState.none);      
     }
     catch(e){
+      if(e is DioError){
+        Fluttertoast.showToast(msg: e.toString());
+      }
       changeState(HomeViewState.error);
     }
     return _classes;

@@ -1,22 +1,37 @@
+class UserApiModel{
+  bool success;
+  String message;
+  List<UserModel> data;
+
+  UserApiModel({required this.success, required this.message, required this.data});
+
+  UserApiModel.fromJson(Map<String, dynamic> json) 
+  :
+    success = json['success'],
+    message = json['message'],
+    data = (json['data'] as List).map((e) => UserModel.fromJson(e)).toList()
+  ;
+}
+
 class UserModel {
-  int idUser;
+  int? id;
   String username;
   String email;
   String contact;
   String password;
 
-  UserModel({this.idUser = 0, required this.username, required this.email, required this.contact, required this.password});
+  UserModel({this.id, required this.username, required this.email, required this.contact, required this.password});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
-    idUser: json['id_user'],
-    username: json['username'],
-    email: json['email'],
-    contact: json['contact'],
-    password: json['password']
-  );
+  UserModel.fromJson(Map<String, dynamic> json)
+  :
+    id = json['id'],
+    email = json['email'],
+    username = json['username'],
+    contact = json['contact'],
+    password = json['password']
+  ;
 
   toJson() => {
-    'id_user' : idUser,
     'username' : username,
     'email': email,
     'contact': contact,

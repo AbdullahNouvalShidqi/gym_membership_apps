@@ -41,7 +41,7 @@ class EmptyListView extends StatelessWidget {
                   children: [
                     SvgPicture.asset(svgAssetLink),
                     const SizedBox(height: 30,),
-                    Text(title ?? 'Ooops, your ${forProgress ? 'progress' : 'schedule'} is still empity', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700))
+                    Text(title ?? 'Ooops, your ${forProgress ? 'progress' : 'schedule'} is still empty', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700))
                   ],
                 ),
               ),

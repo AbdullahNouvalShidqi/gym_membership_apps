@@ -46,13 +46,13 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                currentPasswordFormField(),
+                CurrentPasswordFormField(currentPwCtrl: _currentPwCtrl),
                 const SizedBox(height: 20,),
-                newPasswordFormField(),
+                NewPasswordFormField(newPwCtrl: _newPwCtrl, currentPwCtrl: _currentPwCtrl,),
                 const SizedBox(height: 20,),
-                confirmFormField(),
+                ConfirmFormField(confirmPwCtrl: _confirmPwCtrl, newPwCtrl: _newPwCtrl),
                 const SizedBox(height: 15,),
-                continueButton()
+                ContinueButton(formKey: _formKey,)
               ],
             ),
           ),
@@ -60,12 +60,18 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
       ),
     );
   }
+}
 
-  Widget currentPasswordFormField(){
+class CurrentPasswordFormField extends StatelessWidget {
+  const CurrentPasswordFormField({Key? key, required this.currentPwCtrl}) : super(key: key);
+  final TextEditingController currentPwCtrl;
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer<ProfileViewModel>(
       builder: (context, profileViewModel, _) {
         return CostumFormField(
-          controller: _currentPwCtrl,
+          controller: currentPwCtrl,
           label: 'Current Password',
           hintText: 'Enter your password',
           useIconHidePassword: true,
@@ -84,10 +90,17 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
       }
     );
   }
+}
 
-  Widget newPasswordFormField(){
+class NewPasswordFormField extends StatelessWidget {
+  const NewPasswordFormField({Key? key, required this.newPwCtrl, required this.currentPwCtrl}) : super(key: key);
+  final TextEditingController newPwCtrl;
+  final TextEditingController currentPwCtrl;
+
+  @override
+  Widget build(BuildContext context) {
     return CostumFormField(
-      controller: _newPwCtrl,
+      controller: newPwCtrl,
       label: 'New Password',
       hintText: 'Enter new password',
       useIconHidePassword: true,
@@ -96,6 +109,9 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
       validator: (newValue){
         if(newValue == null || newValue.isEmpty || newValue == ' '){
           return 'Please enter your password';
+        }
+        else if(newValue == currentPwCtrl.text){
+          return 'Enter new password';
         }
         else if(newValue.contains('  ')){
           return 'Your password contains double space, please remove it';
@@ -116,10 +132,17 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
       },
     );
   }
+}
 
-  Widget confirmFormField(){
+class ConfirmFormField extends StatelessWidget {
+  const ConfirmFormField({Key? key, required this.confirmPwCtrl, required this.newPwCtrl}) : super(key: key);
+  final TextEditingController confirmPwCtrl;
+  final TextEditingController newPwCtrl;
+
+  @override
+  Widget build(BuildContext context) {
     return CostumFormField(
-      controller: _confirmPwCtrl,
+      controller: confirmPwCtrl,
       label: 'Confirm Password',
       hintText: 'Enter new password',
       useIconHidePassword: true,
@@ -132,19 +155,25 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
         else if(newValue.contains('  ')){
           return 'Please enter a valid password';
         }
-        else if(newValue != _newPwCtrl.text){
+        else if(newValue != newPwCtrl.text){
           return 'Please enter a same password';
         }
         return null;
       },
     );
   }
+}
 
-  Widget continueButton(){
+class ContinueButton extends StatelessWidget {
+  const ContinueButton({Key? key, required this.formKey}) : super(key: key);
+  final GlobalKey<FormState> formKey;
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
         onPressed: (){
-          if(!_formKey.currentState!.validate())return;
+          if(!formKey.currentState!.validate())return;
         },
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))

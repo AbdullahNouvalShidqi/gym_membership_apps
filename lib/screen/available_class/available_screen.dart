@@ -48,31 +48,31 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
         return true;
       },
       child: Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (context, innerBoxIsScrolled) {
-            return [
-              SliverAppBar(
-                title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle,),
-                leading: IconButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,),
-                ),
-                centerTitle: true,
-              )
-            ];
-          },
-          body: Builder(
-            builder: (context) {
-              if(isLoading){
-                return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
-              }
-              return Column(
-                children: [
-                  SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
+        body: SafeArea(
+          child: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar(
+                  title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle,),
+                  leading: IconButton(
+                    onPressed: (){
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,),
+                  ),
+                  centerTitle: true,
+                )
+              ];
+            },
+            body: Builder(
+              builder: (context) {
+                if(isLoading){
+                  return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
+                }
+                return Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
                       child: Container(
                         height: 64,
                         width: double.infinity,
@@ -111,20 +111,20 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                         ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        for(var i = 0; i < 7; i++) ...[
-                          CostumListView(isEmpty: isEmpty, item: item, availableClassViewModel: availableClassViewModel),
-                        ]
-                      ],
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          for(var i = 0; i < 7; i++) ...[
+                            CostumListView(isEmpty: isEmpty, item: item),
+                          ]
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            }
+                  ],
+                );
+              }
+            ),
           ),
         ),
       ),
@@ -133,28 +133,31 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
 }
 
 class CostumListView extends StatelessWidget {
-  const CostumListView({Key? key, required this.isEmpty, required this.item, required this.availableClassViewModel}) : super(key: key);
+  const CostumListView({Key? key, required this.isEmpty, required this.item}) : super(key: key);
   final bool isEmpty;
   final ClassModel item;
-  final AvailableClassViewModel availableClassViewModel;
 
   @override
   Widget build(BuildContext context) {
     // if(isEmpty){
     //   return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
     // }
-    return RefreshIndicator(
-      onRefresh: availableClassViewModel.refreshData,
-      child: ListView.builder(
-        padding: const EdgeInsets.only(top: 15),
-        itemCount: 8,
-        itemBuilder: (context, i){
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
-          );
-        }
-      ),
+    return Consumer<AvailableClassViewModel>(
+      builder: (context, availableClassViewModel, _) {
+        return RefreshIndicator(
+          onRefresh: availableClassViewModel.refreshData,
+          child: ListView.builder(
+            padding: const EdgeInsets.only(top: 15),
+            itemCount: 8,
+            itemBuilder: (context, i){
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
+              );
+            }
+          ),
+        );
+      }
     );
   }
 }

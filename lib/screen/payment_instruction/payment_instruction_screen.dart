@@ -49,7 +49,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
             const SizedBox(height: 15,),
             CostumMainCard(
               animationController: _animationController,
-              onTap: onTap,
+              onTap: instructionOnTap,
             ),
             CostumSubCard(
               animationController: _animationController,
@@ -114,7 +114,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
   void Function() bookNowOnTap({required ScheduleViewModel scheduleViewModel, required ClassModel item, required bool isError, required HomeViewModel homeViewModel}){
     return  () async {
       bool dontAdd = false;
-      if(scheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour)){
+      if(scheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)){
         await showDialog(
           context: context,
           builder: (context){
@@ -134,6 +134,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
           }
         );
       }
+
       if(dontAdd){
         Fluttertoast.showToast(msg: 'No book has done');
         return;
@@ -145,8 +146,8 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
         Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
         return;
       }
+
       bool goToSchedule = false;
-      
       await showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -172,10 +173,10 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
     };
   }
 
-  void onTap(){
+  void instructionOnTap(){
     setState(() {
-        _isShown = !_isShown;
-      });
+      _isShown = !_isShown;
+    });
     if(_animationController.status == AnimationStatus.forward){
       _animationController.reverse();  
     }

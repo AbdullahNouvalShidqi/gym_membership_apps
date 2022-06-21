@@ -17,6 +17,7 @@ class SignUpViewModel with ChangeNotifier{
   UserModel? get user => _user;
 
   List<UserModel> _allUser = [];
+  List<UserModel> get allUser => _allUser;
 
   void changeState(SignUpState s){
     _state = s;
@@ -40,16 +41,14 @@ class SignUpViewModel with ChangeNotifier{
     
   }
 
-  Future<List<UserModel>> getAllUser() async {
+  Future<void> getAllUser() async {
     changeState(SignUpState.loading);
 
     try{
       _allUser = await MainAPI().getAllUser();
       changeState(SignUpState.none);
-    }catch(e){
-      print(e);
+    }catch(e){      
       changeState(SignUpState.error);
     }
-    return _allUser;
   }
 }

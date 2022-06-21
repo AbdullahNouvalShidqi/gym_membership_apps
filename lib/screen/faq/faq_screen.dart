@@ -181,7 +181,7 @@ class CostumSubCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(8)
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10,),
+              padding: const EdgeInsets.symmetric(horizontal: 10,),
               child: Scrollbar(
                 thumbVisibility: true,
                 controller: scrollControllers[i],

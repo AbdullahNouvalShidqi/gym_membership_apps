@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
@@ -10,6 +9,7 @@ import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -38,66 +38,65 @@ class _LogInScreenState extends State<LogInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final homeViewModel = Provider.of<HomeViewModel>(context);
     return WillPopScope(
       onWillPop: willPopValidation,
       child: Form(
         key: _formKey,
         child: Scaffold(
-          body: body(homeViewModel: homeViewModel)
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const MainTitle(),
+                  EmailFormField(
+                    emailCtrl: _emailCtrl,
+                  ),
+                  const SizedBox(height: 10,),
+                  PasswordFormField(
+                    passwordCtrl: _passwordCtrl,
+                  ),
+                  const SizedBox(height: 15,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      RememberMeCheckBox(
+                        rememberMe: _rememberMe,
+                        onChanged: rememberMeCheckBoxOnTap,
+                        onTap: rememberMeLabelOnTap,
+                      ),
+                      const ForgotPassword()
+                    ],
+                  ),
+                  LoginButton(
+                    formKey: _formKey,
+                    emailCtrl: _emailCtrl,
+                    passwordCtrl: _passwordCtrl,
+                    mounted: mounted,
+                  ),
+                  Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+                  googleLoginButton(),
+                  const ToSignUpButton()
+                ],
+              ),
+            ),
+          )
         ),
       ),
     );
   }
 
-  Widget body({required HomeViewModel homeViewModel}){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MainTitle(),
-            EmailFormField(
-              emailCtrl: _emailCtrl,
-            ),
-            const SizedBox(height: 10,),
-            PasswordFormField(
-              passwordCtrl: _passwordCtrl,
-            ),
-            const SizedBox(height: 15,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                RememberMeCheckBox(
-                  rememberMe: _rememberMe,
-                  onChanged: (newValue){
-                    setState(() {
-                      _rememberMe = newValue!;
-                    });
-                  },
-                  onTap: (){
-                    setState(() {
-                      _rememberMe = !_rememberMe;
-                    });
-                  },
-                ),
-                const ForgotPassword()
-              ],
-            ),
-            LoginButton(
-              formKey: _formKey,
-              emailCtrl: _emailCtrl,
-              passwordCtrl: _passwordCtrl,
-              mounted: mounted,
-            ),
-            Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
-            googleLoginButton(),
-            const ToSignUpButton()
-          ],
-        ),
-      ),
-    );
+  void rememberMeCheckBoxOnTap(bool? newValue){
+    setState(() {
+      _rememberMe = newValue!;
+    });
+  }
+
+  void rememberMeLabelOnTap(){
+    setState(() {
+      _rememberMe = !_rememberMe;
+    });
   }
 
   Widget googleLoginButton(){
@@ -134,26 +133,18 @@ class _LogInScreenState extends State<LogInScreen> {
       await showDialog(
         context: context,
         builder: (context){
-          return AlertDialog(
-            title: Text('Exit?', style: GoogleFonts.roboto(),),
-            content: Text("You will lose your data you've filled!", style: GoogleFonts.roboto(),),
-            actions: [
-              TextButton(
-                onPressed: (){
-                  setState(() {
-                    willPop = true;
-                  });
-                  Navigator.pop(context);
-                },
-                child: Text('Exit', style: GoogleFonts.roboto(),)
-              ),
-              TextButton(
-                onPressed: (){
-                  Navigator.pop(context);
-                },
-                child: Text('Cancel', style: GoogleFonts.roboto(),)
-              ),
-            ],
+          return CostumDialog(
+            title: 'Exit?',
+            contentText: "You will lose your data you've filled!",
+            trueText: 'Exit',
+            falseText: 'Cancel',
+            trueOnPressed: (){
+              willPop = true;
+              Navigator.pop(context);
+            },
+            falseOnPressed: (){
+              Navigator.pop(context);
+            },
           );
         }
       );

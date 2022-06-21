@@ -41,6 +41,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
             final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
             final isError = scheduleViewModel.state == ScheduleViewState.error;
             List<ClassModel> allItem = scheduleViewModel.tempSchedules;
+            
             if(isError){}
             if(isLoading){
               return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.scheduleScreen,);

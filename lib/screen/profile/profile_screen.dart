@@ -69,7 +69,7 @@ class _ProfileScreenState extends State<ProfileScreen>{
                     progressOnTap: progressOnTap(profileViewModel: profileViewModel, scheduleViewModel: scheduleViewModel),
                   ),
                   const SizedBox(height: 15),
-                  ItemsToReturn(
+                  ItemToReturn(
                     myAccountSelected: myAccountSelected,
                     listviewController: _listviewController,
                     mounted: mounted,
@@ -175,8 +175,8 @@ class TabButton extends StatelessWidget {
   }
 }
 
-class ItemsToReturn extends StatelessWidget {
-  const ItemsToReturn({Key? key, required this.myAccountSelected, required this.listviewController, required this.mounted}) : super(key: key);
+class ItemToReturn extends StatelessWidget {
+  const ItemToReturn({Key? key, required this.myAccountSelected, required this.listviewController, required this.mounted}) : super(key: key);
   final bool myAccountSelected;
   final ScrollController listviewController;
   final bool mounted;
@@ -210,9 +210,9 @@ class ItemsToReturn extends StatelessWidget {
                         ),
                       ),
                       Divider(height: 0, color: Utilities.myTheme.primaryColor,),
-                    ],
+                    ]
                     
-                    if(i==6) ...[
+                    else ...[
                       const SizedBox(height: 20,),
                       InkWell(
                         onTap: listTileOntap(context: context, i: i, homeViewModel: homeViewModel, profileViewModel: profileViewModel, scheduleViewModel: scheduleViewModel, mounted: mounted),

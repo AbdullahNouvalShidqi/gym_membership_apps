@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
@@ -21,99 +21,87 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
-        bool willPop = false;
-        await showDialog(
-          context: context,
-          builder: (context){
-            return AlertDialog(
-              title: Text('Exit ?', style: GoogleFonts.roboto(),),
-              content: Text('If you exit you will go back to the main login screen, you sure?', style: GoogleFonts.roboto(),),
-              actions: [
-                TextButton(
-                  onPressed: (){
-                    willPop = true;
-                    Navigator.pop(context);
-                  },
-                  child: Text('Yes', style: GoogleFonts.roboto(),)
-                ),
-                TextButton(
-                  onPressed: (){
-                    Navigator.pop(context);
-                  },
-                  child: Text('Cancel', style: GoogleFonts.roboto(),)
-                ),
-              ]
-            );
-          }
-        );
-        return willPop;
-      },
+      onWillPop: onWillPop,
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
           title: Text('Update Password', style: Utilities.appBarTextStyle,),
           centerTitle: true,
           leading: IconButton(
-            onPressed: () async {
-              bool willPop = false;
-              await showDialog(
-                context: context,
-                builder: (context){
-                  return AlertDialog(
-                    title: Text('Exit ?', style: GoogleFonts.roboto(),),
-                    content: Text('If you exit you will go back to the main login screen, you sure?', style: GoogleFonts.roboto(),),
-                    actions: [
-                      TextButton(
-                        onPressed: (){
-                          willPop = true;
-                          Navigator.pop(context);
-                        },
-                        child: Text('Yes', style: GoogleFonts.roboto(),)
-                      ),
-                      TextButton(
-                        onPressed: (){
-                          Navigator.pop(context);
-                        },
-                        child: Text('Cancel', style: GoogleFonts.roboto(),)
-                      ),
-                    ]
-                  );
-                }
-              );
-              if(willPop){
-                if(!mounted)return;
-                Navigator.pop(context);
-              }
-            },
+            onPressed: appBarBackOnPressed,
             icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor,),
           ),
         ),
-        body: body()
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 40,),
+                  NewPasswordFormField(newPasswordCtrl: _newPasswordCtrl),
+                  const SizedBox(height: 20,),
+                  ConfirmFormField(confirmPasswordCtrl: _confirmPasswordCtrl),
+                  const SizedBox(height: 30,),
+                  ContinueButton(formKey: _formKey,)
+                ],
+              ),
+            ),
+          ),
+        )
       ),
     );
   }
 
-  Widget body(){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 40,),
-              NewPasswordFormField(newPasswordCtrl: _newPasswordCtrl),
-              const SizedBox(height: 20,),
-              ConfirmFormField(confirmPasswordCtrl: _confirmPasswordCtrl),
-              const SizedBox(height: 30,),
-              ContinueButton(formKey: _formKey,)
-            ],
-          ),
-        ),
-      ),
+  Future<bool> onWillPop() async {
+    bool willPop = false;
+    await showDialog(
+      context: context,
+      builder: (context){
+        return CostumDialog(
+          title: 'Exit ?',
+          contentText: 'If you exit you will go back to the main login screen, you sure?',
+          trueText: 'Yes',
+          falseText: 'Cancel',
+          trueOnPressed: (){
+            willPop = true;
+            Navigator.pop(context);
+          },
+          falseOnPressed: (){
+            Navigator.pop(context);
+          },
+        );
+      }
     );
+    return willPop;
+  }
+
+  void appBarBackOnPressed() async {
+    bool willPop = false;
+      await showDialog(
+        context: context,
+        builder: (context){
+          return CostumDialog(
+            title: 'Exit ?',
+            contentText: 'If you exit you will go back to the main login screen, you sure?',
+            trueText: 'Yes',
+            falseText: 'Cancel',
+            trueOnPressed: (){
+              willPop = true;
+              Navigator.pop(context);
+            },
+            falseOnPressed: (){
+              Navigator.pop(context);
+            },
+          );
+        }
+      );
+      if(willPop){
+        if(!mounted)return;
+        Navigator.pop(context);
+      }
   }
 }
 

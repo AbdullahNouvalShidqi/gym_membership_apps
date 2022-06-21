@@ -27,41 +27,37 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
       onWillPop: willPopValidation,
       child: Scaffold(
         backgroundColor: Theme.of(context).primaryColor,
-        body: body(splashScreenViewModel: splashScreenViewModel)
-      ),
-    );
-  }
-
-  Widget body({required SplashScreenViewModel splashScreenViewModel}){
-    return Center(
-      child: Stack(
-        children: [
-          MainCarousel(carouselCtrl: _carouselCtrl, splashScreenViewModel: splashScreenViewModel, onPageChanged: (i, reason) => setState(() {_currentIndex = i;})),
-          Positioned.fill(
-            bottom: 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                CarouselIndicator(carouselCtrl: _carouselCtrl, currentIndex: _currentIndex, splashScreenViewModel: splashScreenViewModel),
-                const SizedBox(height: 10,),
-                GetStartedButton(
-                  carouselCtrl: _carouselCtrl,
-                  currentIndex: _currentIndex,
-                  onPressed: (){
-                    _currentIndex += 1;
-                    if(_currentIndex < splashScreenViewModel.introductionData.length){
-                      _carouselCtrl.animateToPage(_currentIndex);
-                    }
-                    else{
-                      splashScreenViewModel.doneFirstTime();
-                      Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
-                    }
-                  },
+        body: Center(
+          child: Stack(
+            children: [
+              MainCarousel(carouselCtrl: _carouselCtrl, splashScreenViewModel: splashScreenViewModel, onPageChanged: (i, reason) => setState(() {_currentIndex = i;})),
+              Positioned.fill(
+                bottom: 100,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    CarouselIndicator(carouselCtrl: _carouselCtrl, currentIndex: _currentIndex, splashScreenViewModel: splashScreenViewModel),
+                    const SizedBox(height: 10,),
+                    GetStartedButton(
+                      carouselCtrl: _carouselCtrl,
+                      currentIndex: _currentIndex,
+                      onPressed: (){
+                        _currentIndex += 1;
+                        if(_currentIndex < splashScreenViewModel.introductionData.length){
+                          _carouselCtrl.animateToPage(_currentIndex);
+                        }
+                        else{
+                          splashScreenViewModel.doneFirstTime();
+                          Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                        }
+                      },
+                    )
+                  ],
                 )
-              ],
-            )
-          )
-        ],
+              )
+            ],
+          ),
+        )
       ),
     );
   }

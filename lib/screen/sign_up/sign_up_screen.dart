@@ -3,10 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/model/api/main_api.dart';
-import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
-import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
@@ -33,18 +30,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordCtrl = TextEditingController();
   DateTime? currentBackPressTime;
   bool _rememberMe = false;
-  List<UserModel> _allUser = [];
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      _allUser = await Provider.of<SignUpViewModel>(context, listen: false).getAllUser();
-      setState(() {
-        
-      });
-    });
-  }
   
   @override
   void dispose() {
@@ -62,69 +47,63 @@ class _SignUpScreenState extends State<SignUpScreen> {
       onWillPop: willPopValidation,
       key: _formKey,
       child: Scaffold(
-        body: body()
-      ),
-    );
-  }
-
-  Widget body(){
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MainTitle(),
-            UsernameFormField(
-              usernameCtrl: _usernameCtrl,
-              allUser: _allUser,
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const MainTitle(),
+                UsernameFormField(
+                  usernameCtrl: _usernameCtrl,
+                ),
+                EmailFormField(
+                  emailCtrl: _emailCtrl,
+                ),
+                PhoneNumberFormField(
+                  phoneNumberCtrl: _phoneNumberCtrl,
+                ),
+                PasswordFormField(
+                  passwordCtrl: _passwordCtrl,
+                ),
+                ConfirmFormField(
+                  confirmPasswordCtrl: _confirmPasswordCtrl,
+                  passwordCtrl: _passwordCtrl,
+                ),
+                RememberMeCheckBox(
+                  rememberMe: _rememberMe,
+                  onChanged: (newValue){
+                    setState(() {
+                      _rememberMe = newValue!;
+                    });
+                  },
+                  onTap: (){
+                    setState(() {
+                      _rememberMe = !_rememberMe;
+                    });
+                  },
+                ),
+                SignUpButton(
+                  formKey: _formKey,
+                  emailCtrl: _emailCtrl,
+                  usernameCtrl: _usernameCtrl,
+                  phoneNumberCtrl: _phoneNumberCtrl,
+                  passwordCtrl: _passwordCtrl,
+                  mounted: mounted,
+                ),
+                Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+                googleSiugnUpButton(),
+                ToSignInButton(
+                  emailCtrl: _emailCtrl,
+                  usernameCtrl: _usernameCtrl,
+                  phoneNumberCtrl: _phoneNumberCtrl,
+                  passwordCtrl: _passwordCtrl,
+                  mounted: mounted,
+                )
+              ],
             ),
-            EmailFormField(
-              emailCtrl: _emailCtrl,
-              allUser: _allUser,
-            ),
-            PhoneNumberFormField(
-              phoneNumberCtrl: _phoneNumberCtrl,
-            ),
-            PasswordFormField(
-              passwordCtrl: _passwordCtrl,
-            ),
-            ConfirmFormField(
-              confirmPasswordCtrl: _confirmPasswordCtrl,
-              passwordCtrl: _passwordCtrl,
-            ),
-            RememberMeCheckBox(
-              rememberMe: _rememberMe,
-              onChanged: (newValue){
-                setState(() {
-                  _rememberMe = newValue!;
-                });
-              },
-              onTap: (){
-                setState(() {
-                  _rememberMe = !_rememberMe;
-                });
-              },
-            ),
-            SignUpButton(
-              formKey: _formKey,
-              emailCtrl: _emailCtrl,
-              usernameCtrl: _usernameCtrl,
-              phoneNumberCtrl: _phoneNumberCtrl,
-              passwordCtrl: _passwordCtrl,
-              mounted: mounted,
-            ),
-            Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
-            googleSiugnUpButton(),
-            ToSignInButton(
-              emailCtrl: _emailCtrl,
-              usernameCtrl: _usernameCtrl,
-              phoneNumberCtrl: _phoneNumberCtrl,
-              passwordCtrl: _passwordCtrl,
-              mounted: mounted,
-            )
-          ],
-        ),
+          ),
+        )
       ),
     );
   }
@@ -215,64 +194,70 @@ class MainTitle extends StatelessWidget {
 }
 
 class UsernameFormField extends StatelessWidget {
-  const UsernameFormField({Key? key, required this.usernameCtrl, required this.allUser}) : super(key: key);
+  const UsernameFormField({Key? key, required this.usernameCtrl}) : super(key: key);
   final TextEditingController usernameCtrl;
-  final List<UserModel> allUser;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: CostumFormField(
-        controller: usernameCtrl,
-        label: 'Username',
-        hintText: 'Enter your username',
-        prefixIcon: const Icon(CupertinoIcons.person_crop_circle),
-        validator: (newValue){
-          if(newValue == null || newValue.isEmpty || newValue == ' '){
-            return 'Please enter a username';
-          }
-          else if(newValue.contains('  ')){
-            return 'Please enter a valid username';
-          }
-          else if(allUser.any((element) => element.username == newValue)){
-            return 'Username already userd by other user';
-          }
-          return null;
-        }
-      )
+    return Consumer<SignUpViewModel>(
+      builder: (context, signUpViewModel, _) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: CostumFormField(
+            controller: usernameCtrl,
+            label: 'Username',
+            hintText: 'Enter your username',
+            prefixIcon: const Icon(CupertinoIcons.person_crop_circle),
+            validator: (newValue){
+              if(newValue == null || newValue.isEmpty || newValue == ' '){
+                return 'Please enter a username';
+              }
+              else if(newValue.contains('  ')){
+                return 'Please enter a valid username';
+              }
+              else if(signUpViewModel.allUser.any((element) => element.username == newValue)){
+                return 'Username already userd by other user';
+              }
+              return null;
+            }
+          )
+        );
+      }
     );
   }
 }
 
 class EmailFormField extends StatelessWidget {
-  const EmailFormField({Key? key, required this.emailCtrl, required this.allUser}) : super(key: key);
+  const EmailFormField({Key? key, required this.emailCtrl}) : super(key: key);
   final TextEditingController emailCtrl;
-  final List<UserModel> allUser;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: CostumFormField(
-        controller: emailCtrl,
-        label: 'Email Address',
-        hintText: 'Enter your email address',
-        prefixIcon: const Icon(Icons.email_outlined),
-        textInputType: TextInputType.emailAddress,
-        validator: (newValue){
-          if(newValue == null || newValue.isEmpty || newValue == ' '){
-            return 'Please enter your email address';
-          }
-          else if(newValue.contains('  ') || !Utilities.emailRegExp.hasMatch(newValue)){
-            return 'Please enter a valid email address';
-          }
-          else if(allUser.any((element) => element.email == newValue)){
-            return 'Email address is already used by other user';
-          }
-          return null;
-        },
-      )
+    return Consumer<SignUpViewModel>(
+      builder: (context, signUpViewModel, _) {
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: CostumFormField(
+            controller: emailCtrl,
+            label: 'Email Address',
+            hintText: 'Enter your email address',
+            prefixIcon: const Icon(Icons.email_outlined),
+            textInputType: TextInputType.emailAddress,
+            validator: (newValue){
+              if(newValue == null || newValue.isEmpty || newValue == ' '){
+                return 'Please enter your email address';
+              }
+              else if(newValue.contains('  ') || !Utilities.emailRegExp.hasMatch(newValue)){
+                return 'Please enter a valid email address';
+              }
+              else if(signUpViewModel.allUser.any((element) => element.email == newValue)){
+                return 'Email address is already used by other user';
+              }
+              return null;
+            },
+          )
+        );
+      }
     );
   }
 }
@@ -433,8 +418,8 @@ class SignUpButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<HomeViewModel, SignUpViewModel, ProfileViewModel>(
-      builder: (context, homeViewModel, signUpViewModel, profileViewModel, _) {
+    return Consumer<SignUpViewModel>(
+      builder: (context, signUpViewModel,  _) {
         final isLoading = signUpViewModel.state == SignUpState.loading;
         final isError = signUpViewModel.state == SignUpState.error;
         return Center(
@@ -443,6 +428,7 @@ class SignUpButton extends StatelessWidget {
             child: 
             CostumButton(
               onPressed: () async {
+                await signUpViewModel.getAllUser();
                 if(!formKey.currentState!.validate())return;
                 await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, email: emailCtrl.text, contact: phoneNumberCtrl.text, password: passwordCtrl.text);
                 if(isError){

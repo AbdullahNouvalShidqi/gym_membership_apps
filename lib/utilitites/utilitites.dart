@@ -61,7 +61,7 @@ class Utilities{
 
   static TextStyle faqTitleStyle = GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500);
 
-  static TextStyle faqSubTitleStyle = GoogleFonts.roboto(fontSize: 10, color: myGreyColor);
+  static TextStyle faqSubTitleStyle = GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: myGreyColor);
 
   static TextStyle costumSortingButtonStyle(bool isSelected){
     if(isSelected){

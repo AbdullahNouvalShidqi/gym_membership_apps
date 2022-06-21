@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,6 +15,7 @@ import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LogInScreen extends StatefulWidget {
   static String routeName = '/logInScreen';
@@ -26,8 +29,27 @@ class _LogInScreenState extends State<LogInScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
+  late SharedPreferences _sharedPreferences;
   DateTime? currentBackPressTime;
   bool _rememberMe = false;
+
+  @override
+  void initState() {
+    setEmailAndPassword();
+    super.initState();
+  }
+
+  void setEmailAndPassword() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    if(_sharedPreferences.getString('rememberMe') == null)return;
+
+    final Map<String, dynamic> userData = jsonDecode(_sharedPreferences.getString('rememberMe')!);
+    _emailCtrl.text = userData['email'];
+    _passwordCtrl.text = userData['password'];
+    setState(() {
+      _rememberMe = true;  
+    });
+  }
 
   @override
   void dispose() {
@@ -324,7 +346,7 @@ class LoginButton extends StatelessWidget {
                 final allUser = await logInViewModel.getAllUser();
 
                 if(isError){
-                  Fluttertoast.showToast(msg: 'Error: cannot get data, check your internet connection');
+                  Fluttertoast.showToast(msg: 'Error: Something went wrong, try again');
                   return;
                 }
 
@@ -337,6 +359,9 @@ class LoginButton extends StatelessWidget {
 
                 if(rememberMe){
                   await logInViewModel.rememberMe(email: userData.first.email, password: userData.first.password);
+                }
+                else{
+                  await logInViewModel.dontRememberMe();
                 }
 
                 ProfileViewModel.setUserData(currentUser: userData.first);

@@ -5,6 +5,7 @@ import 'package:gym_membership_apps/utilitites/shimmering_gradient.dart';
 class Utilities{
   static Color primaryColor = const Color.fromRGBO(242, 115, 112, 1);
   static Color subPrimaryColor = const Color.fromRGBO(34, 85, 156, 1);
+  static Color formFocusColor = const Color.fromRGBO(34, 85, 156, 1);
   static Color myWhiteColor = const Color.fromRGBO(250, 250, 250, 1);
   static Color myGreyColor = const Color.fromRGBO(112, 112, 112, 1);
   static RegExp emailRegExp = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
@@ -31,8 +32,8 @@ class Utilities{
     ),
     scaffoldBackgroundColor: myWhiteColor,
     inputDecorationTheme: InputDecorationTheme(
-      focusColor: subPrimaryColor,
-      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: subPrimaryColor)),
+      focusColor: formFocusColor,
+      focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: formFocusColor)),
     ),
     checkboxTheme: CheckboxThemeData(
       fillColor: MaterialStateProperty.all(subPrimaryColor),

@@ -246,9 +246,6 @@ class ProfileViewModel with ChangeNotifier{
     }
   }
 
-  late SharedPreferences _sharedPreferences;
-  
-
   dynamic onTap({
     required BuildContext context,
     required int i,
@@ -297,8 +294,6 @@ class ProfileViewModel with ChangeNotifier{
           }
         );
         if(logOut){
-          _sharedPreferences = await SharedPreferences.getInstance();
-          await _sharedPreferences.remove('rememberMe');
           scheduleViewModel.logOut();
           profileViewModel.disposeUserData();
           homeViewModel.selectTab('Home', 0);

@@ -48,7 +48,7 @@ class _CostumFormFieldState extends State<CostumFormField> {
                   _hidePass = !_hidePass;
                 });
               },
-              icon : _hidePass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/icons/hide_pass.svg', color: Theme.of(context).inputDecorationTheme.prefixIconColor)) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/icons/show_pass.svg', color: Theme.of(context).inputDecorationTheme.iconColor)),
+              icon : _hidePass ? Transform.scale(scale: 1.5 , child: SvgPicture.asset('assets/icons/hide_pass.svg')) : Transform.scale(scale: 1.5, child: SvgPicture.asset('assets/icons/show_pass.svg')),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(4),

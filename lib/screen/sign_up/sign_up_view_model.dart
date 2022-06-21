@@ -64,4 +64,9 @@ class SignUpViewModel with ChangeNotifier{
     };
     await _sharedPreferences.setString('rememberMe', jsonEncode(data));
   }
+
+  Future<void> dontRememberMe() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    await _sharedPreferences.remove('rememberMe');
+  }
 }

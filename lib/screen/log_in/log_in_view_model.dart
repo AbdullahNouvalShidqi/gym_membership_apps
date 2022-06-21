@@ -45,6 +45,11 @@ class LogInViewModel with ChangeNotifier{
     await _sharedPreferences.setString('rememberMe', jsonEncode(data));
   }
 
+  Future<void> dontRememberMe() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    await _sharedPreferences.remove('rememberMe');
+  }
+
   Future<List<UserModel>> getAllUser() async {
     changeState(LogInState.loading);
     try{

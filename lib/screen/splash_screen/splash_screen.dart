@@ -20,14 +20,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  late SharedPreferences _sharedPreferences;
   bool isInit = true;
-  bool signedIn = false;
   late Map<String, dynamic> userData;
 
   void loadingDummy() async {
     final splashScreenModel = Provider.of<SplashScreenViewModel>(context, listen: false);
-    final logInViewModel = Provider.of<LogInViewModel>(context, listen: false);
     await precacheImage(const AssetImage('assets/google_logo.png') , context);
     if(!mounted)return;
     await precacheImage(const AssetImage('assets/splash1.png') , context);
@@ -38,23 +35,9 @@ class _SplashScreenState extends State<SplashScreen> {
     
     await splashScreenModel.checkIsFirsTime();
     final isFirstTime = splashScreenModel.isFirstTime;
-
-    _sharedPreferences = await SharedPreferences.getInstance();
-
-    if(_sharedPreferences.getString('rememberMe') != null){
-      final allUser = await logInViewModel.getAllUser();
-      userData = jsonDecode(_sharedPreferences.getString('rememberMe')!);
-      final user = allUser.where((element) => element.email == userData['email'] && element.password == userData['password']).first;
-      ProfileViewModel.setUserData(currentUser: user);
-      signedIn = true;
-    }
-
     
-    if(!mounted)return;
-    if(signedIn){
-      Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-    } 
-    else if(isFirstTime){
+    if(!mounted)return; 
+    if(isFirstTime){
       Navigator.pushReplacementNamed(context, SplashScreenIntroduction.routeName);
     }else{
       Navigator.pushReplacementNamed(context, LogInScreen.routeName);

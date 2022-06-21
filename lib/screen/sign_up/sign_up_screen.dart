@@ -285,7 +285,7 @@ class PhoneNumberFormField extends StatelessWidget {
         if(newValue == null || newValue.isEmpty || newValue == ' '){
           return 'Please enter your phone number';
         }
-        else if(newValue.contains('  ') || int.tryParse(newValue) == null || int.tryParse(newValue).toString().length < 10){
+        else if(newValue.contains('  ') || int.tryParse(newValue) == null || newValue.length < 11 || newValue.length > 13){
           return 'Please enter a valid phone number';
         }
         return null;
@@ -437,15 +437,21 @@ class SignUpButton extends StatelessWidget {
               onPressed: () async {
                 await signUpViewModel.getAllUser();
                 if(!formKey.currentState!.validate())return;
+
                 await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, email: emailCtrl.text, contact: phoneNumberCtrl.text, password: passwordCtrl.text);
+                
                 if(isError){
                   Fluttertoast.showToast(msg: 'Error : Check your internet connection');
                   return;
                 }
+
                 final user = signUpViewModel.user!;
                 if(rememberMe){
                   signUpViewModel.rememberMe(email: user.email, password: user.password);
+                }else{
+                  signUpViewModel.dontRememberMe();
                 }
+
                 if(!mounted)return;
                 ProfileViewModel.setUserData(currentUser: user);
                 Fluttertoast.showToast(msg: 'Sign up succesful!');

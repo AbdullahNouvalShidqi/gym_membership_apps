@@ -162,7 +162,6 @@ class HomeShimmerLoading extends StatelessWidget {
                   }
                 ),
               )
-              
             ],
           ),
         ),

@@ -80,28 +80,28 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
 
   void appBarBackOnPressed() async {
     bool willPop = false;
-      await showDialog(
-        context: context,
-        builder: (context){
-          return CostumDialog(
-            title: 'Exit ?',
-            contentText: 'If you exit you will go back to the main login screen, you sure?',
-            trueText: 'Yes',
-            falseText: 'Cancel',
-            trueOnPressed: (){
-              willPop = true;
-              Navigator.pop(context);
-            },
-            falseOnPressed: (){
-              Navigator.pop(context);
-            },
-          );
-        }
-      );
-      if(willPop){
-        if(!mounted)return;
-        Navigator.pop(context);
+    await showDialog(
+      context: context,
+      builder: (context){
+        return CostumDialog(
+          title: 'Exit ?',
+          contentText: 'If you exit you will go back to the main login screen, you sure?',
+          trueText: 'Yes',
+          falseText: 'Cancel',
+          trueOnPressed: (){
+            willPop = true;
+            Navigator.pop(context);
+          },
+          falseOnPressed: (){
+            Navigator.pop(context);
+          },
+        );
       }
+    );
+    if(willPop){
+      if(!mounted)return;
+      Navigator.pop(context);
+    }
   }
 }
 

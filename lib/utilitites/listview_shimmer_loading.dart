@@ -32,7 +32,6 @@ class ListViewShimmerLoading extends StatelessWidget {
                 ]
               ],
             ),
-            
           ]
           else ... [
             Padding(

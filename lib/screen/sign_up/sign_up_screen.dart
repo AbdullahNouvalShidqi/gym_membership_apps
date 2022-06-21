@@ -72,16 +72,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 RememberMeCheckBox(
                   rememberMe: _rememberMe,
-                  onChanged: (newValue){
-                    setState(() {
-                      _rememberMe = newValue!;
-                    });
-                  },
-                  onTap: (){
-                    setState(() {
-                      _rememberMe = !_rememberMe;
-                    });
-                  },
+                  onChanged: rememberMeCheckBoxOnTap,
+                  onTap: rememberMeLabelOnTap,
                 ),
                 SignUpButton(
                   formKey: _formKey,
@@ -107,6 +99,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
         )
       ),
     );
+  }
+
+  void rememberMeCheckBoxOnTap(bool? newValue){
+    setState(() {
+      _rememberMe = newValue!;
+    });
+  }
+
+  void rememberMeLabelOnTap(){
+    setState(() {
+      _rememberMe = !_rememberMe;
+    });
   }
 
   Widget googleSiugnUpButton(){

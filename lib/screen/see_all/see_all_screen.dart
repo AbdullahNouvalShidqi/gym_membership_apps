@@ -19,53 +19,49 @@ class _SeeAllScrenState extends State<SeeAllScren> {
   Widget build(BuildContext context) {
     type = ModalRoute.of(context)!.settings.arguments as String;
     return Scaffold(
-      body: body(context: context, type: type),
-    );
-  }
-
-  Widget body({required BuildContext context, required String type}){
-    return Consumer<ProfileViewModel>(
-      builder: (context, profileViewModel, _) {
-        final user = profileViewModel.user;
-        return SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      backgroundColor: Utilities.primaryColor,
-                      radius: 25,
-                      child: const Icon(Icons.person, color: Colors.white,),
-                    ),
-                    const SizedBox(width: 10,),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Hello,', style: Utilities.greetingHomeStyle,),
-                        Text(user.username, style: Utilities.greetinSubHomeStyle)
-                      ],
-                    )
-                  ],
+      body: Consumer<ProfileViewModel>(
+        builder: (context, profileViewModel, _) {
+          final user = profileViewModel.user;
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Utilities.primaryColor,
+                        radius: 25,
+                        child: const Icon(Icons.person, color: Colors.white,),
+                      ),
+                      const SizedBox(width: 10,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Hello,', style: Utilities.greetingHomeStyle,),
+                          Text(user.username, style: Utilities.greetinSubHomeStyle)
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 30, bottom: 12, left: 20, right: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Select', style: Utilities.homeViewMainTitleStyle),
-                    Text('$type Class', style: Utilities.homeViewMainTitleStyle)
-                  ],
+                Padding(
+                  padding: const EdgeInsets.only(top: 30, bottom: 12, left: 20, right: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Select', style: Utilities.homeViewMainTitleStyle),
+                      Text('$type Class', style: Utilities.homeViewMainTitleStyle)
+                    ],
+                  ),
                 ),
-              ),
-              CostumGridView(type: type)
-            ]
-          ),
-        );
-      }
+                CostumGridView(type: type)
+              ]
+            ),
+          );
+        }
+      ),
     );
   }
 }

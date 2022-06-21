@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 class SlidingGradientTransform extends GradientTransform {
   const SlidingGradientTransform({
     required this.slidePercent,
-    required this.context
   });
 
   final double slidePercent;
-  final BuildContext context;
 
   @override
   Matrix4? transform(Rect bounds, {TextDirection? textDirection}) {

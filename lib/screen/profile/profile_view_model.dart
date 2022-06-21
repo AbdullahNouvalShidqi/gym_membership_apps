@@ -15,6 +15,7 @@ import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum ProfileViewState{
   none,
@@ -244,6 +245,8 @@ class ProfileViewModel with ChangeNotifier{
       changeState(ProfileViewState.error);
     }
   }
+
+  late SharedPreferences _sharedPreferences;
   
 
   dynamic onTap({
@@ -294,6 +297,8 @@ class ProfileViewModel with ChangeNotifier{
           }
         );
         if(logOut){
+          _sharedPreferences = await SharedPreferences.getInstance();
+          await _sharedPreferences.remove('rememberMe');
           scheduleViewModel.logOut();
           profileViewModel.disposeUserData();
           homeViewModel.selectTab('Home', 0);

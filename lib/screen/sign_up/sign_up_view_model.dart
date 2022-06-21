@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum SignUpState{
   none,
@@ -9,6 +12,7 @@ enum SignUpState{
 }
 
 class SignUpViewModel with ChangeNotifier{
+  late SharedPreferences _sharedPreferences;
 
   SignUpState _state = SignUpState.none;
   SignUpState get state => _state;
@@ -50,5 +54,14 @@ class SignUpViewModel with ChangeNotifier{
     }catch(e){      
       changeState(SignUpState.error);
     }
+  }
+
+  Future<void> rememberMe({required String email, required String password}) async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    Map<String, dynamic> data = {
+      'email' : email,
+      'password' : password
+    };
+    await _sharedPreferences.setString('rememberMe', jsonEncode(data));
   }
 }

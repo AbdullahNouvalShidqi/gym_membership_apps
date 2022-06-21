@@ -1,12 +1,16 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum LogInState {none, loading, error}
 
 class LogInViewModel with ChangeNotifier{
+  late SharedPreferences _sharedPreferences;
 
   static UserModel? currentUser;
 
@@ -30,6 +34,15 @@ class LogInViewModel with ChangeNotifier{
     catch(e){
       changeState(LogInState.error);
     }
+  }
+
+  Future<void> rememberMe({required String email, required String password}) async {
+    _sharedPreferences = await SharedPreferences.getInstance();
+    Map<String, dynamic> data = {
+      'email' : email,
+      'password' : password
+    };
+    await _sharedPreferences.setString('rememberMe', jsonEncode(data));
   }
 
   Future<List<UserModel>> getAllUser() async {

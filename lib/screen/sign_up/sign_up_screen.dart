@@ -89,6 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   usernameCtrl: _usernameCtrl,
                   phoneNumberCtrl: _phoneNumberCtrl,
                   passwordCtrl: _passwordCtrl,
+                  rememberMe: _rememberMe,
                   mounted: mounted,
                 ),
                 Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
@@ -212,8 +213,8 @@ class UsernameFormField extends StatelessWidget {
               if(newValue == null || newValue.isEmpty || newValue == ' '){
                 return 'Please enter a username';
               }
-              else if(newValue.contains('  ')){
-                return 'Please enter a valid username';
+              else if(newValue.contains(' ')){
+                return 'Please enter a valid username(no spaces)';
               }
               else if(signUpViewModel.allUser.any((element) => element.username == newValue)){
                 return 'Username already userd by other user';
@@ -407,6 +408,7 @@ class SignUpButton extends StatelessWidget {
     required this.emailCtrl,
     required this.phoneNumberCtrl,
     required this.passwordCtrl,
+    required this.rememberMe,
     required this.mounted
   }) : super(key: key);
   final GlobalKey<FormState> formKey;
@@ -414,6 +416,7 @@ class SignUpButton extends StatelessWidget {
   final TextEditingController emailCtrl;
   final TextEditingController phoneNumberCtrl;
   final TextEditingController passwordCtrl;
+  final bool rememberMe;
   final bool mounted;
 
   @override
@@ -432,12 +435,15 @@ class SignUpButton extends StatelessWidget {
                 if(!formKey.currentState!.validate())return;
                 await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, email: emailCtrl.text, contact: phoneNumberCtrl.text, password: passwordCtrl.text);
                 if(isError){
-                  Fluttertoast.showToast(msg: 'Check your internet connection');
+                  Fluttertoast.showToast(msg: 'Error : Check your internet connection');
                   return;
                 }
+                final user = signUpViewModel.user!;
+                if(rememberMe){
+                  signUpViewModel.rememberMe(email: user.email, password: user.password);
+                }
                 if(!mounted)return;
-                final user = signUpViewModel.user;
-                ProfileViewModel.setUserData(currentUser: user!);
+                ProfileViewModel.setUserData(currentUser: user);
                 Fluttertoast.showToast(msg: 'Sign up succesful!');
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },

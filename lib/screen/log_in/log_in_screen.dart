@@ -73,6 +73,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     formKey: _formKey,
                     emailCtrl: _emailCtrl,
                     passwordCtrl: _passwordCtrl,
+                    rememberMe: _rememberMe,
                     mounted: mounted,
                   ),
                   Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
@@ -298,10 +299,11 @@ class ForgotPassword extends StatelessWidget {
 }
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({Key? key, required this.formKey, required this.emailCtrl, required this.passwordCtrl, required this.mounted}) : super(key: key);
+  const LoginButton({Key? key, required this.formKey, required this.emailCtrl, required this.passwordCtrl, required this.rememberMe, required this.mounted}) : super(key: key);
   final GlobalKey<FormState> formKey;
   final TextEditingController emailCtrl;
   final TextEditingController passwordCtrl;
+  final bool rememberMe;
   final bool mounted;
 
   @override
@@ -331,6 +333,10 @@ class LoginButton extends StatelessWidget {
                 if(userData.isEmpty || userData.length > 1 || userData.first.password != passwordCtrl.text){
                   Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
                   return;
+                }
+
+                if(rememberMe){
+                  await logInViewModel.rememberMe(email: userData.first.email, password: userData.first.password);
                 }
 
                 ProfileViewModel.setUserData(currentUser: userData.first);

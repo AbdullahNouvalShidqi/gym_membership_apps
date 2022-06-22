@@ -51,7 +51,7 @@ class CostumHomeCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       image: DecorationImage(
-                        image: AssetImage(classModels[i].images!.first),
+                        image: AssetImage(classModels[i].images.first),
                         fit: BoxFit.cover
                       ),
                     ),

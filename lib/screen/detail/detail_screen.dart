@@ -51,10 +51,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Stack(
                         children: [
-                          MainCarousel(images: item.images!, carouselCtrl: _carouselCtrl, onPageChanged: (index, reason){setState(() => _currentIndex = index);}),
+                          MainCarousel(images: item.images, carouselCtrl: _carouselCtrl, onPageChanged: (index, reason){setState(() => _currentIndex = index);}),
                           Positioned.fill(
                             bottom: 17,
-                            child: CarouselIndicator(images: item.images!, carouselCtrl: _carouselCtrl, currentIndex: _currentIndex,)
+                            child: CarouselIndicator(images: item.images, carouselCtrl: _carouselCtrl, currentIndex: _currentIndex,)
                           )
                         ],
                       ),
@@ -67,11 +67,11 @@ class _DetailScreenState extends State<DetailScreen> {
                             const SizedBox(height: 15),
                             MainTitleStatus(className: item.name, type: item.type),
                             const SizedBox(height: 5),
-                            const Price(),
+                            Price(price: item.price),
                             const SizedBox(height: 10),
                             InstructorName(item: item),
                             const SizedBox(height: 5,),
-                            const GymLocation(),
+                            GymLocation(location: item.location),
                             const SizedBox(height: 10,),
                             SizedBox(
                               height: MediaQuery.of(context).size.height - 575,
@@ -224,12 +224,13 @@ class MainTitleStatus extends StatelessWidget {
 }
 
 class Price extends StatelessWidget {
-  const Price({Key? key}) : super(key: key);
+  const Price({Key? key, required this.price}) : super(key: key);
+  final int price;
 
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Rp. 300.000',
+      'Rp. $price',
       style: GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w700,
@@ -256,7 +257,8 @@ class InstructorName extends StatelessWidget {
 }
 
 class GymLocation extends StatelessWidget {
-  const GymLocation({Key? key}) : super(key: key);
+  const GymLocation({Key? key, required this.location}) : super(key: key);
+  final String location;
 
   @override
   Widget build(BuildContext context) {
@@ -264,7 +266,7 @@ class GymLocation extends StatelessWidget {
       children: [
         SvgPicture.asset('assets/icons/location_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
-        Text('Gym center, Jakarta', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+        Text(location, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
       ],
     );
   }

@@ -37,7 +37,7 @@ class CostumGridView extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   image: DecorationImage(
-                    image: AssetImage(items[i].images!.first),
+                    image: AssetImage(items[i].images.first),
                     fit: BoxFit.cover
                   )
                 ),

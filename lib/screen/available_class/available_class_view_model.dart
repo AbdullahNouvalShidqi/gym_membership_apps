@@ -20,7 +20,7 @@ class AvailableClassViewModel with ChangeNotifier{
     changeState(AvailableClassState.loading);
 
     try{
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 2));
       changeState(AvailableClassState.none);
     }
     catch(e){
@@ -30,7 +30,7 @@ class AvailableClassViewModel with ChangeNotifier{
 
   Future<void> refreshData() async {
     try{
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 2));
       changeState(AvailableClassState.none);
     }
     catch(e){

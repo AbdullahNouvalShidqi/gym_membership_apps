@@ -75,7 +75,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
                     final isError = scheduleViewModel.state == ScheduleViewState.error;
                     return CostumButton(
                       isLoading: isLoading,
-                      onPressed: scheduleViewModel.listSchedule.any((element) => element.idClass == item.idClass && element.type == item.type)  ? null : 
+                      onPressed: scheduleViewModel.listSchedule.any((element) => element.id == item.id && element.type == item.type)  ? null : 
                       bookNowOnTap(
                         scheduleViewModel: scheduleViewModel,
                         item: item,

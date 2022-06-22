@@ -16,37 +16,44 @@ class ClassApiModel {
 }
 
 class ClassModel {
-  int idClass;
+  int id;
   String name;
   String description;
   DateTime startAt;
   DateTime endAt;
   int qtyUser;
   String type;
-  List<String>? images;
+  int price;
+  String location;
+  List<String> images;
   InstructorModel instructor;
 
   ClassModel({
-    required this.idClass, 
+    required this.id, 
     required this.name, 
     required this.description, 
     required this.startAt, 
     required this.endAt, 
     required this.qtyUser, 
     required this.type,
-    this.images,
+    required this.price,
+    required this.location,
+    required this.images,
     required this.instructor
   });
 
   ClassModel.fromJson(Map<String, dynamic> json)
   : 
-    idClass = json['id_class'],
+    id = json['id'],
     name = json['name'],
     description = json['description'],
-    startAt = DateTime.parse(json['start_at']),
-    endAt = DateTime.parse(json['end_at']),
-    qtyUser = json['qty_user'],
+    startAt = DateTime.parse(json['startAt']),
+    endAt = DateTime.parse(json['endAt']),
+    qtyUser = json['qtyUsers'],
     type = json['type'],
-    instructor = InstructorModel.fromJson(json['instructor'])
+    price = json['price'],
+    location = json['location'],
+    images = [],
+    instructor = InstructorModel.fromJson(json['idInstructor'])
   ;
 }

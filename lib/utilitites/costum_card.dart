@@ -40,7 +40,7 @@ class CostumCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: image(image: classModel.images!.first)
+              child: image(image: classModel.images.first)
             ),
             Expanded(
               child: details(classModel: classModel)
@@ -199,7 +199,7 @@ class CostumCard extends StatelessWidget {
   }
 
   Map<String, dynamic> checkItem({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
-    if(scheduleViewModel.listSchedule.any((element) => element.idClass == classModel.idClass && element.type == classModel.type)){
+    if(scheduleViewModel.listSchedule.any((element) => element.id == classModel.id && element.type == classModel.type)){
       return {
         'status' : 'Booked',
         'onPressed' : false

@@ -88,7 +88,7 @@ class BookingDetail extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
                 image: DecorationImage(
-                  image: AssetImage(item.images!.first),
+                  image: AssetImage(item.images.first),
                   fit: BoxFit.cover
                 )
               ),

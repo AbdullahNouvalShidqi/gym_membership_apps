@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
-import 'package:gym_membership_apps/model/instructor_model.dart';
 import 'package:gym_membership_apps/utilitites/tab_navigator.dart';
 
 enum HomeViewState {none, loading, error}
@@ -102,140 +102,7 @@ class HomeViewModel with ChangeNotifier{
     }
   }
 
-  List<ClassModel> _classes = [
-    ClassModel(
-      idClass: 0,
-      name: 'Weight Lifting',
-      description: 'Weightlifting is the sport of Strength, Power, Speed and Precision. In competition, the lifts are comprised of the Snatch and the Clean & Jerk – both of which are efforts to lift the maximum amount of weight from ground to overhead in two distinct ways. In training, weightlifting and accessory exercises challenge the mind and body to grow strong and powerful through repetition after repetition of the basics.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Offline',
-      images: ['assets/weightlifting.png', 'assets/weightlifting1.png', 'assets/weightlifting2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 1,
-      name: 'Body Building',
-      description: 'Bodybuilding is a specific and interesting sport that requires determination and strong discipline. What makes bodybuilding so different is that unlike most sports, in bodybuilding, competitors are judged by the way they look, not the way they perform.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Offline',
-      images: ['assets/bodybuilding.png', 'assets/bodybuilding1.png', 'assets/bodybuilding2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 2,
-      name: 'Yoga',
-      description: 'Yoga is a mind and body practice. Various styles of yoga combine physical postures, breathing techniques, and meditation or relaxation. Yoga is an ancient practice that may have originated in India. It involves movement, meditation, and breathing techniques to promote mental and physical well-being.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Offline',
-      images: ['assets/yoga.png', 'assets/yoga1.png', 'assets/yoga2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 3,
-      name: 'Weight Loss',
-      description: 'Weight loss is a decrease in body weight resulting from either voluntary (diet, exercise) or involuntary (illness) circumstances. Most instances of weight loss arise due to the loss of body fat, but in cases of extreme or severe weight loss, protein and other substances in the body can also be depleted.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Offline',
-      images: ['assets/weightloss.png', 'assets/weightloss1.png', 'assets/weightloss2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 4,
-      name: 'Zumba',
-      description: 'A fitness program which is inspired by music and dance, which were earlier just Latin in nature, now it has got all world wide dance forms and music into its fitness regime.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Offline',
-      images: ['assets/zumba.png', 'assets/zumba1.png', 'assets/zumba2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 5,
-      name: 'Cardio',
-      description: 'Cardio is defined as any type of exercise that gets your heart rate up and keeps it up for a prolonged period of time. Your respiratory system will start working harder as you begin to breathe faster and more deeply.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Offline',
-      images: ['assets/cardio.png', 'assets/cardio1.png', 'assets/cardio2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 0,
-      name: 'Weight Lifting',
-      description: 'Weightlifting is the sport of Strength, Power, Speed and Precision. In competition, the lifts are comprised of the Snatch and the Clean & Jerk – both of which are efforts to lift the maximum amount of weight from ground to overhead in two distinct ways. In training, weightlifting and accessory exercises challenge the mind and body to grow strong and powerful through repetition after repetition of the basics.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Online',
-      images: ['assets/weightlifting.png', 'assets/weightlifting1.png', 'assets/weightlifting2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 1,
-      name: 'Body Building',
-      description: 'Bodybuilding is a specific and interesting sport that requires determination and strong discipline. What makes bodybuilding so different is that unlike most sports, in bodybuilding, competitors are judged by the way they look, not the way they perform.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 0,
-      type: 'Online',
-      images: ['assets/bodybuilding.png', 'assets/bodybuilding1.png', 'assets/bodybuilding2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 2,
-      name: 'Yoga',
-      description: 'Yoga is a mind and body practice. Various styles of yoga combine physical postures, breathing techniques, and meditation or relaxation. Yoga is an ancient practice that may have originated in India. It involves movement, meditation, and breathing techniques to promote mental and physical well-being.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Online',
-      images: ['assets/yoga.png', 'assets/yoga1.png', 'assets/yoga2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 3,
-      name: 'Weight Loss',
-      description: 'Weight loss is a decrease in body weight resulting from either voluntary (diet, exercise) or involuntary (illness) circumstances. Most instances of weight loss arise due to the loss of body fat, but in cases of extreme or severe weight loss, protein and other substances in the body can also be depleted.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Online',
-      images: ['assets/weightloss.png', 'assets/weightloss1.png', 'assets/weightloss2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 4,
-      name: 'Zumba',
-      description: 'A fitness program which is inspired by music and dance, which were earlier just Latin in nature, now it has got all world wide dance forms and music into its fitness regime.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Online',
-      images: ['assets/zumba.png', 'assets/zumba1.png', 'assets/zumba2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-    ClassModel(
-      idClass: 5,
-      name: 'Cardio',
-      description: 'Cardio is defined as any type of exercise that gets your heart rate up and keeps it up for a prolonged period of time. Your respiratory system will start working harder as you begin to breathe faster and more deeply.',
-      startAt: DateTime.now(),
-      endAt: DateTime.now().add(const Duration(hours: 3)),
-      qtyUser: 25,
-      type: 'Online',
-      images: ['assets/cardio.png', 'assets/cardio1.png', 'assets/cardio2.png'],
-      instructor: InstructorModel(id: 0, name: 'Aldi Amal', contact: '087823232237', email: 'aldiamal@gmail.com')
-    ),
-  ];
+  List<ClassModel> _classes = [];
 
   List<ClassModel> get classes => _classes;
 
@@ -243,12 +110,20 @@ class HomeViewModel with ChangeNotifier{
     changeState(HomeViewState.loading);
 
     try{
-      // _classes = await MainAPI().getAllClass();
-      changeState(HomeViewState.none);      
+      _classes = await MainAPI().getAllClass();
+
+      for(var i = 0; i < _classes.length; i++){
+        String name = _classes[i].name.toLowerCase().replaceAll(' ', '');
+        for(var j = 0; j < 3; j++){
+          _classes[i].images.add('assets/$name${j == 0 ? '' : j}.png');
+        }
+      }
+
+      changeState(HomeViewState.none);
     }
     catch(e){
       if(e is DioError){
-        Fluttertoast.showToast(msg: e.toString());
+        Fluttertoast.showToast(msg: e.message);
       }
       changeState(HomeViewState.error);
     }

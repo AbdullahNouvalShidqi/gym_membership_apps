@@ -35,6 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
     
     await splashScreenModel.checkIsFirsTime();
     final isFirstTime = splashScreenModel.isFirstTime;
+
+    await Future.delayed(const Duration(seconds: 1));
     
     if(!mounted)return; 
     if(isFirstTime){

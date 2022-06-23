@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
+import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -31,7 +32,8 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      await Provider.of<AvailableClassViewModel>(context, listen: false).getAvailableClasses();
+      final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
+      await Provider.of<AvailableClassViewModel>(context, listen: false).getAvailableClasses(item: item);
     });
   }
 
@@ -39,8 +41,9 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     final availableClassViewModel = Provider.of<AvailableClassViewModel>(context);
+    final classes = availableClassViewModel.availableClasses;
     final isLoading = availableClassViewModel.state == AvailableClassState.loading;
-    final isEmpty = availableClassViewModel.availableClasses.isEmpty;
+    final isError = availableClassViewModel.state == AvailableClassState.error;
 
     return WillPopScope(
       onWillPop: () async {
@@ -68,6 +71,13 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
               builder: (context) {
                 if(isLoading){
                   return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
+                }
+                if(isError){
+                  return CostumErrorScreen(
+                    onPressed: () async {
+                      await availableClassViewModel.getAvailableClasses(item: item);
+                    }
+                  );
                 }
                 return Column(
                   children: [
@@ -116,7 +126,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                         controller: _tabController,
                         children: [
                           for(var i = 0; i < 7; i++) ...[
-                            CostumListView(isEmpty: isEmpty, item: item),
+                            CostumListView(availableClasses: classes.where((element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day).toList()),
                           ]
                         ],
                       ),
@@ -133,26 +143,25 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
 }
 
 class CostumListView extends StatelessWidget {
-  const CostumListView({Key? key, required this.isEmpty, required this.item}) : super(key: key);
-  final bool isEmpty;
-  final ClassModel item;
+  const CostumListView({Key? key, required this.availableClasses}) : super(key: key);
+  final List<ClassModel> availableClasses;
 
   @override
   Widget build(BuildContext context) {
-    // if(isEmpty){
-    //   return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
-    // }
     return Consumer<AvailableClassViewModel>(
       builder: (context, availableClassViewModel, _) {
+        if(availableClasses.isEmpty){
+          return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
+        }
         return RefreshIndicator(
           onRefresh: availableClassViewModel.refreshData,
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 15),
-            itemCount: 8,
+            itemCount: availableClasses.length,
             itemBuilder: (context, i){
               return Padding(
                 padding: const EdgeInsets.symmetric(vertical: 5),
-                child: CostumCard(classModel: item, whichScreen: CostumCardFor.availableClassScreen)
+                child: CostumCard(classModel: availableClasses[i], whichScreen: CostumCardFor.availableClassScreen)
               );
             }
           ),

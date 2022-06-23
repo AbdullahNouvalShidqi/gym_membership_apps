@@ -4,9 +4,11 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_home_card.dart';
+import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/home_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -21,7 +23,7 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
-  List<ClassModel>? classModel;
+  List<HomeClassModel>? classModel;
 
   @override
   void initState() {
@@ -42,17 +44,10 @@ class _HomePageScreenState extends State<HomePageScreen> {
           final user = profileViewModel.user;
 
           if(isError){
-            return RefreshIndicator(
-              onRefresh: () async {
-                await Future.delayed(const Duration(seconds: 1));
+            return CostumErrorScreen(
+              onPressed: () async{
+                await homeViewModel.getInitData();
               },
-              child: SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()) ,
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height,
-                  child: const Center(child: Text('Error cannot get data, pull to refresh'),)
-                ),
-              ),
             );
           }
 
@@ -95,9 +90,9 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     ],
                   ),
                 ),
-                CostumHomeCard(classModels: classes.where((element) => element.type == 'Online').toList(), height: 164, width: 125,),
+                CostumHomeCard(homeClassModel: classes, type: 'Online', height: 164, width: 125,),
                 const SizedBox(height: 20,),
-                CostumHomeCard(classModels: classes.where((element) => element.type == 'Offline').toList().reversed.toList(), height: 164, width: 125),
+                CostumHomeCard(homeClassModel: classes.reversed.toList(), type: 'Offline', height: 164, width: 125),
                 const SizedBox(height: 20,),
                 const TipsListView()
               ],

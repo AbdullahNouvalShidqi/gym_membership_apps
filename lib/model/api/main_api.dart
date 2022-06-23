@@ -1,17 +1,27 @@
 import 'package:dio/dio.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 
 class MainAPI {
   final String url = "https://capstone-kelompok-3.herokuapp.com";
+  final String url2 = "https://capstone-project-ec879-default-rtdb.asia-southeast1.firebasedatabase.app";
   final dio = Dio();
 
-  Future<List<ClassModel>> getAllClass() async {
-    final response = await dio.get('$url/class');
+  Future<List<ClassModel>> getAllClass({String? type}) async {
+    final response = await dio.get('$url/class${type == null ? '' : '/${type.toLowerCase()}'}');
 
     final data = ClassApiModel.fromJson(response.data);
 
     return data.data;
+  }
+
+  Future<List<HomeClassModel>> getHomeClass() async {
+    final response = await dio.get('$url2/class.json');
+
+    final data = (response.data as List).map((e) => HomeClassModel.fromJson(e)).toList();
+
+    return data;
   }
 
   Future<List<UserModel>> getAllUser() async {

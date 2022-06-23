@@ -125,13 +125,13 @@ class BookingDetail extends StatelessWidget {
                     children: [
                       const Icon(Icons.location_on_outlined, size: 10, color: Colors.grey,),
                       const SizedBox(width: 5,),
-                      Text('Gym center, Jakarta', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+                      Text(item.location, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
                     ],
                   ),
                 ],
               ),
             ),
-            Text('Rp.300.000', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Utilities.primaryColor,))
+            Text(NumberFormat.currency(symbol: 'Rp. ', locale: 'id_id', decimalDigits: 0).format(item.price), style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Utilities.primaryColor,))
           ],
         ),
       ],

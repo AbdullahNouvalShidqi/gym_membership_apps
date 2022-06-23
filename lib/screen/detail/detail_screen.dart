@@ -1,12 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
+import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/detail_shimmer_loading.dart';
+import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -20,29 +26,59 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   int _currentIndex = 0;
   final _carouselCtrl = CarouselController();
+  ClassModel? classModel;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      Provider.of<DetailViewModel>(context, listen: false).getDetail();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+      final detailViewModel = Provider.of<DetailViewModel>(context, listen: false);
+      final data = ModalRoute.of(context)!.settings.arguments as Map;
+      final item = data['homeClassModel'] as HomeClassModel;
+      final type = data['type'] as String;
+      classModel = await detailViewModel.getDetail(name: item.name, images: item.images, type: type);
     });
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context) {
-    final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
-    
-    return Consumer<DetailViewModel>(
-      builder: (context, detailViewModel, _) {
-        final isLoading = detailViewModel.state == DetailState.loading;
-        
-        if(isLoading){
-          return const DetailShimmerLoading();
-        }
+  Widget build(BuildContext context) {    
+    return Scaffold(
+      body: Consumer<DetailViewModel>(
+        builder: (context, detailViewModel, _) {
+          final data = ModalRoute.of(context)!.settings.arguments as Map;
+          final item = data['homeClassModel'] as HomeClassModel;
+          final type = data['type'] as String;
+          final isLoading = detailViewModel.state == DetailState.loading;
+          final isError = detailViewModel.state == DetailState.error;
 
-        return Scaffold(
-          body: SafeArea(
+          if(isLoading){
+            return const DetailShimmerLoading();
+          }
+          if(isError){
+            return CostumErrorScreen(
+              onPressed: () async {
+                classModel = await detailViewModel.refreshDetail(name: item.name, images: item.images, type: type);
+                if(classModel == null){
+                  Fluttertoast.showToast(msg: 'No data found');
+                }
+              }
+            );
+          }
+          if(classModel == null){
+            return EmptyListView(
+              title: 'Class detail not found, pull to refresh',
+              svgAssetLink: 'assets/icons/empty_class.svg',
+              emptyListViewFor: EmptyListViewFor.detail,
+              onRefresh: () async {
+                classModel = await detailViewModel.refreshDetail(name: item.name, images: item.images, type: type);
+                if(classModel == null){
+                  Fluttertoast.showToast(msg: 'No data found');
+                }
+              }
+            );
+          }
+
+          return SafeArea(
             child: Stack(
               children: [
                 SingleChildScrollView(
@@ -51,10 +87,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Stack(
                         children: [
-                          MainCarousel(images: item.images, carouselCtrl: _carouselCtrl, onPageChanged: (index, reason){setState(() => _currentIndex = index);}),
+                          MainCarousel(images: classModel!.images, carouselCtrl: _carouselCtrl, onPageChanged: (index, reason){setState(() => _currentIndex = index);}),
                           Positioned.fill(
                             bottom: 17,
-                            child: CarouselIndicator(images: item.images, carouselCtrl: _carouselCtrl, currentIndex: _currentIndex,)
+                            child: CarouselIndicator(images: classModel!.images, carouselCtrl: _carouselCtrl, currentIndex: _currentIndex,)
                           )
                         ],
                       ),
@@ -65,19 +101,19 @@ class _DetailScreenState extends State<DetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const SizedBox(height: 15),
-                            MainTitleStatus(className: item.name, type: item.type),
+                            MainTitleStatus(className: classModel!.name, type: classModel!.type),
                             const SizedBox(height: 5),
-                            Price(price: item.price),
+                            Price(price: classModel!.price),
                             const SizedBox(height: 10),
-                            InstructorName(item: item),
+                            InstructorName(item: classModel!),
                             const SizedBox(height: 5,),
-                            GymLocation(location: item.location),
+                            GymLocation(location: classModel!.location),
                             const SizedBox(height: 10,),
                             SizedBox(
                               height: MediaQuery.of(context).size.height - 575,
-                              child: ClassDetail(item: item)
+                              child: ClassDetail(item: classModel!)
                             ),
-                            SeeAvalableClassButton(item: item)
+                            SeeAvalableClassButton(item: classModel!)
                           ],
                         ),
                       ),
@@ -87,9 +123,9 @@ class _DetailScreenState extends State<DetailScreen> {
                 const CostumAppBar()
               ],
             ),
-          ),
-        );
-      }
+          );
+        }
+      ),
     );
   }
 }
@@ -230,7 +266,7 @@ class Price extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'Rp. $price',
+      NumberFormat.currency(symbol: 'Rp. ', locale: 'id_id', decimalDigits: 0).format(price),
       style: GoogleFonts.roboto(
         fontSize: 16,
         fontWeight: FontWeight.w700,

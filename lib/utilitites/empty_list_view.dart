@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum EmptyListViewFor{schedule, available, progress}
+enum EmptyListViewFor{schedule, available, progress, detail}
 
 class EmptyListView extends StatelessWidget {
   const EmptyListView({Key? key, this.forProgress = false, this.title, required this.svgAssetLink, required this.emptyListViewFor, required this.onRefresh, this.controller}) : super(key: key);
@@ -23,7 +23,10 @@ class EmptyListView extends StatelessWidget {
       height = MediaQuery.of(context).size.height - 135;
     }
     if (emptyListViewFor == EmptyListViewFor.available){
-      height = height = MediaQuery.of(context).size.height - 210;
+      height = MediaQuery.of(context).size.height - 210;
+    }
+    if(emptyListViewFor == EmptyListViewFor.detail){
+      height = MediaQuery.of(context).size.height - 80;
     }
 
     return RefreshIndicator(

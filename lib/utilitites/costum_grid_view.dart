@@ -12,7 +12,7 @@ class CostumGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
       builder: (context, homeViewModel, _) {
-        final items = type == 'Online' ? homeViewModel.classes.where((e) => e.type == type).toList() : homeViewModel.classes.where((e) => e.type == type).toList().reversed.toList();
+        final items = type == 'Online' ? homeViewModel.classes : homeViewModel.classes.reversed.toList();
         return GridView.builder(
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           physics: const ScrollPhysics(),
@@ -27,7 +27,10 @@ class CostumGridView extends StatelessWidget {
           itemBuilder: (context, i){
             return InkWell(
               onTap: (){
-                Navigator.pushNamed(context, DetailScreen.routeName, arguments: items[i]);
+                Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
+                  'homeClassModel': homeViewModel.classes[i],
+                  'type': type
+                });
               },
               child: 
               Container(

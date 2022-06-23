@@ -1,4 +1,6 @@
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 
 enum AvailableClassState {none, loading, error}
@@ -8,6 +10,8 @@ class AvailableClassViewModel with ChangeNotifier{
   List<ClassModel> _availableClasses = [];
   List<ClassModel> get availableClasses => _availableClasses;
 
+  ClassModel? _currentItems;
+
   AvailableClassState _state = AvailableClassState.none;
   AvailableClassState get state => _state;
 
@@ -16,11 +20,16 @@ class AvailableClassViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<void> getAvailableClasses() async {
+  Future<void> getAvailableClasses({required ClassModel item}) async {
     changeState(AvailableClassState.loading);
 
     try{
-      await Future.delayed(const Duration(seconds: 2));
+      _currentItems = item;
+      _availableClasses = await MainAPI().getAllClass(type: item.type);
+      _availableClasses = _availableClasses.where((element) => element.name == item.name,).toList();
+      for(var i = 0; i < _availableClasses.length; i++){
+        _availableClasses[i].images = [...item.images];
+      }
       changeState(AvailableClassState.none);
     }
     catch(e){
@@ -30,8 +39,15 @@ class AvailableClassViewModel with ChangeNotifier{
 
   Future<void> refreshData() async {
     try{
-      await Future.delayed(const Duration(seconds: 2));
-      changeState(AvailableClassState.none);
+      final currentClasses = [..._availableClasses];
+      _availableClasses = await MainAPI().getAllClass(type: _currentItems!.type);
+      _availableClasses = _availableClasses.where((element) => element.name == _currentItems!.name,).toList();
+      for(var i = 0; i < _availableClasses.length; i++){
+        _availableClasses[i].images = [..._currentItems!.images];
+      }
+      if(currentClasses.length == _availableClasses.length){
+        Fluttertoast.showToast(msg: 'No new data was found');
+      }
     }
     catch(e){
       changeState(AvailableClassState.error);

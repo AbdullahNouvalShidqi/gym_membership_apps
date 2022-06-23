@@ -18,4 +18,11 @@ class InstructorModel {
     contact = json['contact'],
     email = json['email']
   ;
+
+   toJson() =>{
+    'id' : id,
+    'name' : name,
+    'contact' : contact,
+    'email' : email
+  };
 }

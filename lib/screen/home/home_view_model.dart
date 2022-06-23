@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/utilitites/tab_navigator.dart';
 
 enum HomeViewState {none, loading, error}
@@ -102,22 +103,15 @@ class HomeViewModel with ChangeNotifier{
     }
   }
 
-  List<ClassModel> _classes = [];
+  List<HomeClassModel> _classes = [];
 
-  List<ClassModel> get classes => _classes;
+  List<HomeClassModel> get classes => _classes;
 
-  Future<List<ClassModel>?> getInitData() async {
+  Future<List<HomeClassModel>> getInitData() async {
     changeState(HomeViewState.loading);
 
     try{
-      _classes = await MainAPI().getAllClass();
-
-      for(var i = 0; i < _classes.length; i++){
-        String name = _classes[i].name.toLowerCase().replaceAll(' ', '');
-        for(var j = 0; j < 3; j++){
-          _classes[i].images.add('assets/$name${j == 0 ? '' : j}.png');
-        }
-      }
+      _classes = await MainAPI().getHomeClass();
 
       changeState(HomeViewState.none);
     }

@@ -177,11 +177,11 @@ class CostumCard extends StatelessWidget {
                     width: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: classModel.qtyUser == 0 ? Utilities.redColor : Utilities.greenColor
+                      color: classModel.qtyUsers == 0 ? Utilities.redColor : Utilities.greenColor
                     ),
                   ),
                   const SizedBox(width: 5,),
-                  Text(classModel.qtyUser == 0 ? 'Full' : 'Available', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                  Text(classModel.qtyUsers == 0 ? 'Full' : 'Available', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
                 ],
               ),
             ),
@@ -205,7 +205,7 @@ class CostumCard extends StatelessWidget {
         'onPressed' : false
       };
     }
-    if(classModel.qtyUser == 0){
+    if(classModel.qtyUsers == 0){
       return {
         'status' : 'Full',
         'onPressed' : false

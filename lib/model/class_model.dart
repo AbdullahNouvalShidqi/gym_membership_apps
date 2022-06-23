@@ -21,7 +21,7 @@ class ClassModel {
   String description;
   DateTime startAt;
   DateTime endAt;
-  int qtyUser;
+  int qtyUsers;
   String type;
   int price;
   String location;
@@ -34,7 +34,7 @@ class ClassModel {
     required this.description, 
     required this.startAt, 
     required this.endAt, 
-    required this.qtyUser, 
+    required this.qtyUsers, 
     required this.type,
     required this.price,
     required this.location,
@@ -49,7 +49,7 @@ class ClassModel {
     description = json['description'],
     startAt = DateTime.parse(json['startAt']),
     endAt = DateTime.parse(json['endAt']),
-    qtyUser = json['qtyUsers'],
+    qtyUsers = json['qtyUsers'],
     type = json['type'],
     price = json['price'],
     location = json['location'],

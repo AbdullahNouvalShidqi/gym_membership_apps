@@ -441,7 +441,7 @@ class SignUpButton extends StatelessWidget {
                 await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, email: emailCtrl.text, contact: phoneNumberCtrl.text, password: passwordCtrl.text);
                 
                 if(isError){
-                  Fluttertoast.showToast(msg: 'Error : Check your internet connection');
+                  Fluttertoast.showToast(msg: 'Error : Check your internet connection or try again');
                   return;
                 }
 

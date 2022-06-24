@@ -64,8 +64,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           onPressed: () async {
             if(!_formKey.currentState!.validate())return;
             await forgotPasswordViewModel.sendOTP(email: _emailCtrl.text);
+
+            if(isError){
+              Fluttertoast.showToast(msg: 'We failed to sent your email');
+              return;
+            }
             
-            if(!mounted || isError)return;
+            if(!mounted)return;
             Navigator.pushReplacementNamed(context, OtpScreen.routeName);
           },
           childText: 'Continue'

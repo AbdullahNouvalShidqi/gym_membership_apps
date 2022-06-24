@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/email_js_api.dart';
@@ -44,6 +45,9 @@ class ForgotPasswordViewModel with ChangeNotifier{
       changeState(ForgotPasswordState.none);
     }
     catch(e){
+      if(e is DioError){
+        Fluttertoast.showToast(msg: e.message);
+      }
       changeState(ForgotPasswordState.error);
     }
   }

@@ -94,31 +94,10 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                             BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))
                           ]
                         ),
-                        child: TabBar(
-                          controller: _tabController,
-                          indicatorWeight: 0,
-                          indicator: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: Utilities.primaryColor
-                          ),
-                          indicatorPadding: const EdgeInsets.all(10),
-                          isScrollable: false,
-                          unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
-                          labelColor: Utilities.myWhiteColor,
-                          labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-                          tabs: [
-                            for(var i = 0; i < 7; i++) ...[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
-                                  const SizedBox(height: 5,),
-                                  Text(DateFormat('d').format(item.startAt.add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
-                                ],
-                              ),
-                            ]
-                          ],
-                        ),
+                        child: CostumTabBar(
+                          tabController: _tabController,
+                          item: item,
+                        )
                       ),
                     ),
                     Expanded(
@@ -138,6 +117,41 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
           ),
         ),
       ),
+    );
+  }
+}
+
+class CostumTabBar extends StatelessWidget {
+  const CostumTabBar({Key? key, required this.tabController, required this.item}) : super(key: key);
+  final TabController tabController;
+  final ClassModel item;
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBar(
+      controller: tabController,
+      indicatorWeight: 0,
+      indicator: BoxDecoration(
+        borderRadius: BorderRadius.circular(15),
+        color: Utilities.primaryColor
+      ),
+      indicatorPadding: const EdgeInsets.all(10),
+      isScrollable: false,
+      unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
+      labelColor: Utilities.myWhiteColor,
+      labelPadding: const EdgeInsets.symmetric(horizontal: 10),
+      tabs: [
+        for(var i = 0; i < 7; i++) ...[
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
+              const SizedBox(height: 5,),
+              Text(DateFormat('d').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+            ],
+          ),
+        ]
+      ],
     );
   }
 }

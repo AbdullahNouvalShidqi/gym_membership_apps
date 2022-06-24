@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class FeedbackScreen extends StatefulWidget {
@@ -120,14 +121,11 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: (){
-        if(formKey.currentState!.validate())return;
+    return CostumButton(
+      onPressed: () async {
+        if(!formKey.currentState!.validate())return;
       },
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
-      ),
-      child: Text('Submit', style: Utilities.buttonTextStyle)
+      childText: 'Submit'
     );
   }
 }

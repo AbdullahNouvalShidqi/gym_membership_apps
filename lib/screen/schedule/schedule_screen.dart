@@ -4,6 +4,7 @@ import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
+import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -42,13 +43,20 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
             final isError = scheduleViewModel.state == ScheduleViewState.error;
             List<ClassModel> allItem = scheduleViewModel.tempSchedules;
             
-            if(isError){}
-            if(isLoading){
+            if(isError){
+              return CostumErrorScreen(
+                onPressed: ()async{
+                  await scheduleViewModel.refreshData();
+                }
+              );
+            }
+            else if(isLoading){
               return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.scheduleScreen,);
             }
-            if(allItem.isEmpty){
+            else if(allItem.isEmpty){
               return EmptyListView(svgAssetLink: 'assets/icons/empty_list.svg', emptyListViewFor: EmptyListViewFor.schedule, onRefresh: scheduleViewModel.refreshData, controller: scheduleViewModel.scheduleListController,);
             }
+
             return RefreshIndicator(
               key: const Key('scheduleRefresh'),
               onRefresh: scheduleViewModel.refreshData,

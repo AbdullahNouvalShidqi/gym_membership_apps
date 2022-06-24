@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/shimmering_gradient.dart';
+import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Utilities{
   static Color primaryColor = const Color.fromRGBO(242, 115, 112, 1);
@@ -43,6 +44,19 @@ class Utilities{
       backgroundColor: myWhiteColor
     )
   );
+
+  static PinTheme myPinTheme({required bool hasError}){
+    return PinTheme(
+      inactiveColor: hasError ? Colors.red : formFocusColor,
+      activeColor: hasError ? Colors.red : formFocusColor,
+      selectedColor: hasError ? Colors.red : formFocusColor,
+      shape: PinCodeFieldShape.box,
+      borderRadius: BorderRadius.circular(8),
+      fieldHeight: 56,
+      fieldWidth: 56,
+      fieldOuterPadding: const EdgeInsets.symmetric(horizontal: 8)
+    );
+  }
 
   static TextStyle signInSignUpMainTitleStyle = GoogleFonts.roboto(fontSize: 28, fontWeight: FontWeight.bold, color: primaryColor);
 

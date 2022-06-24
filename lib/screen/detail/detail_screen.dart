@@ -7,7 +7,6 @@ import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
-import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/detail_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
@@ -57,7 +56,7 @@ class _DetailScreenState extends State<DetailScreen> {
           if(isError){
             return CostumErrorScreen(
               onPressed: () async {
-                classModel = await detailViewModel.refreshDetail(name: item.name, images: item.images, type: type);
+                classModel = await detailViewModel.getDetail(name: item.name, images: item.images, type: type);
                 if(classModel == null){
                   Fluttertoast.showToast(msg: 'No data found');
                 }

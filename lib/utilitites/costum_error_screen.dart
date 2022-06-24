@@ -12,15 +12,15 @@ class CostumErrorScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 50),
+          padding: const EdgeInsets.symmetric(horizontal: 50),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SvgPicture.asset('assets/icons/connection_lost.svg'),
               const SizedBox(height: 14,),
-              Text('Connection Lost', style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500),),
+              Text('Connection Lost', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500),),
               const SizedBox(height: 5,),
-              Text('Looks like you have lost connection with Wifi or othe internet connection', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: const Color.fromRGBO(88, 88, 88, 1)),),
+              Text('Looks like you have lost connection with Wifi or othe internet connection', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: const Color.fromRGBO(88, 88, 88, 1)),),
               const SizedBox(height: 25,),
               CostumButton(
                 onPressed: onPressed,

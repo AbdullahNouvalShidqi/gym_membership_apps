@@ -40,14 +40,10 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   @override
   Widget build(BuildContext context) {
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
-    final availableClassViewModel = Provider.of<AvailableClassViewModel>(context);
-    final classes = availableClassViewModel.availableClasses;
-    final isLoading = availableClassViewModel.state == AvailableClassState.loading;
-    final isError = availableClassViewModel.state == AvailableClassState.error;
 
     return WillPopScope(
       onWillPop: () async {
-        availableClassViewModel.changeState(AvailableClassState.none);
+        Provider.of<AvailableClassViewModel>(context, listen: false).changeState(AvailableClassState.none);
         return true;
       },
       child: Scaffold(
@@ -67,8 +63,12 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                 )
               ];
             },
-            body: Builder(
-              builder: (context) {
+            body: Consumer<AvailableClassViewModel>(
+              builder: (context, availableClassViewModel, _) {
+                final classes = availableClassViewModel.availableClasses;
+                final isLoading = availableClassViewModel.state == AvailableClassState.loading;
+                final isError = availableClassViewModel.state == AvailableClassState.error;
+
                 if(isLoading){
                   return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
                 }
@@ -154,7 +154,9 @@ class CostumListView extends StatelessWidget {
           return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
         }
         return RefreshIndicator(
-          onRefresh: availableClassViewModel.refreshData,
+          onRefresh: () async {
+            await availableClassViewModel.refreshData();
+          },
           child: ListView.builder(
             padding: const EdgeInsets.only(top: 15),
             itemCount: availableClasses.length,

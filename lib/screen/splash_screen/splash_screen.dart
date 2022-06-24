@@ -1,15 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
-import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
-import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   static String routeName = '/';

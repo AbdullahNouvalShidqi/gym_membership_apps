@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
-import 'package:gym_membership_apps/model/instructor_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
@@ -15,7 +14,6 @@ import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 enum ProfileViewState{
   none,

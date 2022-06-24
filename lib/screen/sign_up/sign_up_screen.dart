@@ -447,9 +447,9 @@ class SignUpButton extends StatelessWidget {
 
                 final user = signUpViewModel.user!;
                 if(rememberMe){
-                  signUpViewModel.rememberMe(email: user.email, password: user.password);
+                  await signUpViewModel.rememberMe(email: user.email, password: user.password);
                 }else{
-                  signUpViewModel.dontRememberMe();
+                  await signUpViewModel.dontRememberMe();
                 }
 
                 if(!mounted)return;

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
-import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/utilitites/tab_navigator.dart';
 

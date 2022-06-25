@@ -20,7 +20,7 @@ class CostumErrorScreen extends StatelessWidget {
               const SizedBox(height: 14,),
               Text('Connection Lost', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500),),
               const SizedBox(height: 5,),
-              Text('Looks like you have lost connection with Wifi or othe internet connection', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: const Color.fromRGBO(88, 88, 88, 1)),),
+              Text('Looks like you have lost connection with Wifi or other internet connection, or the server is down', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: const Color.fromRGBO(88, 88, 88, 1)),),
               const SizedBox(height: 25,),
               CostumButton(
                 onPressed: onPressed,

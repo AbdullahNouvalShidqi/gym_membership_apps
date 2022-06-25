@@ -248,7 +248,10 @@ class ItemToReturn extends StatelessWidget {
               itemBuilder: (context, i){
                 return InkWell(
                   onTap: (){
-                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: scheduleViewModel.listSchedule[i]);
+                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
+                      'homeClassModel' : homeViewModel.classes.firstWhere((element) => element.name == scheduleViewModel.listSchedule[i].name),
+                      'type' : scheduleViewModel.listSchedule[i].type
+                    });
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),

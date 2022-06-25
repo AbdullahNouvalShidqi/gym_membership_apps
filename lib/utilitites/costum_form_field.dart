@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CostumFormField extends StatefulWidget {
   const CostumFormField({
@@ -34,7 +33,7 @@ class _CostumFormFieldState extends State<CostumFormField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(widget.label, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
+        Text(widget.label, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
         const SizedBox(height: 5,),
         TextFormField(
           keyboardType: widget.textInputType,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
@@ -21,12 +20,12 @@ class CostumHomeCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('$type Class', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
+              Text('$type Class', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: (){
                   Navigator.pushNamed(context, SeeAllScren.routeName, arguments: type);
                 },
-                child: Text('See All', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).primaryColor),)
+                child: Text('See All', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).primaryColor),)
               )
             ],
           ),
@@ -76,8 +75,8 @@ class CostumHomeCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(homeClassModel[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                            Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                            Text(homeClassModel[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                            const Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
                           ],
                         ),
                       ),

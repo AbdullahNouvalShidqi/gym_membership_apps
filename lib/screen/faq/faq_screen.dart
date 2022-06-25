@@ -47,7 +47,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
     final faqScreenModel = Provider.of<FaqViewModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('FAQ', style: Utilities.appBarTextStyle,),
+        title: const Text('FAQ', style: Utilities.appBarTextStyle,),
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
@@ -138,7 +138,7 @@ class CostumMainCard extends StatelessWidget {
               titleWidget,
               RotationTransition(
                 turns: Tween(begin: 0.0, end: 0.25).animate(animationControllers[i]),
-                child: Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
+                child: const Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
               ),
             ],
           ),

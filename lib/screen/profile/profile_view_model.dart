@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
@@ -42,31 +41,31 @@ class ProfileViewModel with ChangeNotifier{
   final List<Map<String, Widget>> _myAccountItems = [
     {
       'icon' : SvgPicture.asset('assets/icons/personal_detail.svg'),
-      'title' : Text('Personal Details', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),),
+      'title' : const Text('Personal Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
     },
     {
       'icon' : SvgPicture.asset('assets/icons/payment.svg'),
-      'title' : Text('Payment Instruction', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),),
+      'title' : const Text('Payment Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
     },
     {
       'icon' : SvgPicture.asset('assets/icons/update_password.svg'),
-      'title' : Text('Update Password', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),)
+      'title' : const Text('Update Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
     },
     {
       'icon' : SvgPicture.asset('assets/icons/feedback.svg'),
-      'title' : Text('Send us Feedbacks', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),)
+      'title' : const Text('Send us Feedbacks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
     },
     {
       'icon' : SvgPicture.asset('assets/icons/terms.svg'),
-      'title' : Text('Terms & Conditions', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),)
+      'title' : const Text('Terms & Conditions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
     },
     {
       'icon' : SvgPicture.asset('assets/icons/faq.svg'),
-      'title' : Text('FAQ', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600),)
+      'title' : const Text('FAQ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
     },
     {
       'icon' : SvgPicture.asset('assets/icons/logout.svg'),
-      'title' : Text('Logout', style: GoogleFonts.roboto(fontSize: 16, color: const Color.fromARGB(255, 246, 0, 0)),),
+      'title' : const Text('Logout', style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 246, 0, 0)),),
     },
   ];
 

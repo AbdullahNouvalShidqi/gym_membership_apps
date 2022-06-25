@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
@@ -113,9 +112,9 @@ class MainProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 40),
-          child: Center(child: Text('Profile', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black),),)
+        const Padding(
+          padding: EdgeInsets.only(top: 40),
+          child: Center(child: Text('Profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black),),)
         ),
         Padding(
           padding: const EdgeInsets.only(top: 30),
@@ -125,7 +124,7 @@ class MainProfile extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 15,),
-        Text(profileViewModel.user.username, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+        Text(profileViewModel.user.username, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
       ],
     );
   }
@@ -159,7 +158,7 @@ class TabButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all(myAccountSelected ? Colors.white : null),
             side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
           ),
-          child: Text('My Account', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: myAccountSelected ? Utilities.myTheme.primaryColor : null),)
+          child: Text('My Account', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: myAccountSelected ? Utilities.myTheme.primaryColor : null),)
         ),
         const SizedBox(width: 10,),
         ElevatedButton(
@@ -168,7 +167,7 @@ class TabButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null),
             side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))
           ),
-          child: Text('Progress', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: progressSelected ? Utilities.myTheme.primaryColor : null),)
+          child: Text('Progress', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: progressSelected ? Utilities.myTheme.primaryColor : null),)
         ),
       ],
     );

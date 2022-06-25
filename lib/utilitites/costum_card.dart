@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/book/book_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
@@ -81,15 +80,15 @@ class Details extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(classModel.type, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
-        Text(classModel.name, maxLines: 1, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
+        Text(classModel.type, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
+        Text(classModel.name, maxLines: 1, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Utilities.primaryColor),),
         const SizedBox(height: 10,),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text('${DateFormat('d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text('${DateFormat('d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)}', style: const TextStyle(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -98,7 +97,7 @@ class Details extends StatelessWidget {
           children: [
             SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text(classModel.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text(classModel.instructor.name, style: const TextStyle(fontSize: 10, color: Colors.grey),)
           ],
         ),
         const SizedBox(height: 5,),
@@ -107,7 +106,7 @@ class Details extends StatelessWidget {
           children: [
             const Icon(Icons.location_on_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text(classModel.type == "Online" ? 'Zoom Meeting' : 'Room X', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+            Text(classModel.type == "Online" ? 'Zoom Meeting' : 'Room X', style: const TextStyle(fontSize: 10, color: Colors.grey),)
           ],
         ),
       ],
@@ -145,13 +144,13 @@ class StatusAndButton extends StatelessWidget {
                     Container(
                       height: 8,
                       width: 8,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         color: Utilities.yellowColor
                       ),
                     ),
                     const SizedBox(width: 5,),
-                    Text('Waiting', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                    const Text('Waiting', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
                   ],
                 ),
               ),
@@ -176,7 +175,7 @@ class StatusAndButton extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 5,),
-                Text(checkProgressStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'], style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                Text(checkProgressStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'], style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
               ],
             ),
           );
@@ -203,7 +202,7 @@ class StatusAndButton extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 5,),
-                  Text(classModel.qtyUsers == 0 ? 'Full' : 'Available', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
+                  Text(classModel.qtyUsers == 0 ? 'Full' : 'Available', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),)
                 ],
               ),
             ),

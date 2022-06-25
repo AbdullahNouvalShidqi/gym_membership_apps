@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class CostumButton extends StatelessWidget {
@@ -37,10 +36,10 @@ class CostumButton extends StatelessWidget {
         backgroundColor: MaterialStateProperty.all(onPressed == null ? const Color.fromARGB(255, 188, 188, 188) : backgroundColor),
         side: borderColor != null ?  MaterialStateProperty.all(BorderSide(color: borderColor!)) : null,
       ),
-      child: isLoading ? Center(
-        child: SpinKitThreeBounce(color: Utilities.myWhiteColor, size: 25, duration: const Duration(seconds: 1),)
+      child: isLoading ? const Center(
+        child: SpinKitThreeBounce(color: Utilities.myWhiteColor, size: 25, duration: Duration(seconds: 1),)
       ):
-      Text(childText, style: childTextStyle ?? GoogleFonts.roboto(fontSize: useFixedSize ? 16 : 12, fontWeight: FontWeight.w500, color: fontColor ?? Utilities.myWhiteColor),)
+      Text(childText, style: childTextStyle ?? TextStyle(fontSize: useFixedSize ? 16 : 12, fontWeight: FontWeight.w500, color: fontColor ?? Utilities.myWhiteColor),)
     );
   }
 }

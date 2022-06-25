@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 enum EmptyListViewFor{schedule, available, progress, detail}
 
@@ -43,7 +42,7 @@ class EmptyListView extends StatelessWidget {
               children: [
                 SvgPicture.asset(svgAssetLink),
                 const SizedBox(height: 30,),
-                Text(title ?? 'Ooops, your ${forProgress ? 'progress' : 'schedule'} is still empty', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700))
+                Text(title ?? 'Ooops, your ${forProgress ? 'progress' : 'schedule'} is still empty', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700))
               ],
             ),
           ),

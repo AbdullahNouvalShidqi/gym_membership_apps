@@ -1,7 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:provider/provider.dart';
@@ -105,9 +104,9 @@ class MainCarousel extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: Column(
                   children: [
-                    Text(splashScreenViewModel.introductionData[itemI].title, style: GoogleFonts.roboto(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white),),
+                    Text(splashScreenViewModel.introductionData[itemI].title, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.white),),
                     const SizedBox(height: 5,),
-                    Text(splashScreenViewModel.introductionData[itemI].subtitle, style: GoogleFonts.roboto(fontSize: 12, color: Colors.white),)
+                    Text(splashScreenViewModel.introductionData[itemI].subtitle, style: const TextStyle(fontSize: 12, color: Colors.white),)
                   ],
                 )
               )
@@ -174,7 +173,7 @@ class GetStartedButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 34, 85, 156)),
           fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 50)),
         ),
-        child: Text('Get Started', style: GoogleFonts.roboto(fontSize: 24, color: Colors.white,)),
+        child: const Text('Get Started', style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w500)),
       ),
     );
   }

@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
@@ -97,7 +96,7 @@ class _LogInScreenState extends State<LogInScreen> {
                     rememberMe: _rememberMe,
                     mounted: mounted,
                   ),
-                  Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+                  Center(child: Text('OR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
                   googleLoginButton(),
                   const ToSignUpButton()
                 ],
@@ -141,7 +140,7 @@ class _LogInScreenState extends State<LogInScreen> {
                 width: 25,
               ),
               const SizedBox(width: 10),
-              Text('Sign in with Google', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),)
+              const Text('Sign in with Google', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),)
             ],
           ),
         ),
@@ -234,10 +233,10 @@ class MainTitle extends StatelessWidget {
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             Text('Hello! Welcome back!', style: Utilities.signInSignUpMainTitleStyle,),
-            const SizedBox(height: 4,),
-            Text("Hello again, You've been missed!", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+            SizedBox(height: 4,),
+            Text("Hello again, You've been missed!", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400))
           ],
         ),
       ),
@@ -298,7 +297,7 @@ class RememberMeCheckBox extends StatelessWidget {
         const SizedBox(width: 5,),
         GestureDetector(
           onTap: onTap,
-          child: Text('Remember Me', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold,))
+          child: const Text('Remember Me', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,))
         )
       ],
     );
@@ -314,7 +313,7 @@ class ForgotPassword extends StatelessWidget {
       onTap: (){
         Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
       },
-      child: Text('Forgot Password', style: GoogleFonts.roboto(fontSize: 12, color: Colors.red))
+      child: const Text('Forgot Password', style: TextStyle(fontSize: 12, color: Colors.red))
     );
   }
 }
@@ -338,6 +337,7 @@ class LoginButton extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 30, bottom: 25),
             child: CostumButton(
+              height: 45,
               isLoading: isLoading,
               childText: 'Login',
               onPressed: () async {
@@ -388,11 +388,11 @@ class ToSignUpButton extends StatelessWidget {
         child: RichText(
           text: TextSpan(
             text: "Don't have an account? ",
-            style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
             children: [
               TextSpan(
                 text: 'Sign Up',
-                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
                 recognizer: TapGestureRecognizer()..onTap = (){
                   Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
                 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/payment_instruction/payment_instruction_screen.dart';
@@ -28,7 +27,7 @@ class _BookScreenState extends State<BookScreen> {
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Booking Class', style: Utilities.appBarTextStyle),
+        title: const Text('Booking Class', style: Utilities.appBarTextStyle),
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
@@ -77,7 +76,7 @@ class BookingDetail extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Booking Detail', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
+        const Text('Booking Detail', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
         const SizedBox(height: 10,),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,16 +97,16 @@ class BookingDetail extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(item.type, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
+                  Text(item.type, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
                   const SizedBox(height: 5,),
-                  Text('${item.name} Class', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w500),),
+                  Text('${item.name} Class', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),),
                   const SizedBox(height: 15,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey,),
                       const SizedBox(width: 5,),
-                      Text('${DateFormat('d MMMM y').format(item.startAt)}, ${DateFormat('Hm').format(item.startAt)}', style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+                      Text('${DateFormat('d MMMM y').format(item.startAt)}, ${DateFormat('Hm').format(item.startAt)}', style: const TextStyle(fontSize: 10, color: Colors.grey),)
                     ],
                   ),
                   const SizedBox(height: 5,),
@@ -116,7 +115,7 @@ class BookingDetail extends StatelessWidget {
                     children: [
                       SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey,),
                       const SizedBox(width: 5,),
-                      Text(item.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+                      Text(item.instructor.name, style: const TextStyle(fontSize: 10, color: Colors.grey),)
                     ],
                   ),
                   const SizedBox(height: 5,),
@@ -125,13 +124,13 @@ class BookingDetail extends StatelessWidget {
                     children: [
                       const Icon(Icons.location_on_outlined, size: 10, color: Colors.grey,),
                       const SizedBox(width: 5,),
-                      Text(item.location, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+                      Text(item.location, style: const TextStyle(fontSize: 10, color: Colors.grey),)
                     ],
                   ),
                 ],
               ),
             ),
-            Text(NumberFormat.currency(symbol: 'Rp. ', locale: 'id_id', decimalDigits: 0).format(item.price), style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Utilities.primaryColor,))
+            Text(NumberFormat.currency(symbol: 'Rp. ', locale: 'id_id', decimalDigits: 0).format(item.price), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Utilities.primaryColor,))
           ],
         ),
       ],
@@ -149,7 +148,7 @@ class UserInformation extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('User Information', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
+          const Text('User Information', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
           const SizedBox(height: 10,),
           Expanded(
             child: Row(
@@ -157,22 +156,22 @@ class UserInformation extends StatelessWidget {
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Name', style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
-                    const SizedBox(height: 5,),
-                    Text('Phone Number', style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
-                    const SizedBox(height: 5,),
-                    Text('Email', style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
+                  children: const [
+                    Text('Name', style: TextStyle(fontSize: 10, color: Color.fromRGBO(115, 115, 115, 1))),
+                    SizedBox(height: 5,),
+                    Text('Phone Number', style: TextStyle(fontSize: 10, color: Color.fromRGBO(115, 115, 115, 1))),
+                    SizedBox(height: 5,),
+                    Text('Email', style: TextStyle(fontSize: 10, color: Color.fromRGBO(115, 115, 115, 1))),
                   ],
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(user.username, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
+                    Text(user.username, style: const TextStyle(fontSize: 10, color: Color.fromRGBO(115, 115, 115, 1))),
                     const SizedBox(height: 5,),
-                    Text(user.contact, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
+                    Text(user.contact, style: const TextStyle(fontSize: 10, color: Color.fromRGBO(115, 115, 115, 1))),
                     const SizedBox(height: 5,),
-                    Text(user.email, style: GoogleFonts.roboto(fontSize: 10, color: const Color.fromRGBO(115, 115, 115, 1))),
+                    Text(user.email, style: const TextStyle(fontSize: 10, color: Color.fromRGBO(115, 115, 115, 1))),
                   ],
                 )
               ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
@@ -34,9 +33,9 @@ class CostumDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title, style: GoogleFonts.roboto(fontSize: 16, color: Utilities.primaryColor),),
+              Text(title, style: const TextStyle(fontSize: 16, color: Utilities.primaryColor),),
               const SizedBox(height: 5,),
-              Text(contentText, textAlign:  TextAlign.center, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
+              Text(contentText, textAlign:  TextAlign.center, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
               const SizedBox(height: 15,),
               falseText == null || falseOnPressed == null ? 
               Center(
@@ -51,12 +50,12 @@ class CostumDialog extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: trueOnPressed,
-                    child: Text(trueText, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor),),
+                    child: Text(trueText, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor),),
                   ),
                   const SizedBox(width: 25.5,),
                   ElevatedButton(
                     onPressed: falseOnPressed,
-                    child: Text(falseText!, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.myWhiteColor),)
+                    child: Text(falseText!, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.myWhiteColor),)
                   )
                 ],
               )

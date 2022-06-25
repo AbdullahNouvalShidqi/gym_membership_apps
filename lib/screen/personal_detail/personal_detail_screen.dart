@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +14,7 @@ class PersonalDetail extends StatelessWidget {
         final user = profileViewModel.user;
         return Scaffold(
           appBar: AppBar(
-            title: Text('Personal Details', style: Utilities.appBarTextStyle,),
+            title: const Text('Personal Details', style: Utilities.appBarTextStyle,),
             leading: IconButton(
               onPressed: (){
                 Navigator.pop(context);
@@ -28,7 +27,7 @@ class PersonalDetail extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('My Information', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Utilities.primaryColor),),
+                const Text('My Information', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Utilities.primaryColor),),
                 const SizedBox(height: 15,),
                 Center(
                   child: Container(
@@ -45,17 +44,17 @@ class PersonalDetail extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Name', style: Utilities.personalDetailLabel,),
+                        const Text('Name', style: Utilities.personalDetailLabel,),
                         const SizedBox(height: 5,),
                         Text(user.username, style: Utilities.personalDetailValue,),
                         Divider(height: 0, color: Utilities.primaryColor.withOpacity(0.5),),
                         const SizedBox(height: 20,),
-                        Text('Email', style: Utilities.personalDetailLabel,),
+                        const Text('Email', style: Utilities.personalDetailLabel,),
                         const SizedBox(height: 5,),
                         Text(user.email, style: Utilities.personalDetailValue,),
                         Divider(height: 0, color: Utilities.primaryColor.withOpacity(0.5),),
                         const SizedBox(height: 20,),
-                        Text('Personal Phone Number', style: Utilities.personalDetailLabel,),
+                        const Text('Personal Phone Number', style: Utilities.personalDetailLabel,),
                         const SizedBox(height: 5,),
                         Text(user.contact, style: Utilities.personalDetailValue,),
                         Divider(height: 0, color: Utilities.primaryColor.withOpacity(0.5),),

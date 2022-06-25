@@ -1,8 +1,6 @@
 import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -57,9 +55,6 @@ class LogInViewModel with ChangeNotifier{
       changeState(LogInState.none);
     }
     catch(e){
-      if(e is DioError){
-        Fluttertoast.showToast(msg: e.message);
-      }
       changeState(LogInState.error);
     }
     return allUser;

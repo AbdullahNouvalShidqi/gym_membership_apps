@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_view_model.dart';
 import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
@@ -74,9 +73,9 @@ class _OtpScreenState extends State<OtpScreen> {
                     onChanged: costumPinOnChanged,
                   ),
                   const SizedBox(height: 6,),
-                  hasError ? Text('Please enter a valid OTP', style: GoogleFonts.roboto(color: Colors.red),) : const SizedBox(),
+                  hasError ? const Text('Please enter a valid OTP', style: TextStyle(color: Colors.red),) : const SizedBox(),
                   const SizedBox(height: 20,),
-                  Text('00:$time Sec', style: GoogleFonts.roboto(fontSize: 16),),
+                  Text('00:$time Sec', style: const TextStyle(fontSize: 16),),
                   const SizedBox(height: 10,),
                   ResendOTP(
                     resetTime: resetTime
@@ -167,9 +166,9 @@ class MainTitle extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 35,),
-        Text('OTP VERIFICATION', style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w500,)),
+        const Text('OTP VERIFICATION', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,)),
         const SizedBox(height: 15,),
-        Text('Enter the OTP sent to ${ForgotPasswordViewModel.encryptedEmail}', style: GoogleFonts.roboto(fontSize: 16, color: Colors.grey[700]),),
+        Text('Enter the OTP sent to ${ForgotPasswordViewModel.encryptedEmail}', style: TextStyle(fontSize: 16, color: Colors.grey[700]),),
         const SizedBox(height: 25,),
       ],
     );
@@ -207,7 +206,7 @@ class ResendOTP extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Don't receive code ?", style: GoogleFonts.roboto(fontSize: 16)),
+        const Text("Don't receive code ?", style: TextStyle(fontSize: 16)),
         const SizedBox(width: 5,),
         Consumer<ForgotPasswordViewModel>(
           builder: (context, forgotPasswordViewModel, _) {
@@ -224,7 +223,7 @@ class ResendOTP extends StatelessWidget {
                 }
                 resetTime();
               },
-              child: Text('Re-send', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w600)),
+              child: const Text('Re-send', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             );
           }
         )

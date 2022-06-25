@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
@@ -31,7 +30,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel?;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment Instruction', style: Utilities.appBarTextStyle,),
+        title: const Text('Payment Instruction', style: Utilities.appBarTextStyle,),
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
@@ -211,9 +210,9 @@ class PriceContainer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text('Total Payment', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
-            Text('Rp. 300.000', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500, color: const Color.fromRGBO(34, 85, 156, 1)))
+          children: const [
+            Text('Total Payment', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+            Text('Rp. 300.000', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color:Color.fromRGBO(34, 85, 156, 1)))
           ],
         ),
       ),
@@ -245,12 +244,12 @@ class PaymentDetailContainer extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('Payment Method', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500),),
-                const SizedBox(height: 10,),
-                Text('No. Rekening:', style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w500, color: const Color.fromRGBO(188, 188, 188, 1)),),
-                const SizedBox(height: 5,),
-                Text('1234 5678 910', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),)
+              children: const [
+                Text('Payment Method', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+                SizedBox(height: 10,),
+                Text('No. Rekening:', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w500, color: Color.fromRGBO(188, 188, 188, 1)),),
+                SizedBox(height: 5,),
+                Text('1234 5678 910', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),)
               ],
             ),
             Container(
@@ -259,7 +258,7 @@ class PaymentDetailContainer extends StatelessWidget {
                 onTap: () async {
                   Clipboard.setData(const ClipboardData(text: '1234 5678 910')).then((value) => Fluttertoast.showToast(msg: 'Copied to clipboard'));
                 },
-                child: Text('Copy', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Utilities.primaryColor),),
+                child: const Text('Copy', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Utilities.primaryColor),),
               ),
             )
           ],
@@ -293,10 +292,10 @@ class CostumMainCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('ATM Transfer Instruction', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w500)),
+              const Text('ATM Transfer Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
               RotationTransition(
                 turns: Tween(begin: 0.0, end: 0.25).animate(animationController),
-                child: Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
+                child: const Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
               ),
             ],
           ),
@@ -336,25 +335,25 @@ class CostumSubCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: RichText(
-                    text: TextSpan(
+                    text: const TextSpan(
                       text: '1. Select another Menu > Transfer\n2. Select the origin account and select the destination account to MANDIRI account\n3. Enter the account number ',
-                      style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
+                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
                       children: [
                         TextSpan(
                           text: '12345678910 ',
-                          style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor)
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor)
                         ),
                         TextSpan(
                           text: 'and select correct\n4. Enter the payment amount ',
-                          style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black)
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black)
                         ),
                         TextSpan(
                           text: 'Rp.300.000 ',
-                          style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor)
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor)
                         ),
                         TextSpan(
                           text: "and select correct\n5. Check the data on the screen. Make sure the name is the recipient's name, and the amount is correct. If so, select Yes.",
-                          style: GoogleFonts.roboto(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black)
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black)
                         ),
                       ]
                     )

@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
@@ -63,16 +62,16 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
                   child: Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Utilities.primaryColor,
                         radius: 25,
-                        child: const Icon(Icons.person, color: Colors.white,),
+                        child: Icon(Icons.person, color: Colors.white,),
                       ),
                       const SizedBox(width: 10,),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Hello,', style: Utilities.greetingHomeStyle,),
+                          const Text('Hello,', style: Utilities.greetingHomeStyle,),
                           Text(user.username, style: Utilities.greetinSubHomeStyle)
                         ],
                       )
@@ -83,7 +82,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
                   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: const [
                       Text('Select', style: Utilities.homeViewMainTitleStyle),
                       Text('Workout', style: Utilities.homeViewMainTitleStyle)
                     ],
@@ -115,9 +114,9 @@ class TipsListView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Text('Tips for you', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700),),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text('Tips for you', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
               ),
               const SizedBox(height: 10,),
               SizedBox(
@@ -217,7 +216,7 @@ class CarouselTitle extends StatelessWidget {
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
-        child: Text(title, style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white),),
+        child: Text(title, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white),),
       ),
     );
   }

@@ -29,7 +29,7 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Update Password', style: Utilities.appBarTextStyle,),
+        title: const Text('Update Password', style: Utilities.appBarTextStyle,),
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
@@ -178,7 +178,7 @@ class ContinueButton extends StatelessWidget {
         style: ButtonStyle(
           fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
         ),
-        child: Text('Continue', style: Utilities.buttonTextStyle)
+        child: const Text('Continue', style: Utilities.buttonTextStyle)
       ),
     );
   }

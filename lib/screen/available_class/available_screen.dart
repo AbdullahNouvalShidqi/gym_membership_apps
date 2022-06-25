@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_card.dart';
@@ -57,7 +56,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                     onPressed: (){
                       Navigator.pop(context);
                     },
-                    icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,),
+                    icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,),
                   ),
                   centerTitle: true,
                 )
@@ -145,9 +144,9 @@ class CostumTabBar extends StatelessWidget {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400),),
+              Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
               const SizedBox(height: 5,),
-              Text(DateFormat('d').format(DateTime.now().add(Duration(days: i))), style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+              Text(DateFormat('d').format(DateTime.now().add(Duration(days: i))), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400))
             ],
           ),
         ]

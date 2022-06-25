@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
@@ -104,12 +103,12 @@ class MainTitle extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
+        const SizedBox(
           width: 120,
-          child: Text('Forgot Password?', style: GoogleFonts.roboto(fontSize: 24, fontWeight: FontWeight.w500),)
+          child: Text('Forgot Password?', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),)
         ),
         const SizedBox(height: 15,),
-        Text("Don't worry ! It happens. Please enter the email we will send the OTP in this email.", style: GoogleFonts.roboto(fontSize: 16, color: Colors.grey[700]),),
+        Text("Don't worry ! It happens. Please enter the email we will send the OTP in this email.", style: TextStyle(fontSize: 16, color: Colors.grey[700]),),
       ],
     );
   }

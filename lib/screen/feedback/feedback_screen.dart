@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
@@ -26,7 +25,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Send us Feedbacks', style: Utilities.appBarTextStyle,),
+        title: const Text('Send us Feedbacks', style: Utilities.appBarTextStyle,),
         leading: IconButton(
           onPressed: (){
             Navigator.pop(context);
@@ -40,7 +39,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('What do you think of the app?', style: GoogleFonts.roboto(fontSize: 12),),
+              const Text('What do you think of the app?', style: TextStyle(fontSize: 12),),
               const SizedBox(height: 6,),
               RatingStarBar(
                 rating: _rating,
@@ -49,7 +48,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 },
               ),
               const SizedBox(height: 31,),
-              Text('What do you think of the app?', style: GoogleFonts.roboto(fontSize: 12),),
+              const Text('What do you think of the app?', style: TextStyle(fontSize: 12),),
               const SizedBox(height: 5,),
               FeedbackFormField(
                 formKey: _formKey,
@@ -79,7 +78,7 @@ class RatingStarBar extends StatelessWidget {
       initialRating: rating,
       itemCount: 5,
       itemBuilder: (context, i){
-        return Icon(Icons.star, color: Utilities.primaryColor,);
+        return const Icon(Icons.star, color: Utilities.primaryColor,);
       },
       onRatingUpdate: onRatingUpdate
     );
@@ -99,7 +98,7 @@ class FeedbackFormField extends StatelessWidget {
         controller: reviewCtrl,
         decoration: InputDecoration(
           hintText: 'Type your feedback 500 character left',
-          hintStyle: GoogleFonts.roboto(),
+          hintStyle: const TextStyle(),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
         ),
         maxLines: 8,

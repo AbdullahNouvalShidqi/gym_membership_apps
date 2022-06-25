@@ -25,7 +25,7 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: Text('Update Password', style: Utilities.appBarTextStyle,),
+          title: const Text('Update Password', style: Utilities.appBarTextStyle,),
           centerTitle: true,
           leading: IconButton(
             onPressed: appBarBackOnPressed,

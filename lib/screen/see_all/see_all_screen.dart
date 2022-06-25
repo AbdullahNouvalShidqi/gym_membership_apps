@@ -30,16 +30,16 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                   padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
                   child: Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundColor: Utilities.primaryColor,
                         radius: 25,
-                        child: const Icon(Icons.person, color: Colors.white,),
+                        child: Icon(Icons.person, color: Colors.white,),
                       ),
                       const SizedBox(width: 10,),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Hello,', style: Utilities.greetingHomeStyle,),
+                          const Text('Hello,', style: Utilities.greetingHomeStyle,),
                           Text(user.username, style: Utilities.greetinSubHomeStyle)
                         ],
                       )
@@ -51,7 +51,7 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Select', style: Utilities.homeViewMainTitleStyle),
+                      const Text('Select', style: Utilities.homeViewMainTitleStyle),
                       Text('$type Class', style: Utilities.homeViewMainTitleStyle)
                     ],
                   ),

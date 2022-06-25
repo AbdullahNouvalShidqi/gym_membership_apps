@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
@@ -84,7 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   rememberMe: _rememberMe,
                   mounted: mounted,
                 ),
-                Center(child: Text('OR', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+                Center(child: Text('OR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
                 googleSiugnUpButton(),
                 ToSignInButton(
                   emailCtrl: _emailCtrl,
@@ -133,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: 25,
               ),
               const SizedBox(width: 10),
-              Text('Sign up with Google', style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),)
+              const Text('Sign up with Google', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),)
             ],
           ),
         ),
@@ -187,10 +186,10 @@ class MainTitle extends StatelessWidget {
       child: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: const [
             Text('Create an account', style: Utilities.signInSignUpMainTitleStyle,),
-            const SizedBox(height: 4,),
-            Text("Stay strong and healthy with us", style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.w400))
+            SizedBox(height: 4,),
+            Text("Stay strong and healthy with us", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400))
           ],
         ),
       ),
@@ -397,7 +396,7 @@ class RememberMeCheckBox extends StatelessWidget {
         const SizedBox(width: 5,),
         GestureDetector(
           onTap: onTap,
-          child: Text('Remember Me', style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold,))
+          child: const Text('Remember Me', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,))
         )
       ],
     );
@@ -434,6 +433,7 @@ class SignUpButton extends StatelessWidget {
             padding: const EdgeInsets.only(top: 30, bottom: 15),
             child: 
             CostumButton(
+              height: 45,
               onPressed: () async {
                 await signUpViewModel.getAllUser();
                 if(!formKey.currentState!.validate())return;
@@ -457,7 +457,6 @@ class SignUpButton extends StatelessWidget {
                 Fluttertoast.showToast(msg: 'Sign up succesful!');
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },
-              height: 45,
               isLoading: isLoading,
               childText: 'Sign Up',
             )
@@ -491,11 +490,11 @@ class ToSignInButton extends StatelessWidget {
         child: RichText(
           text: TextSpan(
             text: 'Already have an account? ',
-            style: GoogleFonts.roboto(fontSize: 12, color: Colors.grey),
+            style: const TextStyle(fontSize: 12, color: Colors.grey),
             children: [
               TextSpan(
                 text: 'Log in',
-                style: GoogleFonts.roboto(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
                 recognizer: TapGestureRecognizer()..onTap = () async {
                   if(usernameCtrl.text.isNotEmpty ||emailCtrl.text.isNotEmpty || phoneNumberCtrl.text.isNotEmpty || passwordCtrl.text.isNotEmpty){
                     bool willPop = false;

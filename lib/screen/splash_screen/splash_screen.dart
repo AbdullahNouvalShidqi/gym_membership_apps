@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
@@ -60,19 +59,19 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             SvgPicture.asset('assets/icons/logo.svg'),
             const SizedBox(height: 10,),
-            Text(
+            const Text(
               'A-A Gym',
               textAlign: TextAlign.center,
-              style: GoogleFonts.roboto(
+              style: TextStyle(
                 fontSize: 32,
                 color: Colors.white,
                 fontWeight: FontWeight.w700
               )
             ),
             const SizedBox(height: 3,),
-            Text(
+            const Text(
               'Stay healthy and strong with us!!!',
-              style: GoogleFonts.roboto(
+              style: TextStyle(
                 fontSize: 16,
                 color: Colors.white
               ),

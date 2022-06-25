@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
@@ -155,10 +154,10 @@ class CostumAppBar extends StatelessWidget {
                 onPressed: (){
                   Navigator.pop(context);
                 },
-                icon: Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,)
+                icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,)
               ),
             ),
-            Expanded(child: Text('Detail Class', textAlign: TextAlign.center, style: GoogleFonts.roboto(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),)),
+            const Expanded(child: Text('Detail Class', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),)),
             const SizedBox(width: 24,)
           ],
         ),
@@ -242,7 +241,7 @@ class MainTitleStatus extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(className, style: GoogleFonts.roboto(fontSize: 20, fontWeight: FontWeight.w700),),
+        Text(className, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
         Container(
           alignment: Alignment.center,
           height: 25,
@@ -251,7 +250,7 @@ class MainTitleStatus extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
             color: Utilities.subPrimaryColor,
           ),
-          child: Text(type, style: GoogleFonts.roboto(fontSize: 12, color: Utilities.myWhiteColor),),
+          child: Text(type, style: const TextStyle(fontSize: 12, color: Utilities.myWhiteColor),),
         )
       ],
     );
@@ -266,7 +265,7 @@ class Price extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       NumberFormat.currency(symbol: 'Rp. ', locale: 'id_id', decimalDigits: 0).format(price),
-      style: GoogleFonts.roboto(
+      style: const TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w700,
         color: Utilities.subPrimaryColor
@@ -285,7 +284,7 @@ class InstructorName extends StatelessWidget {
       children: [
         SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
-        Text(item.instructor.name, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+        Text(item.instructor.name, style: const TextStyle(fontSize: 10, color: Colors.grey),)
       ],
     );
   }
@@ -301,7 +300,7 @@ class GymLocation extends StatelessWidget {
       children: [
         SvgPicture.asset('assets/icons/location_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
-        Text(location, style: GoogleFonts.roboto(fontSize: 10, color: Colors.grey),)
+        Text(location, style: const TextStyle(fontSize: 10, color: Colors.grey),)
       ],
     );
   }
@@ -316,9 +315,9 @@ class ClassDetail extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('About This Class', style: GoogleFonts.roboto(fontSize: 14, fontWeight: FontWeight.w700),),
+        const Text('About This Class', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),),
         const SizedBox(height: 5,),
-        Text(item.description, style: GoogleFonts.roboto(fontSize: 12, color: const Color.fromARGB(255, 88, 88, 88), height: 1.5),),
+        Text(item.description, style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 88, 88, 88), height: 1.5),),
       ],
     );
   }
@@ -337,7 +336,7 @@ class SeeAvalableClassButton extends StatelessWidget {
       style: ButtonStyle(
         fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
       ),
-      child: Text('See Available Classes', style: Utilities.buttonTextStyle)
+      child: const Text('See Available Classes', style: Utilities.buttonTextStyle)
     );
   }
 }

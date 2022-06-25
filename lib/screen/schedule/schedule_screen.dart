@@ -33,7 +33,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: Text('My Schedules', style: Utilities.appBarTextStyle),
+        title: const Text('My Schedules', style: Utilities.appBarTextStyle),
         centerTitle: true,
       ),
       body: Center(

@@ -40,19 +40,24 @@ class CostumCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 10),
-              child: image(image: classModel.images.first)
+              child: CostumImage(image: classModel.images.first)
             ),
             Expanded(
-              child: details(classModel: classModel)
+              child: Details(classModel: classModel)
             ),
-            statusAndButton(classModel: classModel)
+            StatusAndButton(classModel: classModel, whichScreen: whichScreen,)
           ],
         ),
       ),
     );
   }
+}
 
-  Widget image({required String image}){
+class CostumImage extends StatelessWidget {
+  const CostumImage({Key? key, required this.image}) : super(key: key);
+  final String image;
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: 94,
       width: 73,
@@ -65,8 +70,14 @@ class CostumCard extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget details({required ClassModel classModel}){
+class Details extends StatelessWidget {
+  const Details({Key? key, required this.classModel}) : super(key: key);
+  final ClassModel classModel;
+
+  @override
+  Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -102,8 +113,19 @@ class CostumCard extends StatelessWidget {
       ],
     );
   }
+}
 
-  Widget statusAndButton({required ClassModel classModel}){
+class StatusAndButton extends StatelessWidget {
+  const StatusAndButton({
+    Key? key,
+    required this.classModel,
+    required this.whichScreen
+  }) : super(key: key);
+  final ClassModel classModel;
+  final CostumCardFor whichScreen;
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer<ScheduleViewModel>(
       builder: (context, scheduleViewModel, _){
         if(whichScreen == CostumCardFor.scheduleScreen){

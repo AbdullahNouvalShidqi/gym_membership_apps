@@ -232,6 +232,12 @@ class StatusAndButton extends StatelessWidget {
         'onPressed' : false
       };
     }
+    if(DateTime.now().compareTo(classModel.startAt) == 1){
+      return{
+        'status': 'Late',
+        'onPressed': false
+      };
+    }
     return {
       'status' : 'Book now',
       'onPressed' : true

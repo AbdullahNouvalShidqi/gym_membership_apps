@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/home_class_model.dart';
 
 enum DetailState {none, loading, error}
 
@@ -16,14 +17,15 @@ class DetailViewModel with ChangeNotifier{
     notifyListeners();
   }
 
-  Future<ClassModel?> getDetail({required String name, required List<String> images, required String type}) async {
+  Future<ClassModel?> getDetail({required HomeClassModel item, required String type}) async {
     changeState(DetailState.loading);
 
     try{
       _classDetail = await MainAPI().getAllClass(type: type);
-      _classDetail = _classDetail.where((e) => e.name == name && e.type == type).toList();
+      _classDetail = _classDetail.where((e) => e.name == item.name && e.type == type).toList();
       if(_classDetail.isNotEmpty){
-        _classDetail.first.images = images;
+        _classDetail.first.images = item.images;
+        _classDetail.first.description = item.description;
       }
       changeState(DetailState.none);
     }
@@ -34,13 +36,14 @@ class DetailViewModel with ChangeNotifier{
     return _classDetail.first;
   }
 
-  Future<ClassModel?> refreshDetail({required String name, required List<String> images, required String type}) async {
+  Future<ClassModel?> refreshDetail({required HomeClassModel item, required String type}) async {
     
     try{
       _classDetail = await MainAPI().getAllClass(type: type);
-      _classDetail = _classDetail.where((e) => e.name == name && e.type == type).toList();
+      _classDetail = _classDetail.where((e) => e.name == item.name && e.type == type).toList();
       if(_classDetail.isNotEmpty){
-        _classDetail.first.images = images;
+        _classDetail.first.images = item.images;
+        _classDetail.first.description = item.description;
       }
       changeState(DetailState.none);
     }

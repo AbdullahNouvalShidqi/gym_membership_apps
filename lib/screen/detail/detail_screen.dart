@@ -34,7 +34,7 @@ class _DetailScreenState extends State<DetailScreen> {
       final data = ModalRoute.of(context)!.settings.arguments as Map;
       final item = data['homeClassModel'] as HomeClassModel;
       final type = data['type'] as String;
-      classModel = await detailViewModel.getDetail(name: item.name, images: item.images, type: type);
+      classModel = await detailViewModel.getDetail(item: item, type: type);
     });
     super.initState();
   }
@@ -56,7 +56,7 @@ class _DetailScreenState extends State<DetailScreen> {
           if(isError){
             return CostumErrorScreen(
               onPressed: () async {
-                classModel = await detailViewModel.getDetail(name: item.name, images: item.images, type: type);
+                classModel = await detailViewModel.getDetail(item: item, type: type);
                 if(classModel == null){
                   Fluttertoast.showToast(msg: 'No data found');
                 }
@@ -69,7 +69,7 @@ class _DetailScreenState extends State<DetailScreen> {
               svgAssetLink: 'assets/icons/empty_class.svg',
               emptyListViewFor: EmptyListViewFor.detail,
               onRefresh: () async {
-                classModel = await detailViewModel.refreshDetail(name: item.name, images: item.images, type: type);
+                classModel = await detailViewModel.refreshDetail(item: item, type: type);
                 if(classModel == null){
                   Fluttertoast.showToast(msg: 'No data found');
                 }

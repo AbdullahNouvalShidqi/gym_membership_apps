@@ -116,8 +116,11 @@ class _DetailScreenState extends State<DetailScreen> {
                             const SizedBox(height: 5),
                             GymLocation(location: classModel!.location),
                             const SizedBox(height: 10),
-                            SizedBox(height: MediaQuery.of(context).size.height - 575, child: ClassDetail(item: classModel!)),
-                            SeeAvalableClassButton(item: classModel!)
+                            SizedBox(
+                              height: MediaQuery.of(context).size.height - 575,
+                              child: ClassDetail(item: classModel!),
+                            ),
+                            SeeAvalableClassButton(item: classModel!),
                           ],
                         ),
                       ),

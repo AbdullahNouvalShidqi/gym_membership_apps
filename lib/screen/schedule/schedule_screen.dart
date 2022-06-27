@@ -20,7 +20,10 @@ class ScheduleScreen extends StatefulWidget {
 }
 
 class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProviderStateMixin {
-  late final AnimationController _animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 100));
+  late final AnimationController _animationController = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 100),
+  );
   int _currentIndex = 0;
 
   @override
@@ -94,12 +97,21 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                           controller: scheduleViewModel.scheduleListController,
                           child: ListView.builder(
                             controller: scheduleViewModel.scheduleListController,
-                            physics: isLoading ? const NeverScrollableScrollPhysics() : const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                            physics: isLoading
+                                ? const NeverScrollableScrollPhysics()
+                                : const AlwaysScrollableScrollPhysics(
+                                    parent: BouncingScrollPhysics(),
+                                  ),
                             itemCount: isLoading ? 8 : scheduleViewModel.listSchedule.length,
                             itemBuilder: (context, i) {
                               return InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, DetailScreen.routeName, arguments: {'homeClassModel': homeViewModel.classes.firstWhere((element) => element.name == allItem[i].name), 'type': allItem[i].type});
+                                  Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
+                                    'homeClassModel': homeViewModel.classes.firstWhere(
+                                      (element) => element.name == allItem[i].name,
+                                    ),
+                                    'type': allItem[i].type,
+                                  });
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 5),
@@ -121,19 +133,38 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
     );
   }
 
-  void Function() sortingButtonOnTap({required int i, required List<ClassModel> allItem, required ScheduleViewModel scheduleViewModel}) {
+  void Function() sortingButtonOnTap({
+    required int i,
+    required List<ClassModel> allItem,
+    required ScheduleViewModel scheduleViewModel,
+  }) {
     return () {
       if (_currentIndex != i) {
         setState(() {
           _currentIndex = i;
         });
 
-        _animationController.reverse().then((value) => checkSchedules(allItem: allItem, currentIndex: _currentIndex, scheduleViewModel: scheduleViewModel)).then((value) => _animationController.forward());
+        _animationController
+            .reverse()
+            .then(
+              (value) => checkSchedules(
+                allItem: allItem,
+                currentIndex: _currentIndex,
+                scheduleViewModel: scheduleViewModel,
+              ),
+            )
+            .then(
+              (value) => _animationController.forward(),
+            );
       }
     };
   }
 
-  void checkSchedules({required List<ClassModel> allItem, required int currentIndex, required ScheduleViewModel scheduleViewModel}) {
+  void checkSchedules({
+    required List<ClassModel> allItem,
+    required int currentIndex,
+    required ScheduleViewModel scheduleViewModel,
+  }) {
     if (currentIndex == 0) {
       scheduleViewModel.resetSort();
     }

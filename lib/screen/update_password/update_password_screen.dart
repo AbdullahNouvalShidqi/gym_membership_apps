@@ -178,7 +178,9 @@ class ContinueButton extends StatelessWidget {
       onPressed: () {
         if (!formKey.currentState!.validate()) return;
         showModalBottomSheet(
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+          ),
           isScrollControlled: true,
           context: context,
           builder: (context) {

@@ -72,7 +72,9 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
                           final isError = scheduleViewModel.state == ScheduleViewState.error;
                           return CostumButton(
                             isLoading: isLoading,
-                            onPressed: scheduleViewModel.listSchedule.any((element) => element.id == item.id && element.type == item.type)
+                            onPressed: scheduleViewModel.listSchedule.any(
+                              (element) => element.id == item.id && element.type == item.type,
+                            )
                                 ? null
                                 : bookNowOnTap(
                                     scheduleViewModel: scheduleViewModel,
@@ -359,10 +361,22 @@ class CostumSubCard extends StatelessWidget {
                       text: '1. Select another Menu > Transfer\n2. Select the origin account and select the destination account to MANDIRI account\n3. Enter the account number ',
                       style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
                       children: [
-                        TextSpan(text: '12345678910 ', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor)),
-                        TextSpan(text: 'and select correct\n4. Enter the payment amount ', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black)),
-                        TextSpan(text: 'Rp.300.000 ', style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor)),
-                        TextSpan(text: "and select correct\n5. Check the data on the screen. Make sure the name is the recipient's name, and the amount is correct. If so, select Yes.", style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black)),
+                        TextSpan(
+                          text: '12345678910 ',
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
+                        ),
+                        TextSpan(
+                          text: 'and select correct\n4. Enter the payment amount ',
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text: 'Rp.300.000 ',
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
+                        ),
+                        TextSpan(
+                          text: "and select correct\n5. Check the data on the screen. Make sure the name is the recipient's name, and the amount is correct. If so, select Yes.",
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
+                        ),
                       ],
                     ),
                   ),

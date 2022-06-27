@@ -25,6 +25,7 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context).user;
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Booking Class', style: Utilities.appBarTextStyle),
@@ -45,7 +46,7 @@ class _BookScreenState extends State<BookScreen> {
             const SizedBox(height: 20),
             UserInformation(user: user),
             CostumButtons(item: item, backToHomeOnTap: backToHomeOnTap),
-            const SizedBox(height: 30)
+            const SizedBox(height: 30),
           ],
         ),
       ),
@@ -83,7 +84,10 @@ class BookingDetail extends StatelessWidget {
             Container(
               height: 108,
               width: 83,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), image: DecorationImage(image: AssetImage(item.images.first), fit: BoxFit.cover)),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(image: AssetImage(item.images.first), fit: BoxFit.cover),
+              ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -127,7 +131,7 @@ class BookingDetail extends StatelessWidget {
                     children: [
                       const Icon(Icons.location_on_outlined, size: 10, color: Colors.grey),
                       const SizedBox(width: 5),
-                      Text(item.location, style: const TextStyle(fontSize: 10, color: Colors.grey))
+                      Text(item.location, style: const TextStyle(fontSize: 10, color: Colors.grey)),
                     ],
                   ),
                 ],

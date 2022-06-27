@@ -2,7 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CostumFormField extends StatefulWidget {
-  const CostumFormField({Key? key, required this.controller, required this.label, required this.hintText, required this.prefixIcon, this.textInputType, this.useIconHidePassword = false, required this.validator}) : super(key: key);
+  const CostumFormField({
+    Key? key,
+    required this.controller,
+    required this.label,
+    required this.hintText,
+    required this.prefixIcon,
+    this.textInputType,
+    this.useIconHidePassword = false,
+    required this.validator,
+  }) : super(key: key);
   final TextEditingController controller;
   final String label;
   final String hintText;

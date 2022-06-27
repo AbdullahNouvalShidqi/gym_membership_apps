@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
@@ -32,9 +31,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             children: [
               const MainLogo(),
               const MainTitle(),
-              const SizedBox(
-                height: 35,
-              ),
+              const SizedBox(height: 35),
               Form(key: _formKey, child: EmailFormField(emailCtrl: _emailCtrl)),
               const SizedBox(height: 24),
               ContinueButton(

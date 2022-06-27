@@ -72,9 +72,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     hasError: hasError,
                     onChanged: costumPinOnChanged,
                   ),
-                  const SizedBox(
-                    height: 6,
-                  ),
+                  const SizedBox(height: 6),
                   hasError
                       ? const Text(
                           'Please enter a valid OTP',

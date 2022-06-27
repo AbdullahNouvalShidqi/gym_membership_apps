@@ -50,7 +50,11 @@ class CostumDialog extends StatelessWidget {
                           onPressed: trueOnPressed,
                           child: Text(
                             trueText,
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Utilities.primaryColor,
+                            ),
                           ),
                         ),
                         const SizedBox(
@@ -60,7 +64,11 @@ class CostumDialog extends StatelessWidget {
                           onPressed: falseOnPressed,
                           child: Text(
                             falseText!,
-                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.myWhiteColor),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: Utilities.myWhiteColor,
+                            ),
                           ),
                         )
                       ],

@@ -205,7 +205,14 @@ class CarouselTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomLeft,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), gradient: const LinearGradient(colors: [Colors.black, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.center)),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+        gradient: const LinearGradient(
+          colors: [Colors.black, Colors.transparent],
+          begin: Alignment.bottomCenter,
+          end: Alignment.center,
+        ),
+      ),
       height: 60,
       width: double.infinity,
       child: Padding(

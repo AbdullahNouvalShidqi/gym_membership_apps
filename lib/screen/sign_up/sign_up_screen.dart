@@ -72,7 +72,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   rememberMe: _rememberMe,
                   mounted: mounted,
                 ),
-                Center(child: Text('OR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+                Center(
+                  child: Text(
+                    'OR',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]),
+                  ),
+                ),
                 googleSiugnUpButton(),
                 ToSignInButton(
                   emailCtrl: _emailCtrl,
@@ -131,7 +136,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Future<bool> willPopValidation() async {
-    if (_usernameCtrl.text.isNotEmpty || _emailCtrl.text.isNotEmpty || _phoneNumberCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty) {
+    if (_usernameCtrl.text.isNotEmpty ||
+        _emailCtrl.text.isNotEmpty ||
+        _phoneNumberCtrl.text.isNotEmpty ||
+        _passwordCtrl.text.isNotEmpty) {
       bool willPop = false;
       await showDialog(
         context: context,
@@ -154,7 +162,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return willPop;
     } else {
       DateTime now = DateTime.now();
-      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst) {
+      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) &&
+          ModalRoute.of(context)!.isFirst) {
         currentBackPressTime = now;
         Fluttertoast.showToast(msg: 'Press back again to exit');
         return false;
@@ -267,7 +276,10 @@ class PhoneNumberFormField extends StatelessWidget {
         validator: (newValue) {
           if (newValue == null || newValue.isEmpty || newValue == ' ') {
             return 'Please enter your phone number';
-          } else if (newValue.contains('  ') || int.tryParse(newValue) == null || newValue.length < 11 || newValue.length > 13) {
+          } else if (newValue.contains('  ') ||
+              int.tryParse(newValue) == null ||
+              newValue.length < 11 ||
+              newValue.length > 13) {
             return 'Please enter a valid phone number';
           }
           return null;
@@ -420,7 +432,11 @@ class SignUpButton extends StatelessWidget {
                 await signUpViewModel.getAllUser();
                 if (!formKey.currentState!.validate()) return;
 
-                await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, email: emailCtrl.text, contact: phoneNumberCtrl.text, password: passwordCtrl.text);
+                await signUpViewModel.signUpWithEmailAndPassword(
+                    username: usernameCtrl.text,
+                    email: emailCtrl.text,
+                    contact: phoneNumberCtrl.text,
+                    password: passwordCtrl.text);
 
                 final isError = signUpViewModel.state == SignUpState.error;
 
@@ -481,7 +497,10 @@ class ToSignInButton extends StatelessWidget {
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
                 recognizer: TapGestureRecognizer()
                   ..onTap = () async {
-                    if (usernameCtrl.text.isNotEmpty || emailCtrl.text.isNotEmpty || phoneNumberCtrl.text.isNotEmpty || passwordCtrl.text.isNotEmpty) {
+                    if (usernameCtrl.text.isNotEmpty ||
+                        emailCtrl.text.isNotEmpty ||
+                        phoneNumberCtrl.text.isNotEmpty ||
+                        passwordCtrl.text.isNotEmpty) {
                       bool willPop = false;
                       await showDialog(
                           context: context,

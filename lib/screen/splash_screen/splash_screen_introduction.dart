@@ -43,7 +43,11 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    CarouselIndicator(carouselCtrl: _carouselCtrl, currentIndex: _currentIndex, splashScreenViewModel: splashScreenViewModel),
+                    CarouselIndicator(
+                      carouselCtrl: _carouselCtrl,
+                      currentIndex: _currentIndex,
+                      splashScreenViewModel: splashScreenViewModel,
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -72,7 +76,8 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
 
   Future<bool> willPopValidation() async {
     DateTime now = DateTime.now();
-    if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst) {
+    if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) &&
+        ModalRoute.of(context)!.isFirst) {
       currentBackPressTime = now;
       Fluttertoast.showToast(msg: 'Press back again to exit');
       return Future.value(false);
@@ -82,7 +87,9 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
 }
 
 class MainCarousel extends StatelessWidget {
-  const MainCarousel({Key? key, required this.carouselCtrl, required this.splashScreenViewModel, required this.onPageChanged}) : super(key: key);
+  const MainCarousel(
+      {Key? key, required this.carouselCtrl, required this.splashScreenViewModel, required this.onPageChanged})
+      : super(key: key);
   final CarouselController carouselCtrl;
   final SplashScreenViewModel splashScreenViewModel;
   final dynamic Function(int, CarouselPageChangedReason) onPageChanged;
@@ -175,7 +182,8 @@ class CarouselIndicator extends StatelessWidget {
 }
 
 class GetStartedButton extends StatelessWidget {
-  const GetStartedButton({Key? key, required this.currentIndex, required this.carouselCtrl, required this.onPressed}) : super(key: key);
+  const GetStartedButton({Key? key, required this.currentIndex, required this.carouselCtrl, required this.onPressed})
+      : super(key: key);
   final int currentIndex;
   final CarouselController carouselCtrl;
   final void Function() onPressed;
@@ -190,7 +198,10 @@ class GetStartedButton extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 34, 85, 156)),
           fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 50)),
         ),
-        child: const Text('Get Started', style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w500)),
+        child: const Text(
+          'Get Started',
+          style: TextStyle(fontSize: 24, color: Colors.white, fontWeight: FontWeight.w500),
+        ),
       ),
     );
   }

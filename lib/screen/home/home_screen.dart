@@ -26,9 +26,21 @@ class HomeScreen extends StatelessWidget {
             ),
             bottomNavigationBar: BottomNavigationBar(
               items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home_outlined), activeIcon: Icon(Icons.home), label: 'Home'),
-                BottomNavigationBarItem(icon: Icon(Icons.calendar_month_outlined), activeIcon: Icon(Icons.calendar_month), label: 'Schedule'),
-                BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_crop_rectangle), activeIcon: Icon(CupertinoIcons.person_crop_rectangle_fill), label: 'Profile'),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_outlined),
+                  activeIcon: Icon(Icons.home),
+                  label: 'Home',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.calendar_month_outlined),
+                  activeIcon: Icon(Icons.calendar_month),
+                  label: 'Schedule',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.person_crop_rectangle),
+                  activeIcon: Icon(CupertinoIcons.person_crop_rectangle_fill),
+                  label: 'Profile',
+                ),
               ],
               onTap: (index) {
                 final onGoToSchedule = homeViewModel.currentPage != 'Schedule';

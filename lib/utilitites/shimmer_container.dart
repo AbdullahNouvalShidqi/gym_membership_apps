@@ -33,7 +33,11 @@ class _ShimmerContainerState extends State<ShimmerContainer> {
       decoration: BoxDecoration(
         borderRadius: widget.borderRadius,
         color: Colors.black,
-        boxShadow: widget.useBoxShadow ? const [BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))] : null,
+        boxShadow: widget.useBoxShadow
+            ? const [
+                BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230)),
+              ]
+            : null,
         shape: widget.boxShape ?? BoxShape.rectangle,
       ),
       child: widget.child,

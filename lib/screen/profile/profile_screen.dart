@@ -111,10 +111,11 @@ class MainProfile extends StatelessWidget {
     return Column(
       children: [
         const Padding(
-            padding: EdgeInsets.only(top: 40),
-            child: Center(
-              child: Text('Profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
-            )),
+          padding: EdgeInsets.only(top: 40),
+          child: Center(
+            child: Text('Profile', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black)),
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.only(top: 30),
           child: CircleAvatar(radius: 40, child: Image.asset('assets/profile.png')),
@@ -150,19 +151,33 @@ class TabButton extends StatelessWidget {
       children: [
         ElevatedButton(
           onPressed: myAccountOnTap,
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(myAccountSelected ? Colors.white : null), side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(myAccountSelected ? Colors.white : null),
+            side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor)),
+          ),
           child: Text(
             'My Account',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: myAccountSelected ? Utilities.myTheme.primaryColor : null),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: myAccountSelected ? Utilities.myTheme.primaryColor : null,
+            ),
           ),
         ),
         const SizedBox(width: 10),
         ElevatedButton(
           onPressed: progressOnTap,
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null), side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor))),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null),
+            side: MaterialStateProperty.all(BorderSide(color: Utilities.myTheme.primaryColor)),
+          ),
           child: Text(
             'Progress',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: progressSelected ? Utilities.myTheme.primaryColor : null),
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              color: progressSelected ? Utilities.myTheme.primaryColor : null,
+            ),
           ),
         ),
       ],
@@ -269,12 +284,20 @@ class ItemToReturn extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       DetailScreen.routeName,
-                      arguments: {'homeClassModel': homeViewModel.classes.firstWhere((element) => element.name == scheduleViewModel.listSchedule[i].name), 'type': scheduleViewModel.listSchedule[i].type},
+                      arguments: {
+                        'homeClassModel': homeViewModel.classes.firstWhere(
+                          (element) => element.name == scheduleViewModel.listSchedule[i].name,
+                        ),
+                        'type': scheduleViewModel.listSchedule[i].type,
+                      },
                     );
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: CostumCard(classModel: scheduleViewModel.listSchedule[i], whichScreen: CostumCardFor.profileScreen),
+                    child: CostumCard(
+                      classModel: scheduleViewModel.listSchedule[i],
+                      whichScreen: CostumCardFor.profileScreen,
+                    ),
                   ),
                 );
               },

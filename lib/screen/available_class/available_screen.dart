@@ -87,9 +87,11 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                   return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
                 }
                 if (isError) {
-                  return CostumErrorScreen(onPressed: () async {
-                    await availableClassViewModel.getAvailableClasses(item: item);
-                  });
+                  return CostumErrorScreen(
+                    onPressed: () async {
+                      await availableClassViewModel.getAvailableClasses(item: item);
+                    },
+                  );
                 }
                 return Column(
                   children: [
@@ -113,7 +115,11 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                         children: [
                           for (var i = 0; i < 7; i++) ...[
                             CostumListView(
-                              availableClasses: classes.where((element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day).toList(),
+                              availableClasses: classes
+                                  .where(
+                                    (element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day,
+                                  )
+                                  .toList(),
                             ),
                           ]
                         ],

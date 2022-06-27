@@ -263,7 +263,12 @@ class EmailFormField extends StatelessWidget {
 }
 
 class RememberMeCheckBox extends StatelessWidget {
-  const RememberMeCheckBox({Key? key, required this.rememberMe, required this.onChanged, required this.onTap}) : super(key: key);
+  const RememberMeCheckBox({
+    Key? key,
+    required this.rememberMe,
+    required this.onChanged,
+    required this.onTap,
+  }) : super(key: key);
   final bool rememberMe;
   final void Function(bool?) onChanged;
   final void Function() onTap;

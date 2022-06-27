@@ -8,11 +8,9 @@ class ClassApiModel {
   ClassApiModel({required this.success, required this.message, required this.data});
 
   ClassApiModel.fromJson(Map<String, dynamic> json)
-  :
-    success = json['success'],
-    message = json['message'],
-    data = (json['data'] as List).map((e) => ClassModel.fromJson(e)).toList()
-  ;
+      : success = json['success'],
+        message = json['message'],
+        data = (json['data'] as List).map((e) => ClassModel.fromJson(e)).toList();
 }
 
 class ClassModel {
@@ -29,31 +27,29 @@ class ClassModel {
   InstructorModel instructor;
 
   ClassModel({
-    required this.id, 
-    required this.name, 
-    required this.description, 
-    required this.startAt, 
-    required this.endAt, 
-    required this.qtyUsers, 
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.startAt,
+    required this.endAt,
+    required this.qtyUsers,
     required this.type,
     required this.price,
     required this.location,
     required this.images,
-    required this.instructor
+    required this.instructor,
   });
 
   ClassModel.fromJson(Map<String, dynamic> json)
-  : 
-    id = json['id'],
-    name = json['name'],
-    description = json['description'],
-    startAt = DateTime.parse(json['startAt']),
-    endAt = DateTime.parse(json['endAt']),
-    qtyUsers = json['qtyUsers'],
-    type = json['type'],
-    price = json['price'],
-    location = json['location'],
-    images = [],
-    instructor = InstructorModel.fromJson(json['idInstructor'])
-  ;
+      : id = json['id'],
+        name = json['name'],
+        description = json['description'],
+        startAt = DateTime.parse(json['startAt']),
+        endAt = DateTime.parse(json['endAt']),
+        qtyUsers = json['qtyUsers'],
+        type = json['type'],
+        price = json['price'],
+        location = json['location'],
+        images = [],
+        instructor = InstructorModel.fromJson(json['idInstructor']);
 }

@@ -19,23 +19,23 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void loadingDummy() async {
     final splashScreenModel = Provider.of<SplashScreenViewModel>(context, listen: false);
-    await precacheImage(const AssetImage('assets/google_logo.png') , context);
-    if(!mounted)return;
-    await precacheImage(const AssetImage('assets/splash1.png') , context);
-    if(!mounted)return;
-    await precacheImage(const AssetImage('assets/splash2.png') , context);
-    if(!mounted)return;
-    await precacheImage(const AssetImage('assets/splash3.png') , context);
-    
+    await precacheImage(const AssetImage('assets/google_logo.png'), context);
+    if (!mounted) return;
+    await precacheImage(const AssetImage('assets/splash1.png'), context);
+    if (!mounted) return;
+    await precacheImage(const AssetImage('assets/splash2.png'), context);
+    if (!mounted) return;
+    await precacheImage(const AssetImage('assets/splash3.png'), context);
+
     await splashScreenModel.checkIsFirsTime();
     final isFirstTime = splashScreenModel.isFirstTime;
 
     await Future.delayed(const Duration(seconds: 1));
-    
-    if(!mounted)return; 
-    if(isFirstTime){
+
+    if (!mounted) return;
+    if (isFirstTime) {
       Navigator.pushReplacementNamed(context, SplashScreenIntroduction.routeName);
-    }else{
+    } else {
       Navigator.pushReplacementNamed(context, LogInScreen.routeName);
     }
   }
@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    if(isInit){
+    if (isInit) {
       loadingDummy();
       isInit = false;
     }
@@ -58,25 +58,20 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset('assets/icons/logo.svg'),
-            const SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             const Text(
               'A-A Gym',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 32,
-                color: Colors.white,
-                fontWeight: FontWeight.w700
-              )
+              style: TextStyle(fontSize: 32, color: Colors.white, fontWeight: FontWeight.w700),
             ),
-            const SizedBox(height: 3,),
+            const SizedBox(height: 3),
             const Text(
               'Stay healthy and strong with us!!!',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.white
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.white),
             )
-          ]
+          ],
         ),
       ),
     );

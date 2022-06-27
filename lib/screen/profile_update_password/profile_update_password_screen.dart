@@ -25,18 +25,18 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
     _newPwCtrl.dispose();
     _confirmPwCtrl.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Update Password', style: Utilities.appBarTextStyle,),
+        title: const Text('Update Password', style: Utilities.appBarTextStyle),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
           icon: const Icon(Icons.arrow_back_ios),
-        )
-        
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 40),
@@ -47,12 +47,12 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 CurrentPasswordFormField(currentPwCtrl: _currentPwCtrl),
-                const SizedBox(height: 20,),
-                NewPasswordFormField(newPwCtrl: _newPwCtrl, currentPwCtrl: _currentPwCtrl,),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 20),
+                NewPasswordFormField(newPwCtrl: _newPwCtrl, currentPwCtrl: _currentPwCtrl),
+                const SizedBox(height: 20),
                 ConfirmFormField(confirmPwCtrl: _confirmPwCtrl, newPwCtrl: _newPwCtrl),
-                const SizedBox(height: 15,),
-                ContinueButton(formKey: _formKey,)
+                const SizedBox(height: 15),
+                ContinueButton(formKey: _formKey),
               ],
             ),
           ),
@@ -77,17 +77,16 @@ class CurrentPasswordFormField extends StatelessWidget {
           useIconHidePassword: true,
           prefixIcon: const Icon(Icons.lock_outline),
           textInputType: TextInputType.emailAddress,
-          validator: (newValue){
-            if(newValue == null || newValue.isEmpty || newValue == ' '){
+          validator: (newValue) {
+            if (newValue == null || newValue.isEmpty || newValue == ' ') {
               return 'Please enter your password';
-            }
-            else if(newValue != profileViewModel.user.password){
+            } else if (newValue != profileViewModel.user.password) {
               return 'Please enter your current password';
             }
             return null;
           },
         );
-      }
+      },
     );
   }
 }
@@ -106,26 +105,20 @@ class NewPasswordFormField extends StatelessWidget {
       useIconHidePassword: true,
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.emailAddress,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
+      validator: (newValue) {
+        if (newValue == null || newValue.isEmpty || newValue == ' ') {
           return 'Please enter your password';
-        }
-        else if(newValue == currentPwCtrl.text){
+        } else if (newValue == currentPwCtrl.text) {
           return 'Enter new password';
-        }
-        else if(newValue.contains('  ')){
+        } else if (newValue.contains('  ')) {
           return 'Your password contains double space, please remove it';
-        }
-        else if(newValue.length < 6){
+        } else if (newValue.length < 6) {
           return 'The minimal length of password is 6';
-        }
-        else if(!Utilities.pwNeedOneCapital.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
           return 'Please enter at least one alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNonCapital.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
           return 'Please enter at least one non alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
           return 'Please enter at least one number in your password';
         }
         return null;
@@ -148,14 +141,12 @@ class ConfirmFormField extends StatelessWidget {
       useIconHidePassword: true,
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.visiblePassword,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
+      validator: (newValue) {
+        if (newValue == null || newValue.isEmpty || newValue == ' ') {
           return 'Please enter your password';
-        }
-        else if(newValue.contains('  ')){
+        } else if (newValue.contains('  ')) {
           return 'Please enter a valid password';
-        }
-        else if(newValue != newPwCtrl.text){
+        } else if (newValue != newPwCtrl.text) {
           return 'Please enter a same password';
         }
         return null;
@@ -172,13 +163,11 @@ class ContinueButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: (){
-          if(!formKey.currentState!.validate())return;
+        onPressed: () {
+          if (!formKey.currentState!.validate()) return;
         },
-        style: ButtonStyle(
-          fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))
-        ),
-        child: const Text('Continue', style: Utilities.buttonTextStyle)
+        style: ButtonStyle(fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 40))),
+        child: const Text('Continue', style: Utilities.buttonTextStyle),
       ),
     );
   }

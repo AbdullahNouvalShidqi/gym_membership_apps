@@ -11,7 +11,11 @@ class Shimmer extends StatefulWidget {
 
 class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   late final AnimationController _animationController = AnimationController.unbounded(vsync: this)
-      ..repeat(min: -1.0, max: 1.0, period: const Duration(milliseconds: 1000));
+    ..repeat(
+      min: -1.0,
+      max: 1.0,
+      period: const Duration(milliseconds: 1000),
+    );
 
   @override
   void initState() {
@@ -25,7 +29,7 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  void updateAnimation(){
+  void updateAnimation() {
     setState(() {});
   }
 
@@ -33,7 +37,7 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return ShaderMask(
       blendMode: BlendMode.srcATop,
-      shaderCallback: (bounds){
+      shaderCallback: (bounds) {
         return Utilities.gradient(value: _animationController.value).createShader(bounds);
       },
       child: widget.child,

@@ -41,18 +41,18 @@ class _HomePageScreenState extends State<HomePageScreen> {
           final classes = homeViewModel.classes;
           final user = profileViewModel.user;
 
-          if(isError){
+          if (isError) {
             return CostumErrorScreen(
-              onPressed: () async{
+              onPressed: () async {
                 await homeViewModel.getInitData();
               },
             );
           }
 
-          if(isLoading){
+          if (isLoading) {
             return const HomeShimmerLoading();
           }
-          
+
           return SingleChildScrollView(
             controller: homeViewModel.homeScrollController,
             child: Column(
@@ -65,14 +65,14 @@ class _HomePageScreenState extends State<HomePageScreen> {
                       const CircleAvatar(
                         backgroundColor: Utilities.primaryColor,
                         radius: 25,
-                        child: Icon(Icons.person, color: Colors.white,),
+                        child: Icon(Icons.person, color: Colors.white),
                       ),
-                      const SizedBox(width: 10,),
+                      const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Hello,', style: Utilities.greetingHomeStyle,),
-                          Text(user.username, style: Utilities.greetinSubHomeStyle)
+                          const Text('Hello,', style: Utilities.greetingHomeStyle),
+                          Text(user.username, style: Utilities.greetinSubHomeStyle),
                         ],
                       )
                     ],
@@ -84,20 +84,22 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
                       Text('Select', style: Utilities.homeViewMainTitleStyle),
-                      Text('Workout', style: Utilities.homeViewMainTitleStyle)
+                      Text('Workout', style: Utilities.homeViewMainTitleStyle),
                     ],
                   ),
                 ),
-                CostumHomeCard(homeClassModel: classes, type: 'Online', height: 164, width: 125,),
-                const SizedBox(height: 20,),
+                CostumHomeCard(homeClassModel: classes, type: 'Online', height: 164, width: 125),
+                const SizedBox(
+                  height: 20,
+                ),
                 CostumHomeCard(homeClassModel: classes.reversed.toList(), type: 'Offline', height: 164, width: 125),
-                const SizedBox(height: 20,),
+                const SizedBox(height: 20),
                 const TipsListView()
               ],
             ),
           );
-        }
-      )
+        },
+      ),
     );
   }
 }
@@ -116,9 +118,9 @@ class TipsListView extends StatelessWidget {
             children: [
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Text('Tips for you', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),),
+                child: Text('Tips for you', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
               ),
-              const SizedBox(height: 10,),
+              const SizedBox(height: 10),
               SizedBox(
                 height: 129,
                 child: ListView.builder(
@@ -126,29 +128,31 @@ class TipsListView extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   scrollDirection: Axis.horizontal,
                   itemCount: homeViewModel.articles.length,
-                  itemBuilder: (context, i){
+                  itemBuilder: (context, i) {
                     return InkWell(
                       onTap: () async {
                         var url = Uri.parse(homeViewModel.articles[i].url);
-                        if(await canLaunchUrl(url)){
+                        if (await canLaunchUrl(url)) {
                           await launchUrl(url, mode: LaunchMode.inAppWebView);
-                        }
-                        else{
+                        } else {
                           Fluttertoast.showToast(msg: 'Error: Cannot open url');
-                        }  
+                        }
                       },
                       child: SizedBox(
                         width: 210,
-                        child: TipsImage(imageUrl: homeViewModel.articles[i].imageUrl, title: homeViewModel.articles[i].title),
+                        child: TipsImage(
+                          imageUrl: homeViewModel.articles[i].imageUrl,
+                          title: homeViewModel.articles[i].title,
+                        ),
                       ),
                     );
-                  }
+                  },
                 ),
               )
             ],
           ),
         );
-      }
+      },
     );
   }
 }
@@ -166,7 +170,7 @@ class TipsImage extends StatelessWidget {
         imageUrl: imageUrl,
         width: 800,
         fit: BoxFit.cover,
-        placeholder: (context, child){
+        placeholder: (context, child) {
           return Container(
             height: 600,
             width: 800,
@@ -177,18 +181,15 @@ class TipsImage extends StatelessWidget {
             child: const SpinKitPianoWave(color: Colors.white),
           );
         },
-        imageBuilder: (context, image){
+        imageBuilder: (context, image) {
           return Container(
             height: 600,
             width: 800,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(
-                image: image,
-                fit: BoxFit.cover
-              ),
+              image: DecorationImage(image: image, fit: BoxFit.cover),
             ),
-            child: CarouselTitle(title: title)
+            child: CarouselTitle(title: title),
           );
         },
       ),
@@ -204,19 +205,15 @@ class CarouselTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       alignment: Alignment.bottomLeft,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        gradient: const LinearGradient(
-          colors: [Colors.black,  Colors.transparent], 
-          begin: Alignment.bottomCenter,
-          end: Alignment.center
-        )
-      ),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8), gradient: const LinearGradient(colors: [Colors.black, Colors.transparent], begin: Alignment.bottomCenter, end: Alignment.center)),
       height: 60,
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 11, vertical: 8),
-        child: Text(title, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white),),
+        child: Text(
+          title,
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white),
+        ),
       ),
     );
   }

@@ -33,14 +33,14 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                       const CircleAvatar(
                         backgroundColor: Utilities.primaryColor,
                         radius: 25,
-                        child: Icon(Icons.person, color: Colors.white,),
+                        child: Icon(Icons.person, color: Colors.white),
                       ),
-                      const SizedBox(width: 10,),
+                      const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text('Hello,', style: Utilities.greetingHomeStyle,),
-                          Text(user.username, style: Utilities.greetinSubHomeStyle)
+                          const Text('Hello,', style: Utilities.greetingHomeStyle),
+                          Text(user.username, style: Utilities.greetinSubHomeStyle),
                         ],
                       )
                     ],
@@ -52,15 +52,15 @@ class _SeeAllScrenState extends State<SeeAllScren> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text('Select', style: Utilities.homeViewMainTitleStyle),
-                      Text('$type Class', style: Utilities.homeViewMainTitleStyle)
+                      Text('$type Class', style: Utilities.homeViewMainTitleStyle),
                     ],
                   ),
                 ),
                 CostumGridView(type: type)
-              ]
+              ],
             ),
           );
-        }
+        },
       ),
     );
   }

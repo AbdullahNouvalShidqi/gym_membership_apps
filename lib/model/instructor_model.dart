@@ -8,21 +8,19 @@ class InstructorModel {
     required this.id,
     required this.name,
     required this.contact,
-    required this.email
+    required this.email,
   });
 
   InstructorModel.fromJson(Map<String, dynamic> json)
-  : 
-    id = json['id'],
-    name = json['name'],
-    contact = json['contact'],
-    email = json['email']
-  ;
+      : id = json['id'],
+        name = json['name'],
+        contact = json['contact'],
+        email = json['email'];
 
-   toJson() =>{
-    'id' : id,
-    'name' : name,
-    'contact' : contact,
-    'email' : email
-  };
+  toJson() => {
+        'id': id,
+        'name': name,
+        'contact': contact,
+        'email': email,
+      };
 }

@@ -67,25 +67,25 @@ class MyApp extends StatelessWidget {
         title: 'My Gym Apps',
         theme: Utilities.myTheme,
         home: const SplashScreen(),
-        onGenerateRoute: (settings){
-          if(settings.name == SplashScreen.routeName){
+        onGenerateRoute: (settings) {
+          if (settings.name == SplashScreen.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const SplashScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 final tween = Tween(begin: 0.0, end: 1.0);
                 return ScaleTransition(
                   scale: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
-          if(settings.name == LogInScreen.routeName){
+          if (settings.name == LogInScreen.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const LogInScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(-1.0, 0.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
@@ -93,14 +93,14 @@ class MyApp extends StatelessWidget {
                   position: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
-          if(settings.name == SignUpScreen.routeName){
+          if (settings.name == SignUpScreen.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const SignUpScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
@@ -108,14 +108,14 @@ class MyApp extends StatelessWidget {
                   position: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
-          if(settings.name == HomeScreen.routeName){
+          if (settings.name == HomeScreen.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const HomeScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(0.0, 1.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
@@ -123,14 +123,14 @@ class MyApp extends StatelessWidget {
                   position: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
-          if(settings.name == SplashScreenIntroduction.routeName){
+          if (settings.name == SplashScreenIntroduction.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const SplashScreenIntroduction(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(0.0, 1.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
@@ -138,14 +138,14 @@ class MyApp extends StatelessWidget {
                   position: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
-          if(settings.name == ForgotPasswordScreen.routeName){
+          if (settings.name == ForgotPasswordScreen.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const ForgotPasswordScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
@@ -153,14 +153,14 @@ class MyApp extends StatelessWidget {
                   position: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
-          if(settings.name == OtpScreen.routeName){
+          if (settings.name == OtpScreen.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const OtpScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
@@ -168,14 +168,14 @@ class MyApp extends StatelessWidget {
                   position: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
-          if(settings.name == UpdatePasswordScreen.routeName){
+          if (settings.name == UpdatePasswordScreen.routeName) {
             return PageRouteBuilder(
               settings: settings,
               pageBuilder: (context, animation, secondaryAnimation) => const UpdatePasswordScreen(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child){
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);
                 const end = Offset.zero;
                 final tween = Tween(begin: begin, end: end);
@@ -183,7 +183,7 @@ class MyApp extends StatelessWidget {
                   position: animation.drive(tween),
                   child: child,
                 );
-              }
+              },
             );
           }
           return null;

@@ -10,12 +10,15 @@ class TermsAndConditionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Terms and Conditions', style: Utilities.appBarTextStyle,),
+        title: const Text(
+          'Terms and Conditions',
+          style: Utilities.appBarTextStyle,
+        ),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios)
+          icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
       body: Padding(
@@ -28,7 +31,7 @@ class TermsAndConditionsScreen extends StatelessWidget {
               width: double.infinity,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Utilities.primaryColor)
+                border: Border.all(color: Utilities.primaryColor),
               ),
               margin: const EdgeInsets.only(top: 10),
               child: const SingleChildScrollView(
@@ -41,8 +44,11 @@ class TermsAndConditionsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 23,),
-            Text('Last updated: ${DateFormat('MMMM d, y').format(DateTime(2021, 6, 1))}', style: const TextStyle(fontSize: 12, color: Color.fromRGBO(153, 153, 153, 1)),)
+            const SizedBox(height: 23),
+            Text(
+              'Last updated: ${DateFormat('MMMM d, y').format(DateTime(2021, 6, 1))}',
+              style: const TextStyle(fontSize: 12, color: Color.fromRGBO(153, 153, 153, 1)),
+            )
           ],
         ),
       ),

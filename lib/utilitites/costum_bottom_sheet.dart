@@ -8,7 +8,7 @@ class CostumBottomSheet extends StatelessWidget {
     required this.title,
     required this.content,
     required this.buttonText,
-    required this.onPressed
+    required this.onPressed,
   }) : super(key: key);
   final String title;
   final String content;
@@ -23,28 +23,40 @@ class CostumBottomSheet extends StatelessWidget {
         child: Column(
           children: [
             SvgPicture.asset('assets/icons/otp_success_logo.svg'),
-            const SizedBox(height: 15,),
+            const SizedBox(height: 15),
             SizedBox(
               width: 252,
               child: Column(
                 children: [
-                  Text(title, textAlign: TextAlign.center, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),),
-                  const Text('Succesful', textAlign: TextAlign.center, style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),),
+                  Text(
+                    title,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                  ),
+                  const Text(
+                    'Succesful',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(height: 10),
             SizedBox(
               width: 252,
-              child: Text(content, textAlign: TextAlign.center, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),)
+              child: Text(
+                content,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              ),
             ),
-            const SizedBox(height: 25,),
+            const SizedBox(height: 25),
             CostumButton(
               width: 252,
               onPressed: onPressed,
               height: 56,
               childTextStyle: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
-              childText: buttonText
+              childText: buttonText,
             )
           ],
         ),

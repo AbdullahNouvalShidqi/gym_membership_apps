@@ -39,13 +39,13 @@ class _LogInScreenState extends State<LogInScreen> {
 
   void setEmailAndPassword() async {
     _sharedPreferences = await SharedPreferences.getInstance();
-    if(_sharedPreferences.getString('rememberMe') == null)return;
+    if (_sharedPreferences.getString('rememberMe') == null) return;
 
     final Map<String, dynamic> userData = jsonDecode(_sharedPreferences.getString('rememberMe')!);
     _emailCtrl.text = userData['email'];
     _passwordCtrl.text = userData['password'];
     setState(() {
-      _rememberMe = true;  
+      _rememberMe = true;
     });
   }
 
@@ -70,14 +70,10 @@ class _LogInScreenState extends State<LogInScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const MainTitle(),
-                  EmailFormField(
-                    emailCtrl: _emailCtrl,
-                  ),
-                  const SizedBox(height: 10,),
-                  PasswordFormField(
-                    passwordCtrl: _passwordCtrl,
-                  ),
-                  const SizedBox(height: 15,),
+                  EmailFormField(emailCtrl: _emailCtrl),
+                  const SizedBox(height: 10),
+                  PasswordFormField(passwordCtrl: _passwordCtrl),
+                  const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -96,42 +92,45 @@ class _LogInScreenState extends State<LogInScreen> {
                     rememberMe: _rememberMe,
                     mounted: mounted,
                   ),
-                  Center(child: Text('OR', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]))),
+                  Center(
+                    child: Text(
+                      'OR',
+                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]),
+                    ),
+                  ),
                   googleLoginButton(),
                   const ToSignUpButton()
                 ],
               ),
             ),
-          )
+          ),
         ),
       ),
     );
   }
 
-  void rememberMeCheckBoxOnTap(bool? newValue){
+  void rememberMeCheckBoxOnTap(bool? newValue) {
     setState(() {
       _rememberMe = newValue!;
     });
   }
 
-  void rememberMeLabelOnTap(){
+  void rememberMeLabelOnTap() {
     setState(() {
       _rememberMe = !_rememberMe;
     });
   }
 
-  Widget googleLoginButton(){
+  Widget googleLoginButton() {
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 25),
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(Colors.white),
-            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
+            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45)),
           ),
-          onPressed: (){
-            
-          },
+          onPressed: () {},
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -140,7 +139,10 @@ class _LogInScreenState extends State<LogInScreen> {
                 width: 25,
               ),
               const SizedBox(width: 10),
-              const Text('Sign in with Google', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),)
+              const Text(
+                'Sign in with Google',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),
+              )
             ],
           ),
         ),
@@ -149,35 +151,32 @@ class _LogInScreenState extends State<LogInScreen> {
   }
 
   Future<bool> willPopValidation() async {
-    if(_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty){
+    if (_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty) {
       bool willPop = false;
       await showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return CostumDialog(
             title: 'Exit?',
             contentText: "You will lose your data you've filled!",
             trueText: 'Exit',
             falseText: 'Cancel',
-            trueOnPressed: (){
+            trueOnPressed: () {
               willPop = true;
               Navigator.pop(context);
             },
-            falseOnPressed: (){
+            falseOnPressed: () {
               Navigator.pop(context);
             },
           );
-        }
+        },
       );
       return willPop;
-    }
-    else{
+    } else {
       DateTime now = DateTime.now();
-      if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst){
+      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst) {
         currentBackPressTime = now;
-        Fluttertoast.showToast(
-          msg: 'Press back again to exit'
-        );
+        Fluttertoast.showToast(msg: 'Press back again to exit');
         return Future.value(false);
       }
       return Future.value(true);
@@ -197,23 +196,18 @@ class PasswordFormField extends StatelessWidget {
       hintText: 'Enter your password',
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.visiblePassword,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
+      validator: (newValue) {
+        if (newValue == null || newValue.isEmpty || newValue == ' ') {
           return 'Please enter your password';
-        }
-        else if(newValue.contains('  ')){
+        } else if (newValue.contains('  ')) {
           return 'Your password contains double space, please remove it';
-        }
-        else if(newValue.length < 6){
+        } else if (newValue.length < 6) {
           return 'The minimal length of password is 6';
-        }
-        else if(!Utilities.pwNeedOneCapital.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
           return 'Please enter at least one alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNonCapital.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
           return 'Please enter at least one non alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
           return 'Please enter at least one number in your password';
         }
         return null;
@@ -234,9 +228,9 @@ class MainTitle extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const [
-            Text('Hello! Welcome back!', style: Utilities.signInSignUpMainTitleStyle,),
-            SizedBox(height: 4,),
-            Text("Hello again, You've been missed!", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400))
+            Text('Hello! Welcome back!', style: Utilities.signInSignUpMainTitleStyle),
+            SizedBox(height: 4),
+            Text("Hello again, You've been missed!", style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400)),
           ],
         ),
       ),
@@ -256,15 +250,14 @@ class EmailFormField extends StatelessWidget {
       hintText: 'Enter your email address',
       prefixIcon: const Icon(Icons.email_outlined),
       textInputType: TextInputType.emailAddress,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
+      validator: (newValue) {
+        if (newValue == null || newValue.isEmpty || newValue == ' ') {
           return 'Please enter your email address';
-        }
-        else if(!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')){
+        } else if (!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')) {
           return 'Please enter a valid email address';
         }
         return null;
-      }
+      },
     );
   }
 }
@@ -277,7 +270,7 @@ class RememberMeCheckBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Row(
+    return Row(
       children: [
         Transform.scale(
           scale: 1.2,
@@ -285,19 +278,17 @@ class RememberMeCheckBox extends StatelessWidget {
             height: 24,
             width: 24,
             child: Checkbox(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
               value: rememberMe,
-              onChanged: onChanged
+              onChanged: onChanged,
             ),
           ),
         ),
-        const SizedBox(width: 5,),
+        const SizedBox(width: 5),
         GestureDetector(
           onTap: onTap,
-          child: const Text('Remember Me', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold,))
+          child: const Text('Remember Me', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
         )
       ],
     );
@@ -310,16 +301,23 @@ class ForgotPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         Navigator.pushNamed(context, ForgotPasswordScreen.routeName);
       },
-      child: const Text('Forgot Password', style: TextStyle(fontSize: 12, color: Colors.red))
+      child: const Text('Forgot Password', style: TextStyle(fontSize: 12, color: Colors.red)),
     );
   }
 }
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({Key? key, required this.formKey, required this.emailCtrl, required this.passwordCtrl, required this.rememberMe, required this.mounted}) : super(key: key);
+  const LoginButton({
+    Key? key,
+    required this.formKey,
+    required this.emailCtrl,
+    required this.passwordCtrl,
+    required this.rememberMe,
+    required this.mounted,
+  }) : super(key: key);
   final GlobalKey<FormState> formKey;
   final TextEditingController emailCtrl;
   final TextEditingController passwordCtrl;
@@ -340,40 +338,39 @@ class LoginButton extends StatelessWidget {
               isLoading: isLoading,
               childText: 'Login',
               onPressed: () async {
-                if(!formKey.currentState!.validate())return;
+                if (!formKey.currentState!.validate()) return;
                 final allUser = await logInViewModel.getAllUser();
                 final email = emailCtrl.text.toLowerCase();
                 final isError = logInViewModel.state == LogInState.error;
-                
-                if(isError){
+
+                if (isError) {
                   Fluttertoast.showToast(msg: 'Error: Something went wrong, try again');
                   return;
                 }
 
                 final userData = allUser.where((element) => element.email.toLowerCase() == email).toList();
 
-                if(userData.isEmpty || userData.length > 1 || userData.first.password != passwordCtrl.text){
+                if (userData.isEmpty || userData.length > 1 || userData.first.password != passwordCtrl.text) {
                   Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
                   return;
                 }
 
-                if(rememberMe){
+                if (rememberMe) {
                   await logInViewModel.rememberMe(email: userData.first.email, password: userData.first.password);
-                }
-                else{
+                } else {
                   await logInViewModel.dontRememberMe();
                 }
 
                 ProfileViewModel.setUserData(currentUser: userData.first);
 
-                if(!mounted)return;
+                if (!mounted) return;
                 Fluttertoast.showToast(msg: 'Log in successful!');
                 Navigator.pushReplacementNamed(context, HomeScreen.routeName);
               },
-            )
+            ),
           ),
         );
-      }
+      },
     );
   }
 }
@@ -394,14 +391,15 @@ class ToSignUpButton extends StatelessWidget {
               TextSpan(
                 text: 'Sign Up',
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()..onTap = (){
-                  Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
-                }
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
+                  },
               )
-            ]
-          )
+            ],
+          ),
         ),
-      )
+      ),
     );
   }
 }

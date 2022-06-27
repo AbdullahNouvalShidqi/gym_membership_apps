@@ -5,9 +5,9 @@ import 'package:gym_membership_apps/model/api/email_js_api.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 
-enum ForgotPasswordState {none, loading, error}
+enum ForgotPasswordState { none, loading, error }
 
-class ForgotPasswordViewModel with ChangeNotifier{
+class ForgotPasswordViewModel with ChangeNotifier {
   static String _otp = '';
   static String get otp => _otp;
 
@@ -23,7 +23,7 @@ class ForgotPasswordViewModel with ChangeNotifier{
   ForgotPasswordState _state = ForgotPasswordState.none;
   ForgotPasswordState get state => _state;
 
-  void changeState(ForgotPasswordState s){
+  void changeState(ForgotPasswordState s) {
     _state = s;
     notifyListeners();
   }
@@ -31,11 +31,11 @@ class ForgotPasswordViewModel with ChangeNotifier{
   Future<void> getAllUser() async {
     changeState(ForgotPasswordState.loading);
 
-    try{
+    try {
       _allUser = [];
       _allUser = await MainAPI().getAllUser();
       changeState(ForgotPasswordState.none);
-    }catch(e){
+    } catch (e) {
       changeState(ForgotPasswordState.error);
     }
   }
@@ -43,26 +43,25 @@ class ForgotPasswordViewModel with ChangeNotifier{
   Future<void> sendOTP({required String email}) async {
     changeState(ForgotPasswordState.loading);
 
-    try{
+    try {
       _otp = await EmailJsAPI.sendOTP(email: email);
       _email = email;
-      
+
       int j = 0;
-      for(var i = 0; i < email.length; i++){
-        if(email[i] == '@'){
+      for (var i = 0; i < email.length; i++) {
+        if (email[i] == '@') {
           j = i;
         }
       }
-      for(j; j >= 3; j--){
-        email = email.replaceRange(j, j+1, '*');
+      for (j; j >= 3; j--) {
+        email = email.replaceRange(j, j + 1, '*');
       }
       _encryptedEmail = email;
 
       Fluttertoast.showToast(msg: 'OTP has sent to your email');
       changeState(ForgotPasswordState.none);
-    }
-    catch(e){
-      if(e is DioError){
+    } catch (e) {
+      if (e is DioError) {
         Fluttertoast.showToast(msg: e.message);
       }
       changeState(ForgotPasswordState.error);
@@ -71,12 +70,11 @@ class ForgotPasswordViewModel with ChangeNotifier{
 
   Future<void> resendOTP() async {
     changeState(ForgotPasswordState.loading);
-    try{
+    try {
       _otp = await EmailJsAPI.sendOTP(email: _email);
       Fluttertoast.showToast(msg: 'OTP has resend to your email');
       changeState(ForgotPasswordState.none);
-    }
-    catch(e){
+    } catch (e) {
       changeState(ForgotPasswordState.error);
     }
   }

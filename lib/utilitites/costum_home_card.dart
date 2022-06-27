@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class CostumHomeCard extends StatelessWidget {
-  const CostumHomeCard({Key? key, required this.homeClassModel, required this.type, required this.height, required this.width}) : super(key: key);
+  const CostumHomeCard({
+    Key? key,
+    required this.homeClassModel,
+    required this.type,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
   final List<HomeClassModel> homeClassModel;
   final String type;
   final double height;
@@ -20,17 +27,20 @@ class CostumHomeCard extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('$type Class', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),),
+              Text('$type Class', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
               InkWell(
-                onTap: (){
+                onTap: () {
                   Navigator.pushNamed(context, SeeAllScren.routeName, arguments: type);
                 },
-                child: Text('See All', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Theme.of(context).primaryColor),)
+                child: const Text(
+                  'See All',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
+                ),
               )
             ],
           ),
         ),
-        const SizedBox(height: 5,),
+        const SizedBox(height: 5),
         SizedBox(
           height: height,
           child: ListView.builder(
@@ -38,25 +48,23 @@ class CostumHomeCard extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.horizontal,
             itemCount: homeClassModel.length,
-            itemBuilder: (context, i){
+            itemBuilder: (context, i) {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: InkWell(
-                  onTap: (){
-                    Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
-                      'homeClassModel': homeClassModel[i],
-                      'type': type
-                    });
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      DetailScreen.routeName,
+                      arguments: {'homeClassModel': homeClassModel[i], 'type': type},
+                    );
                   },
-                  child: Container(                    
+                  child: Container(
                     width: width,
                     alignment: Alignment.bottomLeft,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: AssetImage(homeClassModel[i].images.first),
-                        fit: BoxFit.cover
-                      ),
+                      image: DecorationImage(image: AssetImage(homeClassModel[i].images.first), fit: BoxFit.cover),
                     ),
                     child: Container(
                       height: double.infinity,
@@ -64,9 +72,9 @@ class CostumHomeCard extends StatelessWidget {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         gradient: const LinearGradient(
-                          colors: [Colors.black,  Colors.transparent], 
+                          colors: [Colors.black, Colors.transparent],
                           begin: Alignment.bottomCenter,
-                          end: Alignment.center
+                          end: Alignment.center,
                         ),
                       ),
                       child: Padding(
@@ -75,16 +83,26 @@ class CostumHomeCard extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Text(homeClassModel[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                            const Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                            Text(
+                              homeClassModel[i].name,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+                            ),
+                            const Text(
+                              'Class',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+                            ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                )
+                ),
               );
-            }
+            },
           ),
         ),
       ],

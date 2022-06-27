@@ -24,58 +24,28 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: body()
-    );
-  }
-
-  Widget body(){
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const MainLogo(),
-            const MainTitle(),
-            const SizedBox(height: 35,),
-            Form(
-              key: _formKey,
-              child: EmailFormField(emailCtrl: _emailCtrl,)
-            ),
-            const SizedBox(height: 24,),
-            ContinueButton(
-              formKey: _formKey,
-              emailCtrl: _emailCtrl,
-              mounted: mounted,
-            )
-          ],
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MainLogo(),
+              const MainTitle(),
+              const SizedBox(
+                height: 35,
+              ),
+              Form(key: _formKey, child: EmailFormField(emailCtrl: _emailCtrl)),
+              const SizedBox(height: 24),
+              ContinueButton(
+                formKey: _formKey,
+                emailCtrl: _emailCtrl,
+                mounted: mounted,
+              )
+            ],
+          ),
         ),
       ),
-    );
-  }
-
-  Widget continueButton(){
-    return Consumer<ForgotPasswordViewModel>(
-      builder: (context, forgotPasswordViewModel, _) {
-        final isLoading = forgotPasswordViewModel.state == ForgotPasswordState.loading;
-        final isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
-        return CostumButton(
-          isLoading: isLoading,
-          onPressed: () async {
-            if(!_formKey.currentState!.validate())return;
-            await forgotPasswordViewModel.sendOTP(email: _emailCtrl.text);
-
-            if(isError){
-              Fluttertoast.showToast(msg: 'We failed to sent your email');
-              return;
-            }
-            
-            if(!mounted)return;
-            Navigator.pushReplacementNamed(context, OtpScreen.routeName);
-          },
-          childText: 'Continue'
-        );
-      }
     );
   }
 }
@@ -88,9 +58,7 @@ class MainLogo extends StatelessWidget {
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 130, bottom: 45),
-        child: SvgPicture.asset(
-          'assets/icons/fw_logo.svg',
-        ),
+        child: SvgPicture.asset('assets/icons/fw_logo.svg'),
       ),
     );
   }
@@ -106,10 +74,13 @@ class MainTitle extends StatelessWidget {
       children: [
         const SizedBox(
           width: 120,
-          child: Text('Forgot Password?', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),)
+          child: Text('Forgot Password?', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500)),
         ),
-        const SizedBox(height: 15,),
-        Text("Don't worry ! It happens. Please enter the email we will send the OTP in this email.", style: TextStyle(fontSize: 16, color: Colors.grey[700]),),
+        const SizedBox(height: 15),
+        Text(
+          "Don't worry ! It happens. Please enter the email we will send the OTP in this email.",
+          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+        ),
       ],
     );
   }
@@ -127,8 +98,8 @@ class EmailFormField extends StatelessWidget {
       hintText: 'Enter your email',
       prefixIcon: const Icon(Icons.email_outlined),
       textInputType: TextInputType.emailAddress,
-      validator: (newValue){
-        if(newValue == null || newValue == '' || newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(emailCtrl.text)){
+      validator: (newValue) {
+        if (newValue == null || newValue == '' || newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(emailCtrl.text)) {
           return 'Please enter a valid email';
         }
         return null;
@@ -138,7 +109,12 @@ class EmailFormField extends StatelessWidget {
 }
 
 class ContinueButton extends StatelessWidget {
-  const ContinueButton({Key? key, required this.formKey, required this.emailCtrl, required this.mounted}) : super(key: key);
+  const ContinueButton({
+    Key? key,
+    required this.formKey,
+    required this.emailCtrl,
+    required this.mounted,
+  }) : super(key: key);
   final GlobalKey<FormState> formKey;
   final TextEditingController emailCtrl;
   final bool mounted;
@@ -151,38 +127,36 @@ class ContinueButton extends StatelessWidget {
         return CostumButton(
           isLoading: isLoading,
           onPressed: () async {
-            if(!formKey.currentState!.validate())return;
+            if (!formKey.currentState!.validate()) return;
             await forgotPasswordViewModel.getAllUser();
             final allUser = forgotPasswordViewModel.allUser;
             final email = emailCtrl.text.toLowerCase();
             final isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
 
-            if(isError){
+            if (isError) {
               Fluttertoast.showToast(msg: 'Something went wrong, try again.');
               return;
             }
 
             final user = allUser.where((element) => element.email.toLowerCase() == email.toLowerCase());
 
-            if(user.length > 1 || user.isEmpty){
-              Fluttertoast.showToast(
-                msg: 'No user with email of $email found on our database, sign up first or check your email'
-              );
+            if (user.length > 1 || user.isEmpty) {
+              Fluttertoast.showToast(msg: 'No user with email of $email found on our database, sign up first or check your email');
               return;
             }
 
             await forgotPasswordViewModel.sendOTP(email: email);
 
-            if(isError){
+            if (isError) {
               Fluttertoast.showToast(msg: 'Error, we cannot send your otp, check your email or your internet');
               return;
             }
-            if(!mounted)return;
+            if (!mounted) return;
             Navigator.pushReplacementNamed(context, OtpScreen.routeName);
           },
-          childText: 'Continue'
+          childText: 'Continue',
         );
-      }
+      },
     );
   }
 }

@@ -21,27 +21,24 @@ class CostumGridView extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 20,
             mainAxisSpacing: 20,
-            childAspectRatio: 150/195
+            childAspectRatio: 150 / 195,
           ),
-          itemBuilder: (context, i){
+          itemBuilder: (context, i) {
             return InkWell(
-              onTap: (){
-                Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
-                  'homeClassModel': homeViewModel.classes[i],
-                  'type': type
-                });
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  DetailScreen.routeName,
+                  arguments: {'homeClassModel': homeViewModel.classes[i], 'type': type},
+                );
               },
-              child: 
-              Container(
+              child: Container(
                 height: 195,
                 width: 150,
                 alignment: Alignment.bottomLeft,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  image: DecorationImage(
-                    image: AssetImage(items[i].images.first),
-                    fit: BoxFit.cover
-                  )
+                  image: DecorationImage(image: AssetImage(items[i].images.first), fit: BoxFit.cover),
                 ),
                 child: Container(
                   height: double.infinity,
@@ -49,9 +46,9 @@ class CostumGridView extends StatelessWidget {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
                     gradient: const LinearGradient(
-                      colors: [Colors.black,  Colors.transparent], 
+                      colors: [Colors.black, Colors.transparent],
                       begin: Alignment.bottomCenter,
-                      end: Alignment.center
+                      end: Alignment.center,
                     ),
                   ),
                   child: Padding(
@@ -60,17 +57,27 @@ class CostumGridView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text(items[i].name, maxLines: 1, overflow: TextOverflow.ellipsis,style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
-                        const Text('Class', maxLines: 1, overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),),
+                        Text(
+                          items[i].name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+                        ),
+                        const Text(
+                          'Class',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+                        ),
                       ],
                     ),
                   ),
                 ),
               ),
             );
-          }
+          },
         );
-      }
+      },
     );
   }
 }

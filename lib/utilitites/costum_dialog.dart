@@ -10,7 +10,7 @@ class CostumDialog extends StatelessWidget {
     required this.trueText,
     required this.trueOnPressed,
     this.falseText,
-    this.falseOnPressed
+    this.falseOnPressed,
   }) : super(key: key);
   final String title;
   final String contentText;
@@ -33,32 +33,38 @@ class CostumDialog extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title, style: const TextStyle(fontSize: 16, color: Utilities.primaryColor),),
-              const SizedBox(height: 5,),
-              Text(contentText, textAlign:  TextAlign.center, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
-              const SizedBox(height: 15,),
-              falseText == null || falseOnPressed == null ? 
-              Center(
-                child: CostumButton(
-                  onPressed: trueOnPressed, 
-                  childText: trueText
-                ),
-              )
-              :
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: trueOnPressed,
-                    child: Text(trueText, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor),),
-                  ),
-                  const SizedBox(width: 25.5,),
-                  ElevatedButton(
-                    onPressed: falseOnPressed,
-                    child: Text(falseText!, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.myWhiteColor),)
-                  )
-                ],
-              )
+              Text(title, style: const TextStyle(fontSize: 16, color: Utilities.primaryColor)),
+              const SizedBox(height: 5),
+              Text(
+                contentText,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(height: 15),
+              falseText == null || falseOnPressed == null
+                  ? Center(child: CostumButton(onPressed: trueOnPressed, childText: trueText))
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: trueOnPressed,
+                          child: Text(
+                            trueText,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 25.5,
+                        ),
+                        ElevatedButton(
+                          onPressed: falseOnPressed,
+                          child: Text(
+                            falseText!,
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.myWhiteColor),
+                          ),
+                        )
+                      ],
+                    ),
             ],
           ),
         ),

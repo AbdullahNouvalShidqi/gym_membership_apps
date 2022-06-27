@@ -20,23 +20,17 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     int length = Provider.of<FaqViewModel>(context, listen: false).mainData.length;
-    for(var i = 0; i < length; i++){
-      _scrollControllers.add(
-        ScrollController()       
-      );
-      _animationControllers.add(
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 200))
-      );
-      _isShown.add(
-        false
-      );
+    for (var i = 0; i < length; i++) {
+      _scrollControllers.add(ScrollController());
+      _animationControllers.add(AnimationController(vsync: this, duration: const Duration(milliseconds: 200)));
+      _isShown.add(false);
     }
   }
 
   @override
   void dispose() {
     super.dispose();
-    for(var i = 0; i < _scrollControllers.length; i++){
+    for (var i = 0; i < _scrollControllers.length; i++) {
       _scrollControllers[i].dispose();
       _animationControllers[i].dispose();
     }
@@ -47,19 +41,19 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
     final faqScreenModel = Provider.of<FaqViewModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FAQ', style: Utilities.appBarTextStyle,),
+        title: const Text('FAQ', style: Utilities.appBarTextStyle),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios)
+          icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 35),
         child: ListView.builder(
           itemCount: faqScreenModel.mainData.length,
-          itemBuilder: (context, i){
+          itemBuilder: (context, i) {
             return Column(
               children: [
                 CostumMainCard(
@@ -77,27 +71,23 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
                 )
               ],
             );
-          }
+          },
         ),
       ),
     );
   }
 
-  void Function() onTap(int i){
-    return (){
+  void Function() onTap(int i) {
+    return () {
       setState(() {
-          _isShown[i] = !_isShown[i];
-        });
-      if(_animationControllers[i].status == AnimationStatus.forward){
-        _animationControllers[i].reverse();  
-      }
-      else if(_animationControllers[i].status == AnimationStatus.reverse){
+        _isShown[i] = !_isShown[i];
+      });
+      if (_animationControllers[i].status == AnimationStatus.forward) {
+        _animationControllers[i].reverse();
+      } else if (_animationControllers[i].status == AnimationStatus.reverse) {
         _animationControllers[i].forward();
-      }
-      else{
-        _animationControllers[i].isCompleted ?
-        _animationControllers[i].reverse():
-        _animationControllers[i].forward();
+      } else {
+        _animationControllers[i].isCompleted ? _animationControllers[i].reverse() : _animationControllers[i].forward();
       }
     };
   }
@@ -127,8 +117,8 @@ class CostumMainCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           color: Colors.white,
           boxShadow: const [
-            BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240))
-          ]
+            BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240)),
+          ],
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -138,7 +128,10 @@ class CostumMainCard extends StatelessWidget {
               titleWidget,
               RotationTransition(
                 turns: Tween(begin: 0.0, end: 0.25).animate(animationControllers[i]),
-                child: const Icon(Icons.arrow_forward_ios, color: Utilities.primaryColor,)
+                child: const Icon(
+                  Icons.arrow_forward_ios,
+                  color: Utilities.primaryColor,
+                ),
               ),
             ],
           ),
@@ -178,18 +171,18 @@ class CostumSubCard extends StatelessWidget {
             height: isShown[i] ? 60 : 0,
             decoration: BoxDecoration(
               color: const Color.fromRGBO(232, 232, 232, 1),
-              borderRadius: BorderRadius.circular(8)
+              borderRadius: BorderRadius.circular(8),
             ),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10,),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Scrollbar(
                 thumbVisibility: true,
                 controller: scrollControllers[i],
                 child: SingleChildScrollView(
                   controller: scrollControllers[i],
                   child: faqViewModel.mainData[i]['value'],
-                )
-              )
+                ),
+              ),
             ),
           ),
         ),

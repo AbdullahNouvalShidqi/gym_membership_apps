@@ -24,22 +24,22 @@ class _OtpScreenState extends State<OtpScreen> {
   int time = 120;
   Timer? _timer;
 
-  void startTime(){
+  void startTime() {
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        if(time == 0){
+        if (time == 0) {
           Fluttertoast.showToast(msg: 'Time is up, re-send otp email if you want');
           setState(() {
             hasError = true;
           });
           timer.cancel();
-        }else{
+        } else {
           setState(() {
             time--;
           });
         }
-      }
+      },
     );
   }
 
@@ -72,31 +72,33 @@ class _OtpScreenState extends State<OtpScreen> {
                     hasError: hasError,
                     onChanged: costumPinOnChanged,
                   ),
-                  const SizedBox(height: 6,),
-                  hasError ? const Text('Please enter a valid OTP', style: TextStyle(color: Colors.red),) : const SizedBox(),
-                  const SizedBox(height: 20,),
-                  Text('00:$time Sec', style: const TextStyle(fontSize: 16),),
-                  const SizedBox(height: 10,),
-                  ResendOTP(
-                    resetTime: resetTime
+                  const SizedBox(
+                    height: 6,
                   ),
-                  const SizedBox(height: 15,),
-                  SubmitButton(
-                    hasError: hasError,
-                    onPressed: submitButtonOnPressed,
-                  )
+                  hasError
+                      ? const Text(
+                          'Please enter a valid OTP',
+                          style: TextStyle(color: Colors.red),
+                        )
+                      : const SizedBox(),
+                  const SizedBox(height: 20),
+                  Text('00:$time Sec', style: const TextStyle(fontSize: 16)),
+                  const SizedBox(height: 10),
+                  ResendOTP(resetTime: resetTime),
+                  const SizedBox(height: 15),
+                  SubmitButton(hasError: hasError, onPressed: submitButtonOnPressed)
                 ],
               ),
             ),
           ),
-        )
+        ),
       ),
     );
   }
 
-  void costumPinOnChanged(String newValue){
-    if(newValue.isEmpty || newValue.length < 4 || time == 0){
-      if(time == 0){
+  void costumPinOnChanged(String newValue) {
+    if (newValue.isEmpty || newValue.length < 4 || time == 0) {
+      if (time == 0) {
         Fluttertoast.cancel();
         Fluttertoast.showToast(msg: 'Time is already up, re-send your otp again to reset password');
       }
@@ -104,26 +106,26 @@ class _OtpScreenState extends State<OtpScreen> {
         hasError = true;
       });
       return;
-    }else{
+    } else {
       setState(() {
         hasError = false;
       });
     }
   }
 
-  void resetTime(){
+  void resetTime() {
     setState(() {
       time = 120;
     });
   }
 
-  void submitButtonOnPressed(){
-    if(_otpController.text != ForgotPasswordViewModel.otp){
+  void submitButtonOnPressed() {
+    if (_otpController.text != ForgotPasswordViewModel.otp) {
       setState(() {
         hasError = true;
       });
     }
-    if(hasError)return;
+    if (hasError) return;
     _timer!.cancel();
     Navigator.pushReplacementNamed(context, UpdatePasswordScreen.routeName);
   }
@@ -132,21 +134,21 @@ class _OtpScreenState extends State<OtpScreen> {
     bool willPop = false;
     await showDialog(
       context: context,
-      builder: (context){
+      builder: (context) {
         return CostumDialog(
           title: 'Exit?',
           contentText: 'If you exit you will go back to the main login screen, you sure?',
           trueText: 'Yes',
           falseText: 'Cancel',
-          trueOnPressed: (){
+          trueOnPressed: () {
             willPop = true;
             Navigator.pop(context);
           },
-          falseOnPressed: (){
+          falseOnPressed: () {
             Navigator.pop(context);
           },
         );
-      }
+      },
     );
     return willPop;
   }
@@ -161,22 +163,28 @@ class MainTitle extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 95),
-          child: SvgPicture.asset(
-            'assets/icons/otp_logo.svg'
-          ),
+          child: SvgPicture.asset('assets/icons/otp_logo.svg'),
         ),
-        const SizedBox(height: 35,),
-        const Text('OTP VERIFICATION', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500,)),
-        const SizedBox(height: 15,),
-        Text('Enter the OTP sent to ${ForgotPasswordViewModel.encryptedEmail}', style: TextStyle(fontSize: 16, color: Colors.grey[700]),),
-        const SizedBox(height: 25,),
+        const SizedBox(height: 35),
+        const Text('OTP VERIFICATION', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+        const SizedBox(height: 15),
+        Text(
+          'Enter the OTP sent to ${ForgotPasswordViewModel.encryptedEmail}',
+          style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+        ),
+        const SizedBox(height: 25),
       ],
     );
   }
 }
 
 class CostumPinCodeTextField extends StatelessWidget {
-  const CostumPinCodeTextField({Key? key, required this.otpController, required this.hasError, required this.onChanged}) : super(key: key);
+  const CostumPinCodeTextField({
+    Key? key,
+    required this.otpController,
+    required this.hasError,
+    required this.onChanged,
+  }) : super(key: key);
   final TextEditingController otpController;
   final bool hasError;
   final void Function(String) onChanged;
@@ -192,7 +200,7 @@ class CostumPinCodeTextField extends StatelessWidget {
       appContext: context,
       length: 4,
       onChanged: onChanged,
-      pinTheme: Utilities.myPinTheme(hasError: hasError)
+      pinTheme: Utilities.myPinTheme(hasError: hasError),
     );
   }
 }
@@ -207,7 +215,7 @@ class ResendOTP extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text("Don't receive code ?", style: TextStyle(fontSize: 16)),
-        const SizedBox(width: 5,),
+        const SizedBox(width: 5),
         Consumer<ForgotPasswordViewModel>(
           builder: (context, forgotPasswordViewModel, _) {
             return InkWell(
@@ -216,7 +224,7 @@ class ResendOTP extends StatelessWidget {
                 await forgotPasswordViewModel.resendOTP();
                 final isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
 
-                if(isError){
+                if (isError) {
                   Fluttertoast.cancel();
                   Fluttertoast.showToast(msg: 'We cannot re-send otp to your email, try again');
                   return;
@@ -225,7 +233,7 @@ class ResendOTP extends StatelessWidget {
               },
               child: const Text('Re-send', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
             );
-          }
+          },
         )
       ],
     );
@@ -239,10 +247,6 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CostumButton(
-      onPressed: onPressed,
-      backgroundColor: hasError ? Colors.grey : null,
-      childText: 'Submit'
-    );
+    return CostumButton(onPressed: onPressed, backgroundColor: hasError ? Colors.grey : null, childText: 'Submit');
   }
 }

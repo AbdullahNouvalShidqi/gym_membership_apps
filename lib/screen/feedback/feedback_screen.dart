@@ -21,16 +21,17 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     super.dispose();
     _reviewCtrl.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Send us Feedbacks', style: Utilities.appBarTextStyle,),
+        title: const Text('Send us Feedbacks', style: Utilities.appBarTextStyle),
         leading: IconButton(
-          onPressed: (){
+          onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios)
+          icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
       body: SingleChildScrollView(
@@ -39,25 +40,20 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('What do you think of the app?', style: TextStyle(fontSize: 12),),
-              const SizedBox(height: 6,),
+              const Text('What do you think of the app?', style: TextStyle(fontSize: 12)),
+              const SizedBox(height: 6),
               RatingStarBar(
                 rating: _rating,
-                onRatingUpdate: (newRating){
+                onRatingUpdate: (newRating) {
                   _rating = newRating;
                 },
               ),
-              const SizedBox(height: 31,),
-              const Text('What do you think of the app?', style: TextStyle(fontSize: 12),),
-              const SizedBox(height: 5,),
-              FeedbackFormField(
-                formKey: _formKey,
-                reviewCtrl: _reviewCtrl,
-              ),
-              const SizedBox(height: 20,),
-              SubmitButton(
-                formKey: _formKey,
-              )
+              const SizedBox(height: 31),
+              const Text('What do you think of the app?', style: TextStyle(fontSize: 12)),
+              const SizedBox(height: 5),
+              FeedbackFormField(formKey: _formKey, reviewCtrl: _reviewCtrl),
+              const SizedBox(height: 20),
+              SubmitButton(formKey: _formKey)
             ],
           ),
         ),
@@ -77,10 +73,10 @@ class RatingStarBar extends StatelessWidget {
       itemPadding: const EdgeInsets.only(right: 3),
       initialRating: rating,
       itemCount: 5,
-      itemBuilder: (context, i){
-        return const Icon(Icons.star, color: Utilities.primaryColor,);
+      itemBuilder: (context, i) {
+        return const Icon(Icons.star, color: Utilities.primaryColor);
       },
-      onRatingUpdate: onRatingUpdate
+      onRatingUpdate: onRatingUpdate,
     );
   }
 }
@@ -103,8 +99,8 @@ class FeedbackFormField extends StatelessWidget {
         ),
         maxLines: 8,
         maxLength: 500,
-        validator: (newValue){
-          if(newValue == ' ' || newValue!.contains('  ')){
+        validator: (newValue) {
+          if (newValue == ' ' || newValue!.contains('  ')) {
             return 'Please input your feedback correctly';
           }
           return null;
@@ -122,9 +118,9 @@ class SubmitButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return CostumButton(
       onPressed: () async {
-        if(!formKey.currentState!.validate())return;
+        if (!formKey.currentState!.validate()) return;
       },
-      childText: 'Submit'
+      childText: 'Submit',
     );
   }
 }

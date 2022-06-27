@@ -14,13 +14,9 @@ import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 
-enum ProfileViewState{
-  none,
-  loading,
-  error
-}
+enum ProfileViewState { none, loading, error }
 
-class ProfileViewModel with ChangeNotifier{
+class ProfileViewModel with ChangeNotifier {
   static UserModel _user = UserModel(username: '', email: '', contact: '', password: '');
   UserModel get user => _user;
 
@@ -40,32 +36,32 @@ class ProfileViewModel with ChangeNotifier{
 
   final List<Map<String, Widget>> _myAccountItems = [
     {
-      'icon' : SvgPicture.asset('assets/icons/personal_detail.svg'),
-      'title' : const Text('Personal Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+      'icon': SvgPicture.asset('assets/icons/personal_detail.svg'),
+      'title': const Text('Personal Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
     },
     {
-      'icon' : SvgPicture.asset('assets/icons/payment.svg'),
-      'title' : const Text('Payment Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),),
+      'icon': SvgPicture.asset('assets/icons/payment.svg'),
+      'title': const Text('Payment Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
     },
     {
-      'icon' : SvgPicture.asset('assets/icons/update_password.svg'),
-      'title' : const Text('Update Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
+      'icon': SvgPicture.asset('assets/icons/update_password.svg'),
+      'title': const Text('Update Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
     },
     {
-      'icon' : SvgPicture.asset('assets/icons/feedback.svg'),
-      'title' : const Text('Send us Feedbacks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
+      'icon': SvgPicture.asset('assets/icons/feedback.svg'),
+      'title': const Text('Send us Feedbacks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
     },
     {
-      'icon' : SvgPicture.asset('assets/icons/terms.svg'),
-      'title' : const Text('Terms & Conditions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
+      'icon': SvgPicture.asset('assets/icons/terms.svg'),
+      'title': const Text('Terms & Conditions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
     },
     {
-      'icon' : SvgPicture.asset('assets/icons/faq.svg'),
-      'title' : const Text('FAQ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),)
+      'icon': SvgPicture.asset('assets/icons/faq.svg'),
+      'title': const Text('FAQ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
     },
     {
-      'icon' : SvgPicture.asset('assets/icons/logout.svg'),
-      'title' : const Text('Logout', style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 246, 0, 0)),),
+      'icon': SvgPicture.asset('assets/icons/logout.svg'),
+      'title': const Text('Logout', style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 246, 0, 0))),
     },
   ];
 
@@ -74,37 +70,36 @@ class ProfileViewModel with ChangeNotifier{
   final ScrollController _listviewController = ScrollController();
   ScrollController get listViewController => _listviewController;
 
-  void changeState(ProfileViewState s){
+  void changeState(ProfileViewState s) {
     _state = s;
     notifyListeners();
   }
 
-  static void setUserData({required UserModel currentUser}){
+  static void setUserData({required UserModel currentUser}) {
     _user = currentUser;
   }
 
-  void disposeUserData(){
+  void disposeUserData() {
     _user = UserModel(email: '', username: '', password: '', contact: '');
   }
 
-  void myAccountButtonOnTap(){
+  void myAccountButtonOnTap() {
     _myAccountSelected = true;
     _progressSelected = false;
     notifyListeners();
   }
 
-  void progressButtonOnTap(){
+  void progressButtonOnTap() {
     _myAccountSelected = false;
     _progressSelected = true;
     notifyListeners();
   }
 
   Future<void> refreshProgress() async {
-    try{
+    try {
       await Future.delayed(const Duration(seconds: 2));
       changeState(ProfileViewState.none);
-    }
-    catch(e){
+    } catch (e) {
       Fluttertoast.showToast(msg: 'Error cannot get data, check you internet connection');
       changeState(ProfileViewState.error);
     }
@@ -116,8 +111,8 @@ class ProfileViewModel with ChangeNotifier{
     required ScheduleViewModel scheduleViewModel,
     required ProfileViewModel profileViewModel,
     required HomeViewModel homeViewModel,
-    required bool mounted
-  }){
+    required bool mounted,
+  }) {
     final List onTap = [
       () async {
         Navigator.pushNamed(context, PersonalDetail.routeName);
@@ -141,27 +136,27 @@ class ProfileViewModel with ChangeNotifier{
         bool logOut = false;
         await showDialog(
           context: context,
-          builder: (context){
+          builder: (context) {
             return CostumDialog(
               title: 'Log out?',
               contentText: 'You sure want to log out and go to the login screen?',
               trueText: 'Yes',
               falseText: 'Cancel',
-              trueOnPressed: (){
+              trueOnPressed: () {
                 logOut = true;
                 Navigator.pop(context);
               },
-              falseOnPressed: (){
+              falseOnPressed: () {
                 Navigator.pop(context);
               },
             );
-          }
+          },
         );
-        if(logOut){
+        if (logOut) {
           scheduleViewModel.logOut();
           profileViewModel.disposeUserData();
           homeViewModel.selectTab('Home', 0);
-          if(!mounted)return;
+          if (!mounted) return;
           Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(LogInScreen.routeName, (route) => false);
         }
       }

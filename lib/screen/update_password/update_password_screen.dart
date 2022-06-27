@@ -25,11 +25,14 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          title: const Text('Update Password', style: Utilities.appBarTextStyle,),
+          title: const Text(
+            'Update Password',
+            style: Utilities.appBarTextStyle,
+          ),
           centerTitle: true,
           leading: IconButton(
             onPressed: appBarBackOnPressed,
-            icon: Icon(Icons.arrow_back_ios, color: Theme.of(context).primaryColor,),
+            icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
           ),
         ),
         body: Padding(
@@ -40,17 +43,17 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 40,),
+                  const SizedBox(height: 40),
                   NewPasswordFormField(newPasswordCtrl: _newPasswordCtrl),
-                  const SizedBox(height: 20,),
+                  const SizedBox(height: 20),
                   ConfirmFormField(confirmPasswordCtrl: _confirmPasswordCtrl),
-                  const SizedBox(height: 30,),
-                  ContinueButton(formKey: _formKey,)
+                  const SizedBox(height: 30),
+                  ContinueButton(formKey: _formKey),
                 ],
               ),
             ),
           ),
-        )
+        ),
       ),
     );
   }
@@ -59,21 +62,21 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
     bool willPop = false;
     await showDialog(
       context: context,
-      builder: (context){
+      builder: (context) {
         return CostumDialog(
           title: 'Exit ?',
           contentText: 'If you exit you will go back to the main login screen, you sure?',
           trueText: 'Yes',
           falseText: 'Cancel',
-          trueOnPressed: (){
+          trueOnPressed: () {
             willPop = true;
             Navigator.pop(context);
           },
-          falseOnPressed: (){
+          falseOnPressed: () {
             Navigator.pop(context);
           },
         );
-      }
+      },
     );
     return willPop;
   }
@@ -82,24 +85,24 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
     bool willPop = false;
     await showDialog(
       context: context,
-      builder: (context){
+      builder: (context) {
         return CostumDialog(
           title: 'Exit ?',
           contentText: 'If you exit you will go back to the main login screen, you sure?',
           trueText: 'Yes',
           falseText: 'Cancel',
-          trueOnPressed: (){
+          trueOnPressed: () {
             willPop = true;
             Navigator.pop(context);
           },
-          falseOnPressed: (){
+          falseOnPressed: () {
             Navigator.pop(context);
           },
         );
-      }
+      },
     );
-    if(willPop){
-      if(!mounted)return;
+    if (willPop) {
+      if (!mounted) return;
       Navigator.pop(context);
     }
   }
@@ -118,23 +121,18 @@ class NewPasswordFormField extends StatelessWidget {
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.visiblePassword,
       useIconHidePassword: true,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
+      validator: (newValue) {
+        if (newValue == null || newValue.isEmpty || newValue == ' ') {
           return 'Please enter your password';
-        }
-        else if(newValue.contains('  ')){
+        } else if (newValue.contains('  ')) {
           return 'Your password contains double space, please remove it';
-        }
-        else if(newValue.length < 6){
+        } else if (newValue.length < 6) {
           return 'The minimal length of password is 6';
-        }
-        else if(!Utilities.pwNeedOneCapital.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
           return 'Please enter at least one alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNonCapital.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
           return 'Please enter at least one non alphabet letter in your password';
-        }
-        else if(!Utilities.pwNeedOneNumber.hasMatch(newValue)){
+        } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
           return 'Please enter at least one number in your password';
         }
         return null;
@@ -156,14 +154,12 @@ class ConfirmFormField extends StatelessWidget {
       prefixIcon: const Icon(Icons.lock_outline),
       textInputType: TextInputType.visiblePassword,
       useIconHidePassword: true,
-      validator: (newValue){
-        if(newValue == null || newValue.isEmpty || newValue == ' '){
+      validator: (newValue) {
+        if (newValue == null || newValue.isEmpty || newValue == ' ') {
           return 'Please enter your password';
-        }
-        else if(newValue.contains('  ')){
+        } else if (newValue.contains('  ')) {
           return 'Please enter a valid password';
-        }
-        else if(newValue != confirmPasswordCtrl.text){
+        } else if (newValue != confirmPasswordCtrl.text) {
           return 'Please enter a same password';
         }
         return null;
@@ -179,27 +175,25 @@ class ContinueButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CostumButton(
-      onPressed: (){
-        if(!formKey.currentState!.validate())return;
+      onPressed: () {
+        if (!formKey.currentState!.validate()) return;
         showModalBottomSheet(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(40) , topRight: Radius.circular(40))
-          ),
+          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))),
           isScrollControlled: true,
           context: context,
-          builder: (context){
+          builder: (context) {
             return CostumBottomSheet(
               title: 'Password Recovery',
               content: 'Return to the login screen to enter the application',
               buttonText: 'Return to login',
-              onPressed: (){
+              onPressed: () {
                 Navigator.popUntil(context, (route) => route.isFirst);
-              }
+              },
             );
-          }
+          },
         );
       },
-      childText: 'Continue'
+      childText: 'Continue',
     );
   }
 }

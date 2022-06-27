@@ -22,27 +22,25 @@ class TabNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget? child;
 
-    if(tabItem == 'Home'){
+    if (tabItem == 'Home') {
       child = const HomePageScreen();
-    }
-    else if(tabItem == 'Schedule'){
+    } else if (tabItem == 'Schedule') {
       child = const ScheduleScreen();
-    }
-    else if(tabItem == "Profile"){
+    } else if (tabItem == "Profile") {
       child = const ProfileScreen();
     }
 
     return Navigator(
       key: navigatorKey,
       initialRoute: 'nothingWrong',
-      onGenerateRoute: (settings){
-        if(settings.name == SeeAllScren.routeName){
+      onGenerateRoute: (settings) {
+        if (settings.name == SeeAllScren.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const SeeAllScren(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -50,16 +48,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == PersonalDetail.routeName){
+        if (settings.name == PersonalDetail.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const PersonalDetail(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -67,16 +65,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == ProfileUpdatePasswordScreen.routeName){
+        if (settings.name == ProfileUpdatePasswordScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const ProfileUpdatePasswordScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -84,16 +82,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == FeedbackScreen.routeName){
+        if (settings.name == FeedbackScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const FeedbackScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -101,16 +99,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == TermsAndConditionsScreen.routeName){
+        if (settings.name == TermsAndConditionsScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const TermsAndConditionsScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -118,16 +116,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == FaqScreen.routeName){
+        if (settings.name == FaqScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const FaqScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -135,16 +133,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == DetailScreen.routeName){
+        if (settings.name == DetailScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const DetailScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = 0.0;
               const end = 1.0;
               final tween = Tween(begin: begin, end: end);
@@ -155,16 +153,16 @@ class TabNavigator extends StatelessWidget {
                 opacity: tween.animate(curveAnimation),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == AvailableClassScreen.routeName){
+        if (settings.name == AvailableClassScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const AvailableClassScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -172,16 +170,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == BookScreen.routeName){
+        if (settings.name == BookScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const BookScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -189,16 +187,16 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        if(settings.name == PaymentInstructionScreen.routeName){
+        if (settings.name == PaymentInstructionScreen.routeName) {
           return PageRouteBuilder(
             transitionDuration: const Duration(milliseconds: 200),
             reverseTransitionDuration: const Duration(milliseconds: 200),
             settings: settings,
             pageBuilder: (context, animation, secondaryAnimation) => const PaymentInstructionScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child){
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
               const begin = Offset(1.0, 0.0);
               const end = Offset.zero;
               final tween = Tween(begin: begin, end: end);
@@ -206,12 +204,10 @@ class TabNavigator extends StatelessWidget {
                 position: animation.drive(tween),
                 child: child,
               );
-            }
+            },
           );
         }
-        return MaterialPageRoute(
-          builder: (context) => child!
-        );
+        return MaterialPageRoute(builder: (context) => child!);
       },
     );
   }

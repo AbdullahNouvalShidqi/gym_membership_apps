@@ -13,24 +13,24 @@ class MainAPI {
   ));
 
   Future<List<ClassModel>> getAllClass({String? type}) async {
-    final response = await dio.get('$url/class${type == null ? '' : '/${type.toLowerCase()}'}',);
+    final response = await dio.get('$url/class${type == null ? '' : '/${type.toLowerCase()}'}');
 
     final data = ClassApiModel.fromJson(response.data);
 
     return data.data;
   }
 
-  Future<ClassModel?> getClassById({required int id}) async{
+  Future<ClassModel?> getClassById({required int id}) async {
     final response = await dio.get('$url/class/$id');
 
     final Map<String, dynamic>? classData = (response.data as List).firstWhere((element) => element, orElse: () => null);
 
     ClassModel? data;
 
-    if(classData != null){
+    if (classData != null) {
       data = ClassModel.fromJson(classData);
     }
-    
+
     return data;
   }
 
@@ -54,7 +54,7 @@ class MainAPI {
     required String username,
     required String email,
     required String contact,
-    required String password
+    required String password,
   }) async {
     final data = UserModel(username: username, email: email, contact: contact, password: password).toJson();
 

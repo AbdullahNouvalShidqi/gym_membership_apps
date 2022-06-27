@@ -20,7 +20,6 @@ class AvailableClassScreen extends StatefulWidget {
 }
 
 class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
-
   late final _tabController = TabController(length: 7, vsync: this);
   Timer? _timer;
   int count = 0;
@@ -29,14 +28,14 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   void dispose() {
     super.dispose();
     _tabController.dispose();
-    if(_timer != null){
+    if (_timer != null) {
       _timer!.cancel();
     }
   }
 
-  void _startTime(){
+  void _startTime() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState((){
+      setState(() {
         count++;
       });
     });
@@ -67,12 +66,12 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 SliverAppBar(
-                  title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle,),
+                  title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle),
                   leading: IconButton(
-                    onPressed: (){
+                    onPressed: () {
                       Navigator.pop(context);
                     },
-                    icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,),
+                    icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
                   ),
                   centerTitle: true,
                 )
@@ -84,15 +83,13 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                 final isLoading = availableClassViewModel.state == AvailableClassState.loading;
                 final isError = availableClassViewModel.state == AvailableClassState.error;
 
-                if(isLoading){
+                if (isLoading) {
                   return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
                 }
-                if(isError){
-                  return CostumErrorScreen(
-                    onPressed: () async {
-                      await availableClassViewModel.getAvailableClasses(item: item);
-                    }
-                  );
+                if (isError) {
+                  return CostumErrorScreen(onPressed: () async {
+                    await availableClassViewModel.getAvailableClasses(item: item);
+                  });
                 }
                 return Column(
                   children: [
@@ -105,29 +102,26 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.white,
-                          boxShadow: const [
-                            BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))
-                          ]
+                          boxShadow: const [BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))],
                         ),
-                        child: CostumTabBar(
-                          tabController: _tabController,
-                          item: item,
-                        )
+                        child: CostumTabBar(tabController: _tabController, item: item),
                       ),
                     ),
                     Expanded(
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          for(var i = 0; i < 7; i++) ...[
-                            CostumListView(availableClasses: classes.where((element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day).toList()),
+                          for (var i = 0; i < 7; i++) ...[
+                            CostumListView(
+                              availableClasses: classes.where((element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day).toList(),
+                            ),
                           ]
                         ],
                       ),
                     ),
                   ],
                 );
-              }
+              },
             ),
           ),
         ),
@@ -137,7 +131,11 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
 }
 
 class CostumTabBar extends StatelessWidget {
-  const CostumTabBar({Key? key, required this.tabController, required this.item}) : super(key: key);
+  const CostumTabBar({
+    Key? key,
+    required this.tabController,
+    required this.item,
+  }) : super(key: key);
   final TabController tabController;
   final ClassModel item;
 
@@ -146,23 +144,26 @@ class CostumTabBar extends StatelessWidget {
     return TabBar(
       controller: tabController,
       indicatorWeight: 0,
-      indicator: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: Utilities.primaryColor
-      ),
+      indicator: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Utilities.primaryColor),
       indicatorPadding: const EdgeInsets.all(10),
       isScrollable: false,
       unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
       labelColor: Utilities.myWhiteColor,
       labelPadding: const EdgeInsets.symmetric(horizontal: 10),
       tabs: [
-        for(var i = 0; i < 7; i++) ...[
+        for (var i = 0; i < 7; i++) ...[
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(DateFormat('EEE').format(DateTime.now().add(Duration(days: i))), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),),
-              const SizedBox(height: 5,),
-              Text(DateFormat('d').format(DateTime.now().add(Duration(days: i))), style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400))
+              Text(
+                DateFormat('EEE').format(DateTime.now().add(Duration(days: i))),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(height: 5),
+              Text(
+                DateFormat('d').format(DateTime.now().add(Duration(days: i))),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              )
             ],
           ),
         ]
@@ -177,27 +178,30 @@ class CostumListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AvailableClassViewModel>(
-      builder: (context, availableClassViewModel, _) {
-        if(availableClasses.isEmpty){
-          return EmptyListView(svgAssetLink: 'assets/icons/empty_class.svg', title: 'Ooops, class not yet available', emptyListViewFor: EmptyListViewFor.available, onRefresh: availableClassViewModel.refreshData,);
-        }
-        return RefreshIndicator(
-          onRefresh: () async {
-            await availableClassViewModel.refreshData();
-          },
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 15),
-            itemCount: availableClasses.length,
-            itemBuilder: (context, i){
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: CostumCard(classModel: availableClasses[i], whichScreen: CostumCardFor.availableClassScreen)
-              );
-            }
-          ),
+    return Consumer<AvailableClassViewModel>(builder: (context, availableClassViewModel, _) {
+      if (availableClasses.isEmpty) {
+        return EmptyListView(
+          svgAssetLink: 'assets/icons/empty_class.svg',
+          title: 'Ooops, class not yet available',
+          emptyListViewFor: EmptyListViewFor.available,
+          onRefresh: availableClassViewModel.refreshData,
         );
       }
-    );
+      return RefreshIndicator(
+        onRefresh: () async {
+          await availableClassViewModel.refreshData();
+        },
+        child: ListView.builder(
+          padding: const EdgeInsets.only(top: 15),
+          itemCount: availableClasses.length,
+          itemBuilder: (context, i) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5),
+              child: CostumCard(classModel: availableClasses[i], whichScreen: CostumCardFor.availableClassScreen),
+            );
+          },
+        ),
+      );
+    });
   }
 }

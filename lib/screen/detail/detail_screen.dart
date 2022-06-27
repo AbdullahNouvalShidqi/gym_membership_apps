@@ -6,6 +6,7 @@ import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
+import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/detail_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
@@ -39,7 +40,7 @@ class _DetailScreenState extends State<DetailScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {    
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Consumer<DetailViewModel>(
         builder: (context, detailViewModel, _) {
@@ -49,30 +50,28 @@ class _DetailScreenState extends State<DetailScreen> {
           final isLoading = detailViewModel.state == DetailState.loading;
           final isError = detailViewModel.state == DetailState.error;
 
-          if(isLoading){
+          if (isLoading) {
             return const DetailShimmerLoading();
           }
-          if(isError){
-            return CostumErrorScreen(
-              onPressed: () async {
-                classModel = await detailViewModel.getDetail(item: item, type: type);
-                if(classModel == null){
-                  Fluttertoast.showToast(msg: 'No data found');
-                }
+          if (isError) {
+            return CostumErrorScreen(onPressed: () async {
+              classModel = await detailViewModel.getDetail(item: item, type: type);
+              if (classModel == null) {
+                Fluttertoast.showToast(msg: 'No data found');
               }
-            );
+            });
           }
-          if(classModel == null){
+          if (classModel == null) {
             return EmptyListView(
               title: 'Class detail not found, pull to refresh',
               svgAssetLink: 'assets/icons/empty_class.svg',
               emptyListViewFor: EmptyListViewFor.detail,
               onRefresh: () async {
                 classModel = await detailViewModel.refreshDetail(item: item, type: type);
-                if(classModel == null){
+                if (classModel == null) {
                   Fluttertoast.showToast(msg: 'No data found');
                 }
-              }
+              },
             );
           }
 
@@ -85,10 +84,20 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Stack(
                         children: [
-                          MainCarousel(images: classModel!.images, carouselCtrl: _carouselCtrl, onPageChanged: (index, reason){setState(() => _currentIndex = index);}),
+                          MainCarousel(
+                            images: classModel!.images,
+                            carouselCtrl: _carouselCtrl,
+                            onPageChanged: (index, reason) {
+                              setState(() => _currentIndex = index);
+                            },
+                          ),
                           Positioned.fill(
                             bottom: 17,
-                            child: CarouselIndicator(images: classModel!.images, carouselCtrl: _carouselCtrl, currentIndex: _currentIndex,)
+                            child: CarouselIndicator(
+                              images: classModel!.images,
+                              carouselCtrl: _carouselCtrl,
+                              currentIndex: _currentIndex,
+                            ),
                           )
                         ],
                       ),
@@ -104,13 +113,10 @@ class _DetailScreenState extends State<DetailScreen> {
                             Price(price: classModel!.price),
                             const SizedBox(height: 10),
                             InstructorName(item: classModel!),
-                            const SizedBox(height: 5,),
+                            const SizedBox(height: 5),
                             GymLocation(location: classModel!.location),
-                            const SizedBox(height: 10,),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height - 575,
-                              child: ClassDetail(item: classModel!)
-                            ),
+                            const SizedBox(height: 10),
+                            SizedBox(height: MediaQuery.of(context).size.height - 575, child: ClassDetail(item: classModel!)),
                             SeeAvalableClassButton(item: classModel!)
                           ],
                         ),
@@ -122,7 +128,7 @@ class _DetailScreenState extends State<DetailScreen> {
               ],
             ),
           );
-        }
+        },
       ),
     );
   }
@@ -140,8 +146,8 @@ class CostumAppBar extends StatelessWidget {
         gradient: LinearGradient(
           colors: [Colors.black.withOpacity(0.7), Colors.transparent],
           begin: Alignment.topCenter,
-          end: Alignment.bottomCenter
-        )
+          end: Alignment.bottomCenter,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -151,14 +157,20 @@ class CostumAppBar extends StatelessWidget {
             SizedBox(
               width: 24,
               child: IconButton(
-                onPressed: (){
+                onPressed: () {
                   Navigator.pop(context);
                 },
-                icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor,)
+                icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
               ),
             ),
-            const Expanded(child: Text('Detail Class', textAlign: TextAlign.center, style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),)),
-            const SizedBox(width: 24,)
+            const Expanded(
+              child: Text(
+                'Detail Class',
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.white),
+              ),
+            ),
+            const SizedBox(width: 24)
           ],
         ),
       ),
@@ -167,7 +179,12 @@ class CostumAppBar extends StatelessWidget {
 }
 
 class MainCarousel extends StatelessWidget {
-  const MainCarousel({Key? key, required this.images, required this.carouselCtrl, required this.onPageChanged}) : super(key: key);
+  const MainCarousel({
+    Key? key,
+    required this.images,
+    required this.carouselCtrl,
+    required this.onPageChanged,
+  }) : super(key: key);
   final CarouselController carouselCtrl;
   final List<String> images;
   final dynamic Function(int, CarouselPageChangedReason) onPageChanged;
@@ -177,16 +194,11 @@ class MainCarousel extends StatelessWidget {
     return CarouselSlider.builder(
       carouselController: carouselCtrl,
       itemCount: images.length,
-      itemBuilder: (context, itemI, pageI){
+      itemBuilder: (context, itemI, pageI) {
         return Container(
           height: 315,
           width: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage(images[itemI]),
-              fit: BoxFit.cover
-            )
-          ),
+          decoration: BoxDecoration(image: DecorationImage(image: AssetImage(images[itemI]), fit: BoxFit.cover)),
         );
       },
       options: CarouselOptions(
@@ -194,14 +206,19 @@ class MainCarousel extends StatelessWidget {
         height: 315,
         enableInfiniteScroll: false,
         autoPlay: false,
-        onPageChanged: onPageChanged
+        onPageChanged: onPageChanged,
       ),
     );
   }
 }
 
 class CarouselIndicator extends StatelessWidget {
-  const CarouselIndicator({Key? key, required this.images, required this.carouselCtrl, required this.currentIndex}) : super(key: key);
+  const CarouselIndicator({
+    Key? key,
+    required this.images,
+    required this.carouselCtrl,
+    required this.currentIndex,
+  }) : super(key: key);
   final List<String> images;
   final CarouselController carouselCtrl;
   final int currentIndex;
@@ -219,10 +236,11 @@ class CarouselIndicator extends StatelessWidget {
             height: 12,
             margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             decoration: BoxDecoration(
-              border: Border.all(color: currentIndex == e.key ? const Color.fromRGBO(242, 115, 112, 1) : Colors.white),
+              border: Border.all(
+                color: currentIndex == e.key ? const Color.fromRGBO(242, 115, 112, 1) : Colors.white,
+              ),
               shape: BoxShape.circle,
-              color: const Color.fromRGBO(242, 115, 112, 1)
-              .withOpacity(currentIndex == e.key ? 1.0 : 0),
+              color: const Color.fromRGBO(242, 115, 112, 1).withOpacity(currentIndex == e.key ? 1.0 : 0),
             ),
           ),
         );
@@ -241,7 +259,7 @@ class MainTitleStatus extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(className, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),),
+        Text(className, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700)),
         Container(
           alignment: Alignment.center,
           height: 25,
@@ -250,7 +268,7 @@ class MainTitleStatus extends StatelessWidget {
             borderRadius: BorderRadius.circular(100),
             color: Utilities.subPrimaryColor,
           ),
-          child: Text(type, style: const TextStyle(fontSize: 12, color: Utilities.myWhiteColor),),
+          child: Text(type, style: const TextStyle(fontSize: 12, color: Utilities.myWhiteColor)),
         )
       ],
     );
@@ -265,11 +283,7 @@ class Price extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       NumberFormat.currency(symbol: 'Rp. ', locale: 'id_id', decimalDigits: 0).format(price),
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w700,
-        color: Utilities.subPrimaryColor
-      )
+      style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Utilities.subPrimaryColor),
     );
   }
 }
@@ -284,7 +298,10 @@ class InstructorName extends StatelessWidget {
       children: [
         SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
-        Text(item.instructor.name, style: const TextStyle(fontSize: 10, color: Colors.grey),)
+        Text(
+          item.instructor.name,
+          style: const TextStyle(fontSize: 10, color: Colors.grey),
+        )
       ],
     );
   }
@@ -300,7 +317,10 @@ class GymLocation extends StatelessWidget {
       children: [
         SvgPicture.asset('assets/icons/location_icon.svg', color: Colors.grey),
         const SizedBox(width: 5),
-        Text(location, style: const TextStyle(fontSize: 10, color: Colors.grey),)
+        Text(
+          location,
+          style: const TextStyle(fontSize: 10, color: Colors.grey),
+        )
       ],
     );
   }
@@ -315,9 +335,12 @@ class ClassDetail extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('About This Class', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700),),
-        const SizedBox(height: 5,),
-        Text(item.description, style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 88, 88, 88), height: 1.5),),
+        const Text('About This Class', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
+        const SizedBox(height: 5),
+        Text(
+          item.description,
+          style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 88, 88, 88), height: 1.5),
+        ),
       ],
     );
   }
@@ -329,14 +352,12 @@ class SeeAvalableClassButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: (){
+    return CostumButton(
+      onPressed: () {
         Navigator.pushNamed(context, AvailableClassScreen.routeName, arguments: item);
       },
-      style: ButtonStyle(
-        fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45))
-      ),
-      child: const Text('See Available Classes', style: Utilities.buttonTextStyle)
+      height: 45,
+      childText: 'See Available Classes',
     );
   }
 }

@@ -1,4 +1,4 @@
-class ArticleModel{
+class ArticleModel {
   String imageUrl;
   String title;
   String url;

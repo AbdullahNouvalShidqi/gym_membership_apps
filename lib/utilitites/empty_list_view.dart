@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-enum EmptyListViewFor{schedule, available, progress, detail}
+enum EmptyListViewFor { schedule, available, progress, detail }
 
 class EmptyListView extends StatelessWidget {
-  const EmptyListView({Key? key, this.forProgress = false, this.title, required this.svgAssetLink, required this.emptyListViewFor, required this.onRefresh, this.controller}) : super(key: key);
+  const EmptyListView({
+    Key? key,
+    this.forProgress = false,
+    this.title,
+    required this.svgAssetLink,
+    required this.emptyListViewFor,
+    required this.onRefresh,
+    this.controller,
+  }) : super(key: key);
   final bool forProgress;
   final String? title;
   final Future<void> Function() onRefresh;
@@ -15,16 +23,13 @@ class EmptyListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     late double height;
-    if(emptyListViewFor == EmptyListViewFor.progress){
+    if (emptyListViewFor == EmptyListViewFor.progress) {
       height = MediaQuery.of(context).size.height - 335;
-    }
-    if(emptyListViewFor == EmptyListViewFor.schedule){
+    } else if (emptyListViewFor == EmptyListViewFor.schedule) {
       height = MediaQuery.of(context).size.height - 135;
-    }
-    if (emptyListViewFor == EmptyListViewFor.available){
+    } else if (emptyListViewFor == EmptyListViewFor.available) {
       height = MediaQuery.of(context).size.height - 210;
-    }
-    if(emptyListViewFor == EmptyListViewFor.detail){
+    } else if (emptyListViewFor == EmptyListViewFor.detail) {
       height = MediaQuery.of(context).size.height - 80;
     }
 
@@ -41,8 +46,13 @@ class EmptyListView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SvgPicture.asset(svgAssetLink),
-                const SizedBox(height: 30,),
-                Text(title ?? 'Ooops, your ${forProgress ? 'progress' : 'schedule'} is still empty', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700))
+                const SizedBox(
+                  height: 30,
+                ),
+                Text(
+                  title ?? 'Ooops, your ${forProgress ? 'progress' : 'schedule'} is still empty',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                )
               ],
             ),
           ),

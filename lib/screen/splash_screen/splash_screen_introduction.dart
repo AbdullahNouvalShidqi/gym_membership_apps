@@ -20,8 +20,8 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
 
   @override
   Widget build(BuildContext context) {
-    final splashScreenViewModel  = Provider.of<SplashScreenViewModel>(context);
-    
+    final splashScreenViewModel = Provider.of<SplashScreenViewModel>(context);
+
     return WillPopScope(
       onWillPop: willPopValidation,
       child: Scaffold(
@@ -29,45 +29,52 @@ class _SplashScreenIntroductionState extends State<SplashScreenIntroduction> {
         body: Center(
           child: Stack(
             children: [
-              MainCarousel(carouselCtrl: _carouselCtrl, splashScreenViewModel: splashScreenViewModel, onPageChanged: (i, reason) => setState(() {_currentIndex = i;})),
+              MainCarousel(
+                carouselCtrl: _carouselCtrl,
+                splashScreenViewModel: splashScreenViewModel,
+                onPageChanged: (i, reason) => setState(
+                  () {
+                    _currentIndex = i;
+                  },
+                ),
+              ),
               Positioned.fill(
                 bottom: 100,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     CarouselIndicator(carouselCtrl: _carouselCtrl, currentIndex: _currentIndex, splashScreenViewModel: splashScreenViewModel),
-                    const SizedBox(height: 10,),
+                    const SizedBox(
+                      height: 10,
+                    ),
                     GetStartedButton(
                       carouselCtrl: _carouselCtrl,
                       currentIndex: _currentIndex,
-                      onPressed: (){
+                      onPressed: () {
                         _currentIndex += 1;
-                        if(_currentIndex < splashScreenViewModel.introductionData.length){
+                        if (_currentIndex < splashScreenViewModel.introductionData.length) {
                           _carouselCtrl.animateToPage(_currentIndex);
-                        }
-                        else{
+                        } else {
                           splashScreenViewModel.doneFirstTime();
                           Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
                         }
                       },
                     )
                   ],
-                )
+                ),
               )
             ],
           ),
-        )
+        ),
       ),
     );
   }
 
   Future<bool> willPopValidation() async {
     DateTime now = DateTime.now();
-    if((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst){
+    if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst) {
       currentBackPressTime = now;
-      Fluttertoast.showToast(
-        msg: 'Press back again to exit'
-      );
+      Fluttertoast.showToast(msg: 'Press back again to exit');
       return Future.value(false);
     }
     return Future.value(true);
@@ -85,7 +92,7 @@ class MainCarousel extends StatelessWidget {
     return CarouselSlider.builder(
       carouselController: carouselCtrl,
       itemCount: splashScreenViewModel.introductionData.length,
-      itemBuilder: (context, itemI, pageViewIndex){
+      itemBuilder: (context, itemI, pageViewIndex) {
         return Stack(
           children: [
             Positioned.fill(
@@ -104,12 +111,18 @@ class MainCarousel extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: Column(
                   children: [
-                    Text(splashScreenViewModel.introductionData[itemI].title, style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.white),),
-                    const SizedBox(height: 5,),
-                    Text(splashScreenViewModel.introductionData[itemI].subtitle, style: const TextStyle(fontSize: 12, color: Colors.white),)
+                    Text(
+                      splashScreenViewModel.introductionData[itemI].title,
+                      style: const TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.white),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      splashScreenViewModel.introductionData[itemI].subtitle,
+                      style: const TextStyle(fontSize: 12, color: Colors.white),
+                    )
                   ],
-                )
-              )
+                ),
+              ),
             ),
           ],
         );
@@ -120,14 +133,19 @@ class MainCarousel extends StatelessWidget {
         enableInfiniteScroll: false,
         autoPlay: false,
         initialPage: 0,
-        onPageChanged: onPageChanged
+        onPageChanged: onPageChanged,
       ),
     );
   }
 }
 
 class CarouselIndicator extends StatelessWidget {
-  const CarouselIndicator({Key? key, required this.carouselCtrl, required this.currentIndex, required this.splashScreenViewModel}) : super(key: key);
+  const CarouselIndicator({
+    Key? key,
+    required this.carouselCtrl,
+    required this.currentIndex,
+    required this.splashScreenViewModel,
+  }) : super(key: key);
   final CarouselController carouselCtrl;
   final SplashScreenViewModel splashScreenViewModel;
   final int currentIndex;
@@ -147,8 +165,7 @@ class CarouselIndicator extends StatelessWidget {
             decoration: BoxDecoration(
               border: Border.all(color: Colors.white),
               shape: BoxShape.circle,
-              color: (Colors.white)
-              .withOpacity(currentIndex == e.key ? 0.9 : 0),
+              color: (Colors.white).withOpacity(currentIndex == e.key ? 0.9 : 0),
             ),
           ),
         );

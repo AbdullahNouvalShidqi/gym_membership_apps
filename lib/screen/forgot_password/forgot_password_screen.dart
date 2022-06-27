@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
@@ -147,12 +148,30 @@ class ContinueButton extends StatelessWidget {
     return Consumer<ForgotPasswordViewModel>(
       builder: (context, forgotPasswordViewModel, _) {
         final isLoading = forgotPasswordViewModel.state == ForgotPasswordState.loading;
-        final isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
         return CostumButton(
           isLoading: isLoading,
           onPressed: () async {
             if(!formKey.currentState!.validate())return;
-            await forgotPasswordViewModel.sendOTP(email: emailCtrl.text);
+            await forgotPasswordViewModel.getAllUser();
+            final allUser = forgotPasswordViewModel.allUser;
+            final email = emailCtrl.text.toLowerCase();
+            final isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
+
+            if(isError){
+              Fluttertoast.showToast(msg: 'Something went wrong, try again.');
+              return;
+            }
+
+            final user = allUser.where((element) => element.email.toLowerCase() == email.toLowerCase());
+
+            if(user.length > 1 || user.isEmpty){
+              Fluttertoast.showToast(
+                msg: 'No user with email of $email found on our database, sign up first or check your email'
+              );
+              return;
+            }
+
+            await forgotPasswordViewModel.sendOTP(email: email);
 
             if(isError){
               Fluttertoast.showToast(msg: 'Error, we cannot send your otp, check your email or your internet');

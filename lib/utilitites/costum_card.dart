@@ -106,7 +106,7 @@ class Details extends StatelessWidget {
           children: [
             const Icon(Icons.location_on_outlined, size: 10, color: Colors.grey,),
             const SizedBox(width: 5,),
-            Text(classModel.type == "Online" ? 'Zoom Meeting' : 'Room X', style: const TextStyle(fontSize: 10, color: Colors.grey),)
+            Text(classModel.location, style: const TextStyle(fontSize: 10, color: Colors.grey),)
           ],
         ),
       ],
@@ -220,6 +220,9 @@ class StatusAndButton extends StatelessWidget {
   }
 
   Map<String, dynamic> checkItem({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
+    final now = DateTime.now();
+    final startAt = classModel.startAt;
+
     if(scheduleViewModel.listSchedule.any((element) => element.id == classModel.id && element.type == classModel.type)){
       return {
         'status' : 'Booked',
@@ -232,7 +235,11 @@ class StatusAndButton extends StatelessWidget {
         'onPressed' : false
       };
     }
-    if(DateTime.now().compareTo(classModel.startAt) == 1){
+    if(
+      now.day == startAt.day && 
+      now.hour >= startAt.subtract(const Duration(hours: 2)).hour && 
+      now.minute >= startAt.subtract(const Duration(hours: 2)).minute
+    ){
       return{
         'status': 'Late',
         'onPressed': false
@@ -245,7 +252,8 @@ class StatusAndButton extends StatelessWidget {
   }
 
   Map<String, dynamic> checkProgressStatus({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}){
-    if(classModel.endAt.compareTo(DateTime.now()) <= 0){
+    final now = DateTime.now();
+    if(classModel.endAt.compareTo(now) <= 0){
       return {
         'status' : 'Ended',
         'color' : Utilities.redColor

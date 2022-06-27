@@ -6,7 +6,11 @@ import 'package:gym_membership_apps/model/user_model.dart';
 class MainAPI {
   final String url = "https://capstone-kelompok-3.herokuapp.com";
   final String url2 = "https://capstone-project-ec879-default-rtdb.asia-southeast1.firebasedatabase.app";
-  final dio = Dio();
+  final dio = Dio(BaseOptions(
+    connectTimeout: 4000,
+    receiveTimeout: 4000,
+    sendTimeout: 4000,
+  ));
 
   Future<List<ClassModel>> getAllClass({String? type}) async {
     final response = await dio.get('$url/class${type == null ? '' : '/${type.toLowerCase()}'}',);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
@@ -20,16 +22,30 @@ class AvailableClassScreen extends StatefulWidget {
 class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
 
   late final _tabController = TabController(length: 7, vsync: this);
+  Timer? _timer;
+  int count = 0;
 
   @override
   void dispose() {
     super.dispose();
     _tabController.dispose();
+    if(_timer != null){
+      _timer!.cancel();
+    }
+  }
+
+  void _startTime(){
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState((){
+        count++;
+      });
+    });
   }
 
   @override
   void initState() {
     super.initState();
+    _startTime();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
       await Provider.of<AvailableClassViewModel>(context, listen: false).getAvailableClasses(item: item);

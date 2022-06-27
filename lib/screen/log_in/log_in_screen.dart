@@ -331,7 +331,6 @@ class LoginButton extends StatelessWidget {
     return Consumer<LogInViewModel>(
       builder: (context, logInViewModel, _) {
         final isLoading = logInViewModel.state == LogInState.loading;
-        final isError = logInViewModel.state == LogInState.error;
 
         return Center(
           child: Padding(
@@ -343,13 +342,15 @@ class LoginButton extends StatelessWidget {
               onPressed: () async {
                 if(!formKey.currentState!.validate())return;
                 final allUser = await logInViewModel.getAllUser();
-
+                final email = emailCtrl.text.toLowerCase();
+                final isError = logInViewModel.state == LogInState.error;
+                
                 if(isError){
                   Fluttertoast.showToast(msg: 'Error: Something went wrong, try again');
                   return;
                 }
 
-                final userData = allUser.where((element) => element.email == emailCtrl.text).toList();
+                final userData = allUser.where((element) => element.email.toLowerCase() == email).toList();
 
                 if(userData.isEmpty || userData.length > 1 || userData.first.password != passwordCtrl.text){
                   Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');

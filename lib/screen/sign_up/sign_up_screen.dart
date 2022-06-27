@@ -427,7 +427,6 @@ class SignUpButton extends StatelessWidget {
     return Consumer<SignUpViewModel>(
       builder: (context, signUpViewModel,  _) {
         final isLoading = signUpViewModel.state == SignUpState.loading;
-        final isError = signUpViewModel.state == SignUpState.error;
         return Center(
           child: Padding(
             padding: const EdgeInsets.only(top: 30, bottom: 15),
@@ -439,6 +438,8 @@ class SignUpButton extends StatelessWidget {
                 if(!formKey.currentState!.validate())return;
 
                 await signUpViewModel.signUpWithEmailAndPassword(username: usernameCtrl.text, email: emailCtrl.text, contact: phoneNumberCtrl.text, password: passwordCtrl.text);
+                
+                final isError = signUpViewModel.state == SignUpState.error;
                 
                 if(isError){
                   Fluttertoast.showToast(msg: 'Error : Check your internet connection or try again');

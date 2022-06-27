@@ -54,12 +54,14 @@ class _DetailScreenState extends State<DetailScreen> {
             return const DetailShimmerLoading();
           }
           if (isError) {
-            return CostumErrorScreen(onPressed: () async {
-              classModel = await detailViewModel.getDetail(item: item, type: type);
-              if (classModel == null) {
-                Fluttertoast.showToast(msg: 'No data found');
-              }
-            });
+            return CostumErrorScreen(
+              onPressed: () async {
+                classModel = await detailViewModel.getDetail(item: item, type: type);
+                if (classModel == null) {
+                  Fluttertoast.showToast(msg: 'No data found');
+                }
+              },
+            );
           }
           if (classModel == null) {
             return EmptyListView(

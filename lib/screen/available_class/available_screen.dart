@@ -184,30 +184,32 @@ class CostumListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AvailableClassViewModel>(builder: (context, availableClassViewModel, _) {
-      if (availableClasses.isEmpty) {
-        return EmptyListView(
-          svgAssetLink: 'assets/icons/empty_class.svg',
-          title: 'Ooops, class not yet available',
-          emptyListViewFor: EmptyListViewFor.available,
-          onRefresh: availableClassViewModel.refreshData,
-        );
-      }
-      return RefreshIndicator(
-        onRefresh: () async {
-          await availableClassViewModel.refreshData();
-        },
-        child: ListView.builder(
-          padding: const EdgeInsets.only(top: 15),
-          itemCount: availableClasses.length,
-          itemBuilder: (context, i) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: CostumCard(classModel: availableClasses[i], whichScreen: CostumCardFor.availableClassScreen),
-            );
+    return Consumer<AvailableClassViewModel>(
+      builder: (context, availableClassViewModel, _) {
+        if (availableClasses.isEmpty) {
+          return EmptyListView(
+            svgAssetLink: 'assets/icons/empty_class.svg',
+            title: 'Ooops, class not yet available',
+            emptyListViewFor: EmptyListViewFor.available,
+            onRefresh: availableClassViewModel.refreshData,
+          );
+        }
+        return RefreshIndicator(
+          onRefresh: () async {
+            await availableClassViewModel.refreshData();
           },
-        ),
-      );
-    });
+          child: ListView.builder(
+            padding: const EdgeInsets.only(top: 15),
+            itemCount: availableClasses.length,
+            itemBuilder: (context, i) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: CostumCard(classModel: availableClasses[i], whichScreen: CostumCardFor.availableClassScreen),
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }

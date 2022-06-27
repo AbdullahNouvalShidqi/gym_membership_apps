@@ -39,9 +39,7 @@ class PersonalDetail extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                       color: Colors.white,
-                      boxShadow: const [
-                        BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240)),
-                      ],
+                      boxShadow: const [BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240))],
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,

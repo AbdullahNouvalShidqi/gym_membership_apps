@@ -9,6 +9,7 @@ import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PaymentInstructionScreen extends StatefulWidget {
@@ -42,7 +43,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         child: Column(
           children: [
-            const PriceContainer(),
+            PriceContainer(price: item?.price),
             const SizedBox(height: 15),
             const PaymentDetailContainer(),
             const SizedBox(height: 15),
@@ -117,7 +118,8 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
   }) {
     return () async {
       bool dontAdd = false;
-      if (scheduleViewModel.listSchedule.any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)) {
+      if (scheduleViewModel.listSchedule
+          .any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)) {
         await showDialog(
             context: context,
             builder: (context) {
@@ -152,7 +154,8 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
       bool goToSchedule = false;
       await showModalBottomSheet(
         context: context,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))),
         isScrollControlled: true,
         builder: (context) {
           return CostumBottomSheet(
@@ -188,7 +191,8 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
 }
 
 class PriceContainer extends StatelessWidget {
-  const PriceContainer({Key? key}) : super(key: key);
+  const PriceContainer({Key? key, required this.price}) : super(key: key);
+  final int? price;
 
   @override
   Widget build(BuildContext context) {
@@ -207,11 +211,17 @@ class PriceContainer extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
-            Text('Total Payment', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
+          children: [
+            const Text('Total Payment', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
             Text(
-              'Rp. 300.000',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Color.fromRGBO(34, 85, 156, 1)),
+              price != null
+                  ? NumberFormat.currency(symbol: 'Rp. ', locale: 'id_id', decimalDigits: 0).format(price)
+                  : 'Rp. 300.000',
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: Color.fromRGBO(34, 85, 156, 1),
+              ),
             ),
           ],
         ),
@@ -358,7 +368,8 @@ class CostumSubCard extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: RichText(
                     text: const TextSpan(
-                      text: '1. Select another Menu > Transfer\n2. Select the origin account and select the destination account to MANDIRI account\n3. Enter the account number ',
+                      text:
+                          '1. Select another Menu > Transfer\n2. Select the origin account and select the destination account to MANDIRI account\n3. Enter the account number ',
                       style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
                       children: [
                         TextSpan(
@@ -374,7 +385,8 @@ class CostumSubCard extends StatelessWidget {
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
                         ),
                         TextSpan(
-                          text: "and select correct\n5. Check the data on the screen. Make sure the name is the recipient's name, and the amount is correct. If so, select Yes.",
+                          text:
+                              "and select correct\n5. Check the data on the screen. Make sure the name is the recipient's name, and the amount is correct. If so, select Yes.",
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
                         ),
                       ],

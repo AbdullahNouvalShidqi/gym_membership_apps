@@ -175,8 +175,8 @@ class TipsImage extends StatelessWidget {
             height: 600,
             width: 800,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
+            decoration: const BoxDecoration(
+              color: Utilities.primaryColor,
             ),
             child: const SpinKitPianoWave(color: Colors.white),
           );

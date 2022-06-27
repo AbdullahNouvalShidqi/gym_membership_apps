@@ -32,13 +32,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _whenToAnimate() {
-    if (_listviewController.position.userScrollDirection == ScrollDirection.reverse && _singleListController.offset == _singleListController.position.minScrollExtent) {
-      _singleListController.animateTo(_singleListController.position.maxScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+    if (_listviewController.position.userScrollDirection == ScrollDirection.reverse &&
+        _singleListController.offset == _singleListController.position.minScrollExtent) {
+      _singleListController.animateTo(_singleListController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300), curve: Curves.linear);
       isDown = true;
     }
-    if (_listviewController.position.userScrollDirection == ScrollDirection.forward && _listviewController.offset < _listviewController.position.minScrollExtent) {
+    if (_listviewController.position.userScrollDirection == ScrollDirection.forward &&
+        _listviewController.offset < _listviewController.position.minScrollExtent) {
       if (isDown) {
-        _singleListController.animateTo(_singleListController.position.minScrollExtent, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+        _singleListController.animateTo(
+          _singleListController.position.minScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.linear,
+        );
         isDown = false;
       }
     }
@@ -90,7 +97,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     };
   }
 
-  void Function() progressOnTap({required ProfileViewModel profileViewModel, required ScheduleViewModel scheduleViewModel}) {
+  void Function() progressOnTap(
+      {required ProfileViewModel profileViewModel, required ScheduleViewModel scheduleViewModel}) {
     return () {
       if (_scrollStatus == ScrollStatus.attached && scheduleViewModel.listSchedule.isNotEmpty) {
         _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);

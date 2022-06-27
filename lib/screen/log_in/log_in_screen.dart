@@ -174,7 +174,8 @@ class _LogInScreenState extends State<LogInScreen> {
       return willPop;
     } else {
       DateTime now = DateTime.now();
-      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) && ModalRoute.of(context)!.isFirst) {
+      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) &&
+          ModalRoute.of(context)!.isFirst) {
         currentBackPressTime = now;
         Fluttertoast.showToast(msg: 'Press back again to exit');
         return Future.value(false);

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
@@ -21,45 +19,32 @@ class AvailableClassScreen extends StatefulWidget {
 
 class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
   late final _tabController = TabController(length: 7, vsync: this);
-  Timer? _timer;
-  int count = 0;
+  late ClassModel item;
 
   @override
   void dispose() {
-    super.dispose();
     _tabController.dispose();
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-  }
-
-  void _startTime() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        count++;
-      });
-    });
+    super.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    _startTime();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
-      await Provider.of<AvailableClassViewModel>(context, listen: false).getAvailableClasses(item: item);
+      final availableClassViewModel = Provider.of<AvailableClassViewModel>(context, listen: false);
+
+      await availableClassViewModel.getAvailableClasses(item: item);
+      availableClassViewModel.startTimer();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
+    item = ModalRoute.of(context)!.settings.arguments as ClassModel;
+    final availableClassViewModel = context.watch<AvailableClassViewModel>();
 
     return WillPopScope(
-      onWillPop: () async {
-        Provider.of<AvailableClassViewModel>(context, listen: false).changeState(AvailableClassState.none);
-        return true;
-      },
+      onWillPop: availableClassViewModel.onWillPop,
       child: Scaffold(
         body: SafeArea(
           child: NestedScrollView(

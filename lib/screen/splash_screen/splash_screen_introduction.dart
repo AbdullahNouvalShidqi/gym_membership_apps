@@ -182,8 +182,12 @@ class CarouselIndicator extends StatelessWidget {
 }
 
 class GetStartedButton extends StatelessWidget {
-  const GetStartedButton({Key? key, required this.currentIndex, required this.carouselCtrl, required this.onPressed})
-      : super(key: key);
+  const GetStartedButton({
+    Key? key,
+    required this.currentIndex,
+    required this.carouselCtrl,
+    required this.onPressed,
+  }) : super(key: key);
   final int currentIndex;
   final CarouselController carouselCtrl;
   final void Function() onPressed;

@@ -54,8 +54,11 @@ class Utilities {
     );
   }
 
-  static const TextStyle signInSignUpMainTitleStyle =
-      TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: primaryColor);
+  static const TextStyle signInSignUpMainTitleStyle = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+    color: primaryColor,
+  );
 
   static const TextStyle homeViewMainTitleStyle =
       TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.black);
@@ -66,8 +69,11 @@ class Utilities {
 
   static const TextStyle appBarTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.black);
 
-  static const TextStyle personalDetailLabel =
-      TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Utilities.primaryColor);
+  static const TextStyle personalDetailLabel = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    color: Utilities.primaryColor,
+  );
 
   static const TextStyle personalDetailValue = TextStyle(fontSize: 16, color: Colors.grey);
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
+import 'package:gym_membership_apps/screen/book/book_view_model.dart';
 import 'package:gym_membership_apps/screen/payment_instruction/payment_instruction_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
@@ -10,21 +10,15 @@ import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class BookScreen extends StatefulWidget {
+class BookScreen extends StatelessWidget {
   static String routeName = '/book';
   const BookScreen({Key? key}) : super(key: key);
-
-  @override
-  State<BookScreen> createState() => _BookScreenState();
-}
-
-class _BookScreenState extends State<BookScreen> {
-  DateTime? currentBackPressTime;
 
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context).user;
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
+    final backToHomeOnTap = context.watch<BookViewModel>().backToHomeOnTap;
 
     return Scaffold(
       appBar: AppBar(
@@ -45,25 +39,17 @@ class _BookScreenState extends State<BookScreen> {
             BookingDetail(item: item),
             const SizedBox(height: 20),
             UserInformation(user: user),
-            CostumButtons(item: item, backToHomeOnTap: backToHomeOnTap),
+            CostumButtons(
+              item: item,
+              backToHomeOnTap: () {
+                backToHomeOnTap(context);
+              },
+            ),
             const SizedBox(height: 30),
           ],
         ),
       ),
     );
-  }
-
-  void backToHomeOnTap() {
-    DateTime now = DateTime.now();
-    if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000))) {
-      currentBackPressTime = now;
-      Fluttertoast.cancel();
-      Fluttertoast.showToast(msg: "Press back to home again, to go back to home");
-      return;
-    }
-    currentBackPressTime = null;
-    Fluttertoast.cancel();
-    Navigator.popUntil(context, (route) => route.isFirst);
   }
 }
 
@@ -101,11 +87,7 @@ class BookingDetail extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const Icon(
-                        Icons.calendar_today_outlined,
-                        size: 10,
-                        color: Colors.grey,
-                      ),
+                      const Icon(Icons.calendar_today_outlined, size: 10, color: Colors.grey),
                       const SizedBox(width: 5),
                       Text(
                         '${DateFormat('d MMMM y').format(item.startAt)}, ${DateFormat('Hm').format(item.startAt)}',
@@ -117,10 +99,7 @@ class BookingDetail extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      SvgPicture.asset(
-                        'assets/icons/gym_icon.svg',
-                        color: Colors.grey,
-                      ),
+                      SvgPicture.asset('assets/icons/gym_icon.svg', color: Colors.grey),
                       const SizedBox(width: 5),
                       Text(item.instructor.name, style: const TextStyle(fontSize: 10, color: Colors.grey))
                     ],
@@ -162,10 +141,7 @@ class UserInformation extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'User Information',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-          ),
+          const Text('User Information', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
           const SizedBox(height: 10),
           Expanded(
             child: Row(

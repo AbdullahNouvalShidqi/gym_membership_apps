@@ -96,7 +96,10 @@ class EmailFormField extends StatelessWidget {
       prefixIcon: const Icon(Icons.email_outlined),
       textInputType: TextInputType.emailAddress,
       validator: (newValue) {
-        if (newValue == null || newValue == '' || newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(emailCtrl.text)) {
+        if (newValue == null || newValue == '') {
+          return 'Please enter your email';
+        }
+        if (newValue.contains(' ') || !Utilities.emailRegExp.hasMatch(emailCtrl.text)) {
           return 'Please enter a valid email';
         }
         return null;
@@ -138,7 +141,8 @@ class ContinueButton extends StatelessWidget {
             final user = allUser.where((element) => element.email.toLowerCase() == email.toLowerCase());
 
             if (user.length > 1 || user.isEmpty) {
-              Fluttertoast.showToast(msg: 'No user with email of $email found on our database, sign up first or check your email');
+              Fluttertoast.showToast(
+                  msg: 'No user with email of $email found on our database, sign up first or check your email');
               return;
             }
 

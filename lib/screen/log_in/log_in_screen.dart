@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -9,11 +7,9 @@ import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
-import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LogInScreen extends StatefulWidget {
   static String routeName = '/logInScreen';
@@ -24,44 +20,21 @@ class LogInScreen extends StatefulWidget {
 }
 
 class _LogInScreenState extends State<LogInScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
-  late SharedPreferences _sharedPreferences;
-  DateTime? currentBackPressTime;
-  bool _rememberMe = false;
-
   @override
   void initState() {
-    setEmailAndPassword();
+    Provider.of<LogInViewModel>(context, listen: false).setEmailAndPassword();
     super.initState();
-  }
-
-  void setEmailAndPassword() async {
-    _sharedPreferences = await SharedPreferences.getInstance();
-    if (_sharedPreferences.getString('rememberMe') == null) return;
-
-    final Map<String, dynamic> userData = jsonDecode(_sharedPreferences.getString('rememberMe')!);
-    _emailCtrl.text = userData['email'];
-    _passwordCtrl.text = userData['password'];
-    setState(() {
-      _rememberMe = true;
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _emailCtrl.dispose();
-    _passwordCtrl.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final loginViewModel = context.watch<LogInViewModel>();
     return WillPopScope(
-      onWillPop: willPopValidation,
+      onWillPop: () async {
+        return await loginViewModel.willPopValidation(context);
+      },
       child: Form(
-        key: _formKey,
+        key: loginViewModel.formKey,
         child: Scaffold(
           body: SingleChildScrollView(
             child: Padding(
@@ -70,28 +43,18 @@ class _LogInScreenState extends State<LogInScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const MainTitle(),
-                  EmailFormField(emailCtrl: _emailCtrl),
+                  const EmailFormField(),
                   const SizedBox(height: 10),
-                  PasswordFormField(passwordCtrl: _passwordCtrl),
+                  const PasswordFormField(),
                   const SizedBox(height: 15),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      RememberMeCheckBox(
-                        rememberMe: _rememberMe,
-                        onChanged: rememberMeCheckBoxOnTap,
-                        onTap: rememberMeLabelOnTap,
-                      ),
-                      const ForgotPassword()
+                    children: const [
+                      RememberMeCheckBox(),
+                      ForgotPassword(),
                     ],
                   ),
-                  LoginButton(
-                    formKey: _formKey,
-                    emailCtrl: _emailCtrl,
-                    passwordCtrl: _passwordCtrl,
-                    rememberMe: _rememberMe,
-                    mounted: mounted,
-                  ),
+                  LoginButton(mounted: mounted),
                   Center(
                     child: Text(
                       'OR',
@@ -107,18 +70,6 @@ class _LogInScreenState extends State<LogInScreen> {
         ),
       ),
     );
-  }
-
-  void rememberMeCheckBoxOnTap(bool? newValue) {
-    setState(() {
-      _rememberMe = newValue!;
-    });
-  }
-
-  void rememberMeLabelOnTap() {
-    setState(() {
-      _rememberMe = !_rememberMe;
-    });
   }
 
   Widget googleLoginButton() {
@@ -149,71 +100,40 @@ class _LogInScreenState extends State<LogInScreen> {
       ),
     );
   }
-
-  Future<bool> willPopValidation() async {
-    if (_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty) {
-      bool willPop = false;
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return CostumDialog(
-            title: 'Exit?',
-            contentText: "You will lose your data you've filled!",
-            trueText: 'Exit',
-            falseText: 'Cancel',
-            trueOnPressed: () {
-              willPop = true;
-              Navigator.pop(context);
-            },
-            falseOnPressed: () {
-              Navigator.pop(context);
-            },
-          );
-        },
-      );
-      return willPop;
-    } else {
-      DateTime now = DateTime.now();
-      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(seconds: 2)) &&
-          ModalRoute.of(context)!.isFirst) {
-        currentBackPressTime = now;
-        Fluttertoast.showToast(msg: 'Press back again to exit');
-        return Future.value(false);
-      }
-      return Future.value(true);
-    }
-  }
 }
 
 class PasswordFormField extends StatelessWidget {
-  const PasswordFormField({Key? key, required this.passwordCtrl}) : super(key: key);
-  final TextEditingController passwordCtrl;
+  const PasswordFormField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CostumFormField(
-      controller: passwordCtrl,
-      label: 'Password',
-      hintText: 'Enter your password',
-      prefixIcon: const Icon(Icons.lock_outline),
-      textInputType: TextInputType.visiblePassword,
-      validator: (newValue) {
-        if (newValue == null || newValue.isEmpty || newValue == ' ') {
-          return 'Please enter your password';
-        } else if (newValue.contains('  ')) {
-          return 'Your password contains double space, please remove it';
-        } else if (newValue.length < 6) {
-          return 'The minimal length of password is 6';
-        } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
-          return 'Please enter at least one alphabet letter in your password';
-        } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
-          return 'Please enter at least one non alphabet letter in your password';
-        } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
-          return 'Please enter at least one number in your password';
-        }
-        return null;
+    return Consumer<LogInViewModel>(
+      builder: (context, loginViewModel, _) {
+        return CostumFormField(
+          controller: loginViewModel.passwordCtrl,
+          label: 'Password',
+          hintText: 'Enter your password',
+          prefixIcon: const Icon(Icons.lock_outline),
+          textInputType: TextInputType.visiblePassword,
+          validator: (newValue) {
+            if (newValue == null || newValue.isEmpty || newValue == ' ') {
+              return 'Please enter your password';
+            } else if (newValue.contains('  ')) {
+              return 'Your password contains double space, please remove it';
+            } else if (newValue.length < 6) {
+              return 'The minimal length of password is 6';
+            } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
+              return 'Please enter at least one alphabet letter in your password';
+            } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
+              return 'Please enter at least one non alphabet letter in your password';
+            } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
+              return 'Please enter at least one number in your password';
+            }
+            return null;
+          },
+          useIconHidePassword: true,
+        );
       },
-      useIconHidePassword: true,
     );
   }
 }
@@ -240,42 +160,36 @@ class MainTitle extends StatelessWidget {
 }
 
 class EmailFormField extends StatelessWidget {
-  const EmailFormField({Key? key, required this.emailCtrl}) : super(key: key);
-  final TextEditingController emailCtrl;
+  const EmailFormField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CostumFormField(
-      controller: emailCtrl,
-      label: 'Email Address',
-      hintText: 'Enter your email address',
-      prefixIcon: const Icon(Icons.email_outlined),
-      textInputType: TextInputType.emailAddress,
-      validator: (newValue) {
-        if (newValue == null || newValue.isEmpty || newValue == ' ') {
-          return 'Please enter your email address';
-        } else if (!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')) {
-          return 'Please enter a valid email address';
-        }
-        return null;
-      },
-    );
+    return Consumer<LogInViewModel>(builder: (context, logInViewModel, _) {
+      return CostumFormField(
+        controller: logInViewModel.emailCtrl,
+        label: 'Email Address',
+        hintText: 'Enter your email address',
+        prefixIcon: const Icon(Icons.email_outlined),
+        textInputType: TextInputType.emailAddress,
+        validator: (newValue) {
+          if (newValue == null || newValue.isEmpty || newValue == ' ') {
+            return 'Please enter your email address';
+          } else if (!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')) {
+            return 'Please enter a valid email address';
+          }
+          return null;
+        },
+      );
+    });
   }
 }
 
 class RememberMeCheckBox extends StatelessWidget {
-  const RememberMeCheckBox({
-    Key? key,
-    required this.rememberMe,
-    required this.onChanged,
-    required this.onTap,
-  }) : super(key: key);
-  final bool rememberMe;
-  final void Function(bool?) onChanged;
-  final void Function() onTap;
+  const RememberMeCheckBox({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final logInViewModel = context.watch<LogInViewModel>();
     return Row(
       children: [
         Transform.scale(
@@ -286,14 +200,14 @@ class RememberMeCheckBox extends StatelessWidget {
             child: Checkbox(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              value: rememberMe,
-              onChanged: onChanged,
+              value: logInViewModel.rememberMe,
+              onChanged: logInViewModel.rememberMeCheckBoxOnTap,
             ),
           ),
         ),
         const SizedBox(width: 5),
         GestureDetector(
-          onTap: onTap,
+          onTap: logInViewModel.rememberMeLabelOnTap,
           child: const Text('Remember Me', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
         )
       ],
@@ -318,16 +232,8 @@ class ForgotPassword extends StatelessWidget {
 class LoginButton extends StatelessWidget {
   const LoginButton({
     Key? key,
-    required this.formKey,
-    required this.emailCtrl,
-    required this.passwordCtrl,
-    required this.rememberMe,
     required this.mounted,
   }) : super(key: key);
-  final GlobalKey<FormState> formKey;
-  final TextEditingController emailCtrl;
-  final TextEditingController passwordCtrl;
-  final bool rememberMe;
   final bool mounted;
 
   @override
@@ -344,6 +250,11 @@ class LoginButton extends StatelessWidget {
               isLoading: isLoading,
               childText: 'Login',
               onPressed: () async {
+                final formKey = logInViewModel.formKey;
+                final emailCtrl = logInViewModel.emailCtrl;
+                final passwordCtrl = logInViewModel.passwordCtrl;
+                final rememberMe = logInViewModel.rememberMe;
+
                 if (!formKey.currentState!.validate()) return;
                 final allUser = await logInViewModel.getAllUser();
                 final email = emailCtrl.text.toLowerCase();
@@ -362,7 +273,7 @@ class LoginButton extends StatelessWidget {
                 }
 
                 if (rememberMe) {
-                  await logInViewModel.rememberMe(email: userData.first.email, password: userData.first.password);
+                  await logInViewModel.setRememberMe(email: userData.first.email, password: userData.first.password);
                 } else {
                   await logInViewModel.dontRememberMe();
                 }

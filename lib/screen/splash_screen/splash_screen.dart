@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
-import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -15,36 +13,12 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   bool isInit = true;
-  late Map<String, dynamic> userData;
-
-  void loadingDummy() async {
-    final splashScreenModel = Provider.of<SplashScreenViewModel>(context, listen: false);
-    await precacheImage(const AssetImage('assets/google_logo.png'), context);
-    if (!mounted) return;
-    await precacheImage(const AssetImage('assets/splash1.png'), context);
-    if (!mounted) return;
-    await precacheImage(const AssetImage('assets/splash2.png'), context);
-    if (!mounted) return;
-    await precacheImage(const AssetImage('assets/splash3.png'), context);
-
-    await splashScreenModel.checkIsFirsTime();
-    final isFirstTime = splashScreenModel.isFirstTime;
-
-    await Future.delayed(const Duration(seconds: 1));
-
-    if (!mounted) return;
-    if (isFirstTime) {
-      Navigator.pushReplacementNamed(context, SplashScreenIntroduction.routeName);
-    } else {
-      Navigator.pushReplacementNamed(context, LogInScreen.routeName);
-    }
-  }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (isInit) {
-      loadingDummy();
+      Provider.of<SplashScreenViewModel>(context, listen: false).initLoad(context, mounted);
       isInit = false;
     }
   }

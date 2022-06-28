@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
@@ -8,8 +8,6 @@ import 'package:gym_membership_apps/utilitites/costum_card.dart';
 import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
-
-enum ScrollStatus { detached, attached }
 
 class ProfileScreen extends StatefulWidget {
   static String routeName = '/profileScreen';
@@ -20,93 +18,45 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  ScrollStatus _scrollStatus = ScrollStatus.detached;
-  final _listviewController = ScrollController();
-  final _singleListController = ScrollController();
-  bool isDown = false;
-
   @override
   void initState() {
-    _listviewController.addListener(_whenToAnimate);
+    Provider.of<ProfileViewModel>(context, listen: false).initListController();
     super.initState();
-  }
-
-  void _whenToAnimate() {
-    if (_listviewController.position.userScrollDirection == ScrollDirection.reverse &&
-        _singleListController.offset == _singleListController.position.minScrollExtent) {
-      _singleListController.animateTo(_singleListController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300), curve: Curves.linear);
-      isDown = true;
-    }
-    if (_listviewController.position.userScrollDirection == ScrollDirection.forward &&
-        _listviewController.offset < _listviewController.position.minScrollExtent) {
-      if (isDown) {
-        _singleListController.animateTo(
-          _singleListController.position.minScrollExtent,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.linear,
-        );
-        isDown = false;
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ScheduleViewModel, ProfileViewModel>(builder: (context, scheduleViewModel, profileViewModel, _) {
-      final myAccountSelected = profileViewModel.myAccountSelected;
-      final progressSelected = profileViewModel.progressSelected;
-      return Scaffold(
-        body: SingleChildScrollView(
-          controller: _singleListController,
-          physics: const NeverScrollableScrollPhysics(),
-          child: Center(
-            child: Column(
-              children: [
-                MainProfile(profileViewModel: profileViewModel),
-                const SizedBox(height: 30),
-                TabButton(
-                  myAccountSelected: myAccountSelected,
-                  progressSelected: progressSelected,
-                  listviewController: _listviewController,
-                  singleListController: _singleListController,
-                  myAccountOnTap: myAccountOnTap(profileViewModel: profileViewModel),
-                  progressOnTap: progressOnTap(profileViewModel: profileViewModel, scheduleViewModel: scheduleViewModel),
-                ),
-                const SizedBox(height: 15),
-                ItemToReturn(
-                  myAccountSelected: myAccountSelected,
-                  listviewController: _listviewController,
-                  mounted: mounted,
-                )
-              ],
+    return Consumer2<ScheduleViewModel, ProfileViewModel>(
+      builder: (context, scheduleViewModel, profileViewModel, _) {
+        final myAccountSelected = profileViewModel.myAccountSelected;
+        final progressSelected = profileViewModel.progressSelected;
+
+        return Scaffold(
+          body: SingleChildScrollView(
+            controller: profileViewModel.singleListController,
+            physics: const NeverScrollableScrollPhysics(),
+            child: Center(
+              child: Column(
+                children: [
+                  MainProfile(profileViewModel: profileViewModel),
+                  const SizedBox(height: 30),
+                  TabButton(
+                    myAccountSelected: myAccountSelected,
+                    progressSelected: progressSelected,
+                    myAccountOnTap: profileViewModel.myAccountButtonOnTap,
+                    progressOnTap: () {
+                      profileViewModel.progressButtonOnTap(scheduleViewModel: scheduleViewModel);
+                    },
+                  ),
+                  const SizedBox(height: 15),
+                  ItemToReturn(myAccountSelected: myAccountSelected, mounted: mounted)
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    });
-  }
-
-  void Function() myAccountOnTap({required ProfileViewModel profileViewModel}) {
-    return () {
-      _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
-      if (_scrollStatus == ScrollStatus.attached) {
-        _scrollStatus = ScrollStatus.detached;
-      }
-      profileViewModel.myAccountButtonOnTap();
-    };
-  }
-
-  void Function() progressOnTap(
-      {required ProfileViewModel profileViewModel, required ScheduleViewModel scheduleViewModel}) {
-    return () {
-      if (_scrollStatus == ScrollStatus.attached && scheduleViewModel.listSchedule.isNotEmpty) {
-        _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
-        _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
-      }
-      _scrollStatus = ScrollStatus.attached;
-      profileViewModel.progressButtonOnTap();
-    };
+        );
+      },
+    );
   }
 }
 
@@ -140,15 +90,11 @@ class TabButton extends StatelessWidget {
     Key? key,
     required this.myAccountSelected,
     required this.progressSelected,
-    required this.singleListController,
-    required this.listviewController,
     required this.myAccountOnTap,
     required this.progressOnTap,
   }) : super(key: key);
   final bool myAccountSelected;
   final bool progressSelected;
-  final ScrollController singleListController;
-  final ScrollController listviewController;
   final void Function() myAccountOnTap;
   final void Function() progressOnTap;
 
@@ -197,11 +143,9 @@ class ItemToReturn extends StatelessWidget {
   const ItemToReturn({
     Key? key,
     required this.myAccountSelected,
-    required this.listviewController,
     required this.mounted,
   }) : super(key: key);
   final bool myAccountSelected;
-  final ScrollController listviewController;
   final bool mounted;
 
   @override
@@ -209,67 +153,7 @@ class ItemToReturn extends StatelessWidget {
     return Consumer3<ScheduleViewModel, HomeViewModel, ProfileViewModel>(
       builder: (context, scheduleViewModel, homeViewModel, profileViewModel, _) {
         if (myAccountSelected) {
-          return SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: ListView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: profileViewModel.myAccountItems.length,
-              itemBuilder: (context, i) {
-                return Column(
-                  children: [
-                    if (i < 6) ...[
-                      InkWell(
-                        onTap: listTileOntap(
-                          context: context,
-                          i: i,
-                          homeViewModel: homeViewModel,
-                          profileViewModel: profileViewModel,
-                          scheduleViewModel: scheduleViewModel,
-                          mounted: mounted,
-                        ),
-                        child: Container(
-                          height: 45,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              profileViewModel.myAccountItems[i]['icon']!,
-                              const SizedBox(width: 10),
-                              profileViewModel.myAccountItems[i]['title']!,
-                            ],
-                          ),
-                        ),
-                      ),
-                      Divider(height: 0, color: Utilities.myTheme.primaryColor),
-                    ] else ...[
-                      const SizedBox(height: 20),
-                      InkWell(
-                        onTap: listTileOntap(
-                          context: context,
-                          i: i,
-                          homeViewModel: homeViewModel,
-                          profileViewModel: profileViewModel,
-                          scheduleViewModel: scheduleViewModel,
-                          mounted: mounted,
-                        ),
-                        child: Container(
-                          height: 45,
-                          padding: const EdgeInsets.symmetric(horizontal: 20),
-                          child: Row(
-                            children: [
-                              profileViewModel.myAccountItems[i]['icon']!,
-                              const SizedBox(width: 10),
-                              profileViewModel.myAccountItems[i]['title']!,
-                            ],
-                          ),
-                        ),
-                      ),
-                      Divider(height: 0, color: Utilities.myTheme.primaryColor)
-                    ],
-                  ],
-                );
-              },
-            ),
-          );
+          return AccountSettings(mounted: mounted);
         }
         if (scheduleViewModel.listSchedule.isEmpty) {
           return EmptyListView(
@@ -284,7 +168,7 @@ class ItemToReturn extends StatelessWidget {
           child: Center(
             child: ListView.builder(
               physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-              controller: listviewController,
+              controller: profileViewModel.listviewController,
               itemCount: scheduleViewModel.listSchedule.length,
               itemBuilder: (context, i) {
                 return InkWell(
@@ -292,12 +176,12 @@ class ItemToReturn extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       DetailScreen.routeName,
-                      arguments: {
-                        'homeClassModel': homeViewModel.classes.firstWhere(
+                      arguments: DetailRouteModel(
+                        homeClassModel: homeViewModel.classes.firstWhere(
                           (element) => element.name == scheduleViewModel.listSchedule[i].name,
                         ),
-                        'type': scheduleViewModel.listSchedule[i].type,
-                      },
+                        type: scheduleViewModel.listSchedule[i].type,
+                      ),
                     );
                   },
                   child: Padding(
@@ -315,22 +199,55 @@ class ItemToReturn extends StatelessWidget {
       },
     );
   }
+}
 
-  Future<void> Function() listTileOntap({
-    required BuildContext context,
-    required int i,
-    required ProfileViewModel profileViewModel,
-    required HomeViewModel homeViewModel,
-    required ScheduleViewModel scheduleViewModel,
-    required bool mounted,
-  }) {
-    return profileViewModel.onTap(
-      context: context,
-      i: i,
-      scheduleViewModel: scheduleViewModel,
-      profileViewModel: profileViewModel,
-      homeViewModel: homeViewModel,
-      mounted: mounted,
+class AccountSettings extends StatelessWidget {
+  const AccountSettings({Key? key, required this.mounted}) : super(key: key);
+  final bool mounted;
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer3<ProfileViewModel, HomeViewModel, ScheduleViewModel>(
+      builder: (context, profileViewModel, homeViewModel, scheduleViewModel, _) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height,
+          child: ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: profileViewModel.myAccountItems.length,
+            itemBuilder: (context, i) {
+              return Column(
+                children: [
+                  if (i == 6) ...[
+                    const SizedBox(height: 20),
+                  ],
+                  InkWell(
+                    onTap: profileViewModel.onTap(
+                      context: context,
+                      i: i,
+                      homeViewModel: homeViewModel,
+                      profileViewModel: profileViewModel,
+                      scheduleViewModel: scheduleViewModel,
+                      mounted: mounted,
+                    ),
+                    child: Container(
+                      height: 45,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: Row(
+                        children: [
+                          profileViewModel.myAccountItems[i].icon,
+                          const SizedBox(width: 10),
+                          profileViewModel.myAccountItems[i].title,
+                        ],
+                      ),
+                    ),
+                  ),
+                  Divider(height: 0, color: Utilities.myTheme.primaryColor),
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

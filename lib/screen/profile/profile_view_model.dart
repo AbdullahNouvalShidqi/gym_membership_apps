@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/profile_settings_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/faq/faq_screen.dart';
 import 'package:gym_membership_apps/screen/feedback/feedback_screen.dart';
@@ -15,6 +17,8 @@ import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_condit
 import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 
 enum ProfileViewState { none, loading, error }
+
+enum ScrollStatus { detached, attached }
 
 class ProfileViewModel with ChangeNotifier {
   static UserModel _user = UserModel(username: '', email: '', contact: '', password: '');
@@ -31,44 +35,51 @@ class ProfileViewModel with ChangeNotifier {
   bool get myAccountSelected => _myAccountSelected;
   bool get progressSelected => _progressSelected;
 
+  final _listviewController = ScrollController();
+  ScrollController get listviewController => _listviewController;
+
+  final _singleListController = ScrollController();
+  ScrollController get singleListController => _singleListController;
+
   final List<ClassModel> _progress = [];
   List<ClassModel> get progress => _progress;
 
-  final List<Map<String, Widget>> _myAccountItems = [
-    {
-      'icon': SvgPicture.asset('assets/icons/personal_detail.svg'),
-      'title': const Text('Personal Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    },
-    {
-      'icon': SvgPicture.asset('assets/icons/payment.svg'),
-      'title': const Text('Payment Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    },
-    {
-      'icon': SvgPicture.asset('assets/icons/update_password.svg'),
-      'title': const Text('Update Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    },
-    {
-      'icon': SvgPicture.asset('assets/icons/feedback.svg'),
-      'title': const Text('Send us Feedbacks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    },
-    {
-      'icon': SvgPicture.asset('assets/icons/terms.svg'),
-      'title': const Text('Terms & Conditions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    },
-    {
-      'icon': SvgPicture.asset('assets/icons/faq.svg'),
-      'title': const Text('FAQ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
-    },
-    {
-      'icon': SvgPicture.asset('assets/icons/logout.svg'),
-      'title': const Text('Logout', style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 246, 0, 0))),
-    },
+  ScrollStatus _scrollStatus = ScrollStatus.detached;
+  ScrollStatus get scrollStatus => _scrollStatus;
+
+  final List<ProfileSettingsModel> _myAccountItems = [
+    ProfileSettingsModel(
+      icon: SvgPicture.asset('assets/icons/personal_detail.svg'),
+      title: const Text('Personal Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
+    ProfileSettingsModel(
+      icon: SvgPicture.asset('assets/icons/payment.svg'),
+      title: const Text('Payment Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
+    ProfileSettingsModel(
+      icon: SvgPicture.asset('assets/icons/update_password.svg'),
+      title: const Text('Update Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
+    ProfileSettingsModel(
+      icon: SvgPicture.asset('assets/icons/feedback.svg'),
+      title: const Text('Send us Feedbacks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
+    ProfileSettingsModel(
+      icon: SvgPicture.asset('assets/icons/terms.svg'),
+      title: const Text('Terms & Conditions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
+    ProfileSettingsModel(
+      icon: SvgPicture.asset('assets/icons/faq.svg'),
+      title: const Text('FAQ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+    ),
+    ProfileSettingsModel(
+      icon: SvgPicture.asset('assets/icons/logout.svg'),
+      title: const Text('Logout', style: TextStyle(fontSize: 16, color: Color.fromARGB(255, 246, 0, 0))),
+    ),
   ];
 
-  List<Map<String, Widget>> get myAccountItems => _myAccountItems;
-
-  final ScrollController _listviewController = ScrollController();
-  ScrollController get listViewController => _listviewController;
+  List<ProfileSettingsModel> get myAccountItems => _myAccountItems;
+  bool isDown = false;
 
   void changeState(ProfileViewState s) {
     _state = s;
@@ -83,16 +94,33 @@ class ProfileViewModel with ChangeNotifier {
     _user = UserModel(email: '', username: '', password: '', contact: '');
   }
 
-  void myAccountButtonOnTap() {
+  void Function() myAccountButtonOnTap() {
     _myAccountSelected = true;
     _progressSelected = false;
     notifyListeners();
+
+    return () {
+      _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+      if (_scrollStatus == ScrollStatus.attached) {
+        _scrollStatus = ScrollStatus.detached;
+      }
+    };
   }
 
-  void progressButtonOnTap() {
+  void Function() progressButtonOnTap({
+    required ScheduleViewModel scheduleViewModel,
+  }) {
     _myAccountSelected = false;
     _progressSelected = true;
     notifyListeners();
+
+    return () {
+      if (_scrollStatus == ScrollStatus.attached && scheduleViewModel.listSchedule.isNotEmpty) {
+        _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+        _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      }
+      _scrollStatus = ScrollStatus.attached;
+    };
   }
 
   Future<void> refreshProgress() async {
@@ -102,6 +130,33 @@ class ProfileViewModel with ChangeNotifier {
     } catch (e) {
       Fluttertoast.showToast(msg: 'Error cannot get data, check you internet connection');
       changeState(ProfileViewState.error);
+    }
+  }
+
+  void initListController() {
+    _listviewController.addListener(_whenToAnimate);
+  }
+
+  void _whenToAnimate() {
+    if (_listviewController.position.userScrollDirection == ScrollDirection.reverse &&
+        _singleListController.offset == _singleListController.position.minScrollExtent) {
+      _singleListController.animateTo(
+        _singleListController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.linear,
+      );
+      isDown = true;
+    }
+    if (_listviewController.position.userScrollDirection == ScrollDirection.forward &&
+        _listviewController.offset < _listviewController.position.minScrollExtent) {
+      if (isDown) {
+        _singleListController.animateTo(
+          _singleListController.position.minScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.linear,
+        );
+        isDown = false;
+      }
     }
   }
 

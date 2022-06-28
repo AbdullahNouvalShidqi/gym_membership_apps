@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
-import 'package:gym_membership_apps/model/home_class_model.dart';
+import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
@@ -23,30 +23,25 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  int _currentIndex = 0;
-  final _carouselCtrl = CarouselController();
   ClassModel? classModel;
+  late DetailRouteModel data;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final detailViewModel = Provider.of<DetailViewModel>(context, listen: false);
-      final data = ModalRoute.of(context)!.settings.arguments as Map;
-      final item = data['homeClassModel'] as HomeClassModel;
-      final type = data['type'] as String;
-      classModel = await detailViewModel.getDetail(item: item, type: type);
+      classModel = await detailViewModel.getDetail(item: data.homeClassModel, type: data.type);
     });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    data = ModalRoute.of(context)!.settings.arguments as DetailRouteModel;
+
     return Scaffold(
       body: Consumer<DetailViewModel>(
         builder: (context, detailViewModel, _) {
-          final data = ModalRoute.of(context)!.settings.arguments as Map;
-          final item = data['homeClassModel'] as HomeClassModel;
-          final type = data['type'] as String;
           final isLoading = detailViewModel.state == DetailState.loading;
           final isError = detailViewModel.state == DetailState.error;
 
@@ -56,7 +51,7 @@ class _DetailScreenState extends State<DetailScreen> {
           if (isError) {
             return CostumErrorScreen(
               onPressed: () async {
-                classModel = await detailViewModel.getDetail(item: item, type: type);
+                classModel = await detailViewModel.getDetail(item: data.homeClassModel, type: data.type);
                 if (classModel == null) {
                   Fluttertoast.showToast(msg: 'No data found');
                 }
@@ -69,7 +64,7 @@ class _DetailScreenState extends State<DetailScreen> {
               svgAssetLink: 'assets/icons/empty_class.svg',
               emptyListViewFor: EmptyListViewFor.detail,
               onRefresh: () async {
-                classModel = await detailViewModel.refreshDetail(item: item, type: type);
+                classModel = await detailViewModel.refreshDetail(item: data.homeClassModel, type: data.type);
                 if (classModel == null) {
                   Fluttertoast.showToast(msg: 'No data found');
                 }
@@ -86,20 +81,10 @@ class _DetailScreenState extends State<DetailScreen> {
                     children: [
                       Stack(
                         children: [
-                          MainCarousel(
-                            images: classModel!.images,
-                            carouselCtrl: _carouselCtrl,
-                            onPageChanged: (index, reason) {
-                              setState(() => _currentIndex = index);
-                            },
-                          ),
+                          MainCarousel(images: classModel!.images),
                           Positioned.fill(
                             bottom: 17,
-                            child: CarouselIndicator(
-                              images: classModel!.images,
-                              carouselCtrl: _carouselCtrl,
-                              currentIndex: _currentIndex,
-                            ),
+                            child: CarouselIndicator(images: classModel!.images),
                           )
                         ],
                       ),
@@ -184,18 +169,15 @@ class CostumAppBar extends StatelessWidget {
 }
 
 class MainCarousel extends StatelessWidget {
-  const MainCarousel({
-    Key? key,
-    required this.images,
-    required this.carouselCtrl,
-    required this.onPageChanged,
-  }) : super(key: key);
-  final CarouselController carouselCtrl;
+  const MainCarousel({Key? key, required this.images}) : super(key: key);
   final List<String> images;
-  final dynamic Function(int, CarouselPageChangedReason) onPageChanged;
 
   @override
   Widget build(BuildContext context) {
+    final detailViewModel = context.watch<DetailViewModel>();
+    final carouselCtrl = detailViewModel.carouselCtrl;
+    final onPageChanged = detailViewModel.onPageChanged;
+
     return CarouselSlider.builder(
       carouselController: carouselCtrl,
       itemCount: images.length,
@@ -218,18 +200,15 @@ class MainCarousel extends StatelessWidget {
 }
 
 class CarouselIndicator extends StatelessWidget {
-  const CarouselIndicator({
-    Key? key,
-    required this.images,
-    required this.carouselCtrl,
-    required this.currentIndex,
-  }) : super(key: key);
+  const CarouselIndicator({Key? key, required this.images}) : super(key: key);
   final List<String> images;
-  final CarouselController carouselCtrl;
-  final int currentIndex;
 
   @override
   Widget build(BuildContext context) {
+    final detailViewModel = context.watch<DetailViewModel>();
+    final currentIndex = detailViewModel.currentIndex;
+    final carouselCtrl = detailViewModel.carouselCtrl;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.end,

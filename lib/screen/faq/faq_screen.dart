@@ -38,7 +38,7 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    final faqScreenModel = Provider.of<FaqViewModel>(context);
+    final faqScreenModel = context.watch<FaqViewModel>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('FAQ', style: Utilities.appBarTextStyle),

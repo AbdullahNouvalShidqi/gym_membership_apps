@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class CostumGridView extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   DetailScreen.routeName,
-                  arguments: {'homeClassModel': homeViewModel.classes[i], 'type': type},
+                  arguments: DetailRouteModel(homeClassModel: homeViewModel.classes[i], type: type),
                 );
               },
               child: Container(

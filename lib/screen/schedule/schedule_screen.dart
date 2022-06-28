@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
@@ -106,12 +107,16 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
                             itemBuilder: (context, i) {
                               return InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, DetailScreen.routeName, arguments: {
-                                    'homeClassModel': homeViewModel.classes.firstWhere(
-                                      (element) => element.name == allItem[i].name,
+                                  Navigator.pushNamed(
+                                    context,
+                                    DetailScreen.routeName,
+                                    arguments: DetailRouteModel(
+                                      homeClassModel: homeViewModel.classes.firstWhere(
+                                        (element) => element.name == allItem[i].name,
+                                      ),
+                                      type: allItem[i].type,
                                     ),
-                                    'type': allItem[i].type,
-                                  });
+                                  );
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(vertical: 5),

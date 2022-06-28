@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/see_all/see_all_screen.dart';
@@ -56,7 +57,7 @@ class CostumHomeCard extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       DetailScreen.routeName,
-                      arguments: {'homeClassModel': homeClassModel[i], 'type': type},
+                      arguments: DetailRouteModel(homeClassModel: homeClassModel[i], type: type),
                     );
                   },
                   child: Container(

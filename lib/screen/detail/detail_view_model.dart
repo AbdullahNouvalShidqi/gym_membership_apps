@@ -1,3 +1,5 @@
+import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
@@ -12,8 +14,19 @@ class DetailViewModel with ChangeNotifier {
   DetailState _state = DetailState.none;
   DetailState get state => _state;
 
+  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
+
+  final _carouselCtrl = CarouselController();
+  CarouselController get carouselCtrl => _carouselCtrl;
+
   void changeState(DetailState s) {
     _state = s;
+    notifyListeners();
+  }
+
+  void onPageChanged(int index, CarouselPageChangedReason reason) {
+    _currentIndex = index;
     notifyListeners();
   }
 

@@ -16,30 +16,7 @@ class AvailableClassViewModel with ChangeNotifier {
   AvailableClassState _state = AvailableClassState.none;
   AvailableClassState get state => _state;
 
-  Timer? _timer;
-  Timer? get timer => _timer;
-
-  int _count = 0;
-
-  void startTimer() {
-    _timer = Timer.periodic(
-      const Duration(seconds: 1),
-      (timer) {
-        _count++;
-        print(_count);
-        notifyListeners();
-      },
-    );
-  }
-
-  void stopTime() {
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-  }
-
   Future<bool> onWillPop() async {
-    stopTime();
     changeState(AvailableClassState.none);
     notifyListeners();
 

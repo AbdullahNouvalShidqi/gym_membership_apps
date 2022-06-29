@@ -79,7 +79,7 @@ class ScheduleViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> addDatBooking({required ClassModel newClass}) async {
+  Future<void> addToSchedule({required ClassModel newClass}) async {
     changeState(ScheduleViewState.loading);
 
     try {

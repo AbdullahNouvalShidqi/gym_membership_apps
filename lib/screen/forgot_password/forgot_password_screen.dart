@@ -37,7 +37,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ContinueButton(
                 formKey: _formKey,
                 emailCtrl: _emailCtrl,
-                mounted: mounted,
               )
             ],
           ),
@@ -109,15 +108,9 @@ class EmailFormField extends StatelessWidget {
 }
 
 class ContinueButton extends StatelessWidget {
-  const ContinueButton({
-    Key? key,
-    required this.formKey,
-    required this.emailCtrl,
-    required this.mounted,
-  }) : super(key: key);
+  const ContinueButton({Key? key, required this.formKey, required this.emailCtrl}) : super(key: key);
   final GlobalKey<FormState> formKey;
   final TextEditingController emailCtrl;
-  final bool mounted;
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +120,8 @@ class ContinueButton extends StatelessWidget {
         return CostumButton(
           isLoading: isLoading,
           onPressed: () async {
+            final navigator = Navigator.of(context);
+
             if (!formKey.currentState!.validate()) return;
             await forgotPasswordViewModel.getAllUser();
             final allUser = forgotPasswordViewModel.allUser;
@@ -152,8 +147,7 @@ class ContinueButton extends StatelessWidget {
               Fluttertoast.showToast(msg: 'Error, we cannot send your otp, check your email or your internet');
               return;
             }
-            if (!mounted) return;
-            Navigator.pushReplacementNamed(context, OtpScreen.routeName);
+            navigator.pushReplacementNamed(OtpScreen.routeName);
           },
           childText: 'Continue',
         );

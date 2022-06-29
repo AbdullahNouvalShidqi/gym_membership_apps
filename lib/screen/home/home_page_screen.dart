@@ -43,9 +43,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
 
           if (isError) {
             return CostumErrorScreen(
-              onPressed: () async {
-                await homeViewModel.getInitData();
-              },
+              onPressed: homeViewModel.getInitData,
             );
           }
 

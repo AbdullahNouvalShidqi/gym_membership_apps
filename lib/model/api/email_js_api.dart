@@ -2,10 +2,13 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class EmailJsAPI {
-  static Future<String> sendOTP({required String email}) async {
-    final dio = Dio();
+  final dio = Dio();
+  String url = 'https://api.emailjs.com/api/v1.0/email';
+
+  Future<String> sendOTP({required String email}) async {
     String numbers = '0987654321';
     String otp = '';
     final random = Random();
@@ -13,12 +16,12 @@ class EmailJsAPI {
       otp += numbers[random.nextInt(numbers.length)];
     }
     await dio.post(
-      'https://api.emailjs.com/api/v1.0/email/send',
+      '$url/send',
       data: jsonEncode({
-        'service_id': 'service_vgdtrkl',
-        'template_id': 'template_72lly5x',
-        'user_id': 'Vd_KL9xxjmE9t1gSo',
-        'accessToken': 'ujNTh80NEezz01WBrtkWN',
+        'service_id': Utilities.serviceId,
+        'template_id': Utilities.otpTemplateId,
+        'user_id': Utilities.userId,
+        'accessToken': Utilities.accessToken,
         'template_params': {
           'email': email,
           'otp': otp,
@@ -30,5 +33,28 @@ class EmailJsAPI {
       ),
     );
     return otp;
+  }
+
+  Future<void> sendFeedBack({
+    required String username,
+    required String email,
+    required String rating,
+    required String feedback,
+  }) async {
+    await dio.post(
+      '$url/send',
+      data: jsonEncode({
+        'service_id': Utilities.serviceId,
+        'template_id': Utilities.feedbackTemplateId,
+        'user_id': Utilities.userId,
+        'accessToken': Utilities.accessToken,
+        'template_params': {
+          'username': username,
+          'email_address': email,
+          'rating': rating,
+          'feedback': feedback,
+        },
+      }),
+    );
   }
 }

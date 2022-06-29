@@ -18,7 +18,6 @@ class BookScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = Provider.of<ProfileViewModel>(context).user;
     final item = ModalRoute.of(context)!.settings.arguments as ClassModel;
-    final backToHomeOnTap = context.watch<BookViewModel>().backToHomeOnTap;
 
     return Scaffold(
       appBar: AppBar(
@@ -39,12 +38,7 @@ class BookScreen extends StatelessWidget {
             BookingDetail(item: item),
             const SizedBox(height: 20),
             UserInformation(user: user),
-            CostumButtons(
-              item: item,
-              backToHomeOnTap: () {
-                backToHomeOnTap(context);
-              },
-            ),
+            CostumButtons(item: item),
             const SizedBox(height: 30),
           ],
         ),
@@ -177,16 +171,16 @@ class UserInformation extends StatelessWidget {
 }
 
 class CostumButtons extends StatelessWidget {
-  const CostumButtons({Key? key, required this.item, required this.backToHomeOnTap}) : super(key: key);
+  const CostumButtons({Key? key, required this.item}) : super(key: key);
   final ClassModel item;
-  final void Function() backToHomeOnTap;
 
   @override
   Widget build(BuildContext context) {
+    final backToHomeOnTap = context.watch<BookViewModel>().backToHomeOnTap;
     return Column(
       children: [
         CostumButton(
-          onPressed: backToHomeOnTap,
+          onPressed: backToHomeOnTap(context),
           height: 45,
           backgroundColor: Utilities.myWhiteColor,
           borderColor: Utilities.primaryColor,

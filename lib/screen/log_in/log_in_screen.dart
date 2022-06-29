@@ -5,7 +5,6 @@ import 'package:gym_membership_apps/screen/forgot_password/forgot_password_scree
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
-import 'package:gym_membership_apps/screen/sign_up/sign_up_screen.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -30,9 +29,7 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     final loginViewModel = context.watch<LogInViewModel>();
     return WillPopScope(
-      onWillPop: () async {
-        return await loginViewModel.willPopValidation(context);
-      },
+      onWillPop: loginViewModel.willPopValidation(context),
       child: Form(
         key: loginViewModel.formKey,
         child: Scaffold(
@@ -54,7 +51,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       ForgotPassword(),
                     ],
                   ),
-                  LoginButton(mounted: mounted),
+                  const LoginButton(),
                   Center(
                     child: Text(
                       'OR',
@@ -230,11 +227,7 @@ class ForgotPassword extends StatelessWidget {
 }
 
 class LoginButton extends StatelessWidget {
-  const LoginButton({
-    Key? key,
-    required this.mounted,
-  }) : super(key: key);
-  final bool mounted;
+  const LoginButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -249,41 +242,7 @@ class LoginButton extends StatelessWidget {
               height: 45,
               isLoading: isLoading,
               childText: 'Login',
-              onPressed: () async {
-                final formKey = logInViewModel.formKey;
-                final emailCtrl = logInViewModel.emailCtrl;
-                final passwordCtrl = logInViewModel.passwordCtrl;
-                final rememberMe = logInViewModel.rememberMe;
-
-                if (!formKey.currentState!.validate()) return;
-                final allUser = await logInViewModel.getAllUser();
-                final email = emailCtrl.text.toLowerCase();
-                final isError = logInViewModel.state == LogInState.error;
-
-                if (isError) {
-                  Fluttertoast.showToast(msg: 'Error: Something went wrong, try again');
-                  return;
-                }
-
-                final userData = allUser.where((element) => element.email.toLowerCase() == email).toList();
-
-                if (userData.isEmpty || userData.length > 1 || userData.first.password != passwordCtrl.text) {
-                  Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
-                  return;
-                }
-
-                if (rememberMe) {
-                  await logInViewModel.setRememberMe(email: userData.first.email, password: userData.first.password);
-                } else {
-                  await logInViewModel.dontRememberMe();
-                }
-
-                ProfileViewModel.setUserData(currentUser: userData.first);
-
-                if (!mounted) return;
-                Fluttertoast.showToast(msg: 'Log in successful!');
-                Navigator.pushReplacementNamed(context, HomeScreen.routeName);
-              },
+              onPressed: logInViewModel.loginButtonOnTap(context),
             ),
           ),
         );
@@ -297,6 +256,7 @@ class ToSignUpButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final logInViewModel = context.watch<LogInViewModel>();
     return Padding(
       padding: const EdgeInsets.only(top: 15),
       child: Center(
@@ -308,10 +268,7 @@ class ToSignUpButton extends StatelessWidget {
               TextSpan(
                 text: 'Sign Up',
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.pushReplacementNamed(context, SignUpScreen.routeName);
-                  },
+                recognizer: TapGestureRecognizer()..onTap = logInViewModel.signUpButtonOnTap(context),
               )
             ],
           ),

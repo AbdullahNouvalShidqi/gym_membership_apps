@@ -228,8 +228,9 @@ class StatusAndButton extends StatelessWidget {
     if (now.day == startAt.day && now.hour >= startAt.subtract(const Duration(hours: 2)).hour) {
       return {'status': 'Late', 'onPressed': false};
     }
-    if (scheduleViewModel.listSchedule
-        .any((element) => element.id == classModel.id && element.type == classModel.type)) {
+    if (scheduleViewModel.listSchedule.any(
+      (element) => element.id == classModel.id && element.type == classModel.type,
+    )) {
       return {'status': 'Booked', 'onPressed': false};
     }
     if (classModel.qtyUsers == 0) {

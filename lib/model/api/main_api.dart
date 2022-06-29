@@ -7,9 +7,9 @@ class MainAPI {
   final String url = "https://capstone-kelompok-3.herokuapp.com";
   final String url2 = "https://capstone-project-ec879-default-rtdb.asia-southeast1.firebasedatabase.app";
   final dio = Dio(BaseOptions(
-    connectTimeout: 4000,
-    receiveTimeout: 4000,
-    sendTimeout: 4000,
+    connectTimeout: 9000,
+    receiveTimeout: 9000,
+    sendTimeout: 9000,
   ));
 
   Future<List<ClassModel>> getAllClass({String? type}) async {

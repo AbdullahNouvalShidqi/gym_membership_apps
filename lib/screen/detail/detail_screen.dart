@@ -71,51 +71,53 @@ class _DetailScreenState extends State<DetailScreen> {
               },
             );
           }
-
-          return SafeArea(
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Stack(
-                        children: [
-                          MainCarousel(images: classModel!.images),
-                          Positioned.fill(
-                            bottom: 17,
-                            child: CarouselIndicator(images: classModel!.images),
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+          return WillPopScope(
+            onWillPop: detailViewModel.onWillPop,
+            child: SafeArea(
+              child: Stack(
+                children: [
+                  SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Stack(
                           children: [
-                            const SizedBox(height: 15),
-                            MainTitleStatus(className: classModel!.name, type: classModel!.type),
-                            const SizedBox(height: 5),
-                            Price(price: classModel!.price),
-                            const SizedBox(height: 10),
-                            InstructorName(item: classModel!),
-                            const SizedBox(height: 5),
-                            GymLocation(location: classModel!.location),
-                            const SizedBox(height: 10),
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height - 575,
-                              child: ClassDetail(item: classModel!),
-                            ),
-                            SeeAvalableClassButton(item: classModel!),
+                            MainCarousel(images: classModel!.images),
+                            Positioned.fill(
+                              bottom: 17,
+                              child: CarouselIndicator(images: classModel!.images),
+                            )
                           ],
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 15),
+                              MainTitleStatus(className: classModel!.name, type: classModel!.type),
+                              const SizedBox(height: 5),
+                              Price(price: classModel!.price),
+                              const SizedBox(height: 10),
+                              InstructorName(item: classModel!),
+                              const SizedBox(height: 5),
+                              GymLocation(location: classModel!.location),
+                              const SizedBox(height: 10),
+                              SizedBox(
+                                height: MediaQuery.of(context).size.height - 575,
+                                child: ClassDetail(item: classModel!),
+                              ),
+                              SeeAvalableClassButton(item: classModel!),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const CostumAppBar()
-              ],
+                  const CostumAppBar()
+                ],
+              ),
             ),
           );
         },

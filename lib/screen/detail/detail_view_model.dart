@@ -30,6 +30,11 @@ class DetailViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> onWillPop() async {
+    _currentIndex = 0;
+    return true;
+  }
+
   Future<ClassModel?> getDetail({required HomeClassModel item, required String type}) async {
     changeState(DetailState.loading);
 

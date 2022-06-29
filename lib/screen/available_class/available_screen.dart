@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
@@ -20,10 +22,13 @@ class AvailableClassScreen extends StatefulWidget {
 class _AvailableClassScreenState extends State<AvailableClassScreen> with SingleTickerProviderStateMixin {
   late final _tabController = TabController(length: 7, vsync: this);
   late ClassModel item;
+  Timer? _timer;
+  int _count = 0;
 
   @override
   void dispose() {
     _tabController.dispose();
+    _timer?.cancel();
     super.dispose();
   }
 
@@ -34,14 +39,28 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
       final availableClassViewModel = Provider.of<AvailableClassViewModel>(context, listen: false);
 
       await availableClassViewModel.getAvailableClasses(item: item);
-      availableClassViewModel.startTimer();
+      _startTimer();
     });
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(
+      const Duration(seconds: 1),
+      (timer) {
+        _count++;
+        print(_count);
+        setState(() {});
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     item = ModalRoute.of(context)!.settings.arguments as ClassModel;
     final availableClassViewModel = context.watch<AvailableClassViewModel>();
+    final classes = availableClassViewModel.availableClasses;
+    final isLoading = availableClassViewModel.state == AvailableClassState.loading;
+    final isError = availableClassViewModel.state == AvailableClassState.error;
 
     return WillPopScope(
       onWillPop: availableClassViewModel.onWillPop,
@@ -62,12 +81,8 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
                 )
               ];
             },
-            body: Consumer<AvailableClassViewModel>(
-              builder: (context, availableClassViewModel, _) {
-                final classes = availableClassViewModel.availableClasses;
-                final isLoading = availableClassViewModel.state == AvailableClassState.loading;
-                final isError = availableClassViewModel.state == AvailableClassState.error;
-
+            body: Builder(
+              builder: (context) {
                 if (isLoading) {
                   return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
                 }
@@ -169,32 +184,28 @@ class CostumListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<AvailableClassViewModel>(
-      builder: (context, availableClassViewModel, _) {
-        if (availableClasses.isEmpty) {
-          return EmptyListView(
-            svgAssetLink: 'assets/icons/empty_class.svg',
-            title: 'Ooops, class not yet available',
-            emptyListViewFor: EmptyListViewFor.available,
-            onRefresh: availableClassViewModel.refreshData,
+    final availableClassViewModel = context.watch<AvailableClassViewModel>();
+
+    if (availableClasses.isEmpty) {
+      return EmptyListView(
+        svgAssetLink: 'assets/icons/empty_class.svg',
+        title: 'Ooops, class not yet available',
+        emptyListViewFor: EmptyListViewFor.available,
+        onRefresh: availableClassViewModel.refreshData,
+      );
+    }
+    return RefreshIndicator(
+      onRefresh: availableClassViewModel.refreshData,
+      child: ListView.builder(
+        padding: const EdgeInsets.only(top: 15),
+        itemCount: availableClasses.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: CostumCard(classModel: availableClasses[index], whichScreen: CostumCardFor.availableClassScreen),
           );
-        }
-        return RefreshIndicator(
-          onRefresh: () async {
-            await availableClassViewModel.refreshData();
-          },
-          child: ListView.builder(
-            padding: const EdgeInsets.only(top: 15),
-            itemCount: availableClasses.length,
-            itemBuilder: (context, i) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: CostumCard(classModel: availableClasses[i], whichScreen: CostumCardFor.availableClassScreen),
-              );
-            },
-          ),
-        );
-      },
+        },
+      ),
     );
   }
 }

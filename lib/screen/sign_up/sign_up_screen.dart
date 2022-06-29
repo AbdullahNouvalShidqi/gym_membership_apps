@@ -21,9 +21,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final signUpViewModel = context.watch<SignUpViewModel>();
 
     return Form(
-      onWillPop: () async {
-        return await signUpViewModel.willPopValidation(context);
-      },
+      onWillPop: signUpViewModel.willPopValidation(context),
       key: signUpViewModel.formKey,
       child: Scaffold(
         body: SingleChildScrollView(
@@ -39,7 +37,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 const PasswordFormField(),
                 const ConfirmFormField(),
                 const RememberMeCheckBox(),
-                SignUpButton(mounted: mounted),
+                const SignUpButton(),
                 Center(
                   child: Text(
                     'OR',
@@ -51,9 +49,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
                 googleSiugnUpButton(),
-                ToSignInButton(
-                  mounted: mounted,
-                )
+                const ToSignInButton()
               ],
             ),
           ),
@@ -132,7 +128,7 @@ class UsernameFormField extends StatelessWidget {
           } else if (newValue.contains(' ')) {
             return 'Please enter a valid username(no spaces)';
           } else if (signUpViewModel.allUser.any((element) => element.username == newValue)) {
-            return 'Username already userd by other user';
+            return 'Username already used by other user';
           }
           return null;
         },
@@ -222,9 +218,9 @@ class PasswordFormField extends StatelessWidget {
           } else if (newValue.length < 6) {
             return 'The minimal length of password is 6';
           } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
-            return 'Please enter at least one alphabet letter in your password';
+            return 'Please enter at least one capital letter in your password';
           } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
-            return 'Please enter at least one non alphabet letter in your password';
+            return 'Please enter at least one non capital letter in your password';
           } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
             return 'Please enter at least one number in your password';
           }
@@ -303,11 +299,7 @@ class RememberMeCheckBox extends StatelessWidget {
 }
 
 class SignUpButton extends StatelessWidget {
-  const SignUpButton({
-    Key? key,
-    required this.mounted,
-  }) : super(key: key);
-  final bool mounted;
+  const SignUpButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -319,9 +311,7 @@ class SignUpButton extends StatelessWidget {
             padding: const EdgeInsets.only(top: 30, bottom: 15),
             child: CostumButton(
               height: 45,
-              onPressed: () async {
-                await signUpViewModel.signUpButtonOnPressed(context, mounted);
-              },
+              onPressed: signUpViewModel.signUpButtonOnPressed(context),
               isLoading: isLoading,
               childText: 'Sign Up',
             ),
@@ -333,11 +323,7 @@ class SignUpButton extends StatelessWidget {
 }
 
 class ToSignInButton extends StatelessWidget {
-  const ToSignInButton({
-    Key? key,
-    required this.mounted,
-  }) : super(key: key);
-  final bool mounted;
+  const ToSignInButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -353,10 +339,7 @@ class ToSignInButton extends StatelessWidget {
               TextSpan(
                 text: 'Log in',
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () async {
-                    await signUpViewModel.toLoginOnTap(context, mounted);
-                  },
+                recognizer: TapGestureRecognizer()..onTap = signUpViewModel.toLoginOnTap(context),
               ),
             ],
           ),

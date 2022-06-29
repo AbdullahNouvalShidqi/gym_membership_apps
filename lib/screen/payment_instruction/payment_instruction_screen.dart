@@ -117,26 +117,27 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
     required HomeViewModel homeViewModel,
   }) {
     return () async {
-      bool dontAdd = false;
+      bool dontAdd = true;
       if (scheduleViewModel.listSchedule
           .any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)) {
         await showDialog(
-            context: context,
-            builder: (context) {
-              return CostumDialog(
-                title: 'Watch it!',
-                contentText: 'You already book another class with the same time as this class, you sure want to book?',
-                trueText: 'Yes',
-                falseText: 'No',
-                trueOnPressed: () {
-                  Navigator.pop(context);
-                },
-                falseOnPressed: () {
-                  dontAdd = true;
-                  Navigator.pop(context);
-                },
-              );
-            });
+          context: context,
+          builder: (context) {
+            return CostumDialog(
+              title: 'Watch it!',
+              contentText: 'You already book another class with the same time as this class, you sure want to book?',
+              trueText: 'Yes',
+              falseText: 'No',
+              trueOnPressed: () {
+                dontAdd = false;
+                Navigator.pop(context);
+              },
+              falseOnPressed: () {
+                Navigator.pop(context);
+              },
+            );
+          },
+        );
       }
 
       if (dontAdd) {
@@ -144,7 +145,7 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
         return;
       }
 
-      await scheduleViewModel.addDatBooking(newClass: item);
+      await scheduleViewModel.addToSchedule(newClass: item);
 
       if (isError) {
         Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
@@ -155,7 +156,8 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
       await showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40))),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+        ),
         isScrollControlled: true,
         builder: (context) {
           return CostumBottomSheet(

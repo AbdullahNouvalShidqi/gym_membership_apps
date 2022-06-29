@@ -44,7 +44,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
     changeState(ForgotPasswordState.loading);
 
     try {
-      _otp = await EmailJsAPI.sendOTP(email: email);
+      _otp = await EmailJsAPI().sendOTP(email: email);
       _email = email;
 
       int j = 0;
@@ -71,7 +71,7 @@ class ForgotPasswordViewModel with ChangeNotifier {
   Future<void> resendOTP() async {
     changeState(ForgotPasswordState.loading);
     try {
-      _otp = await EmailJsAPI.sendOTP(email: _email);
+      _otp = await EmailJsAPI().sendOTP(email: _email);
       Fluttertoast.showToast(msg: 'OTP has resend to your email');
       changeState(ForgotPasswordState.none);
     } catch (e) {

@@ -13,6 +13,12 @@ class Utilities {
   static RegExp pwNeedOneNonCapital = RegExp(r"^(?=.*?[a-z])");
   static RegExp pwNeedOneNumber = RegExp(r"^(?=.*?[0-9])");
 
+  static const String serviceId = 'service_vgdtrkl';
+  static const String userId = 'Vd_KL9xxjmE9t1gSo';
+  static const String accessToken = 'ujNTh80NEezz01WBrtkWN';
+  static const String otpTemplateId = 'template_72lly5x';
+  static const String feedbackTemplateId = 'template_67d0z59';
+
   static ThemeData myTheme = ThemeData(
     fontFamily: 'Roboto',
     colorScheme: ThemeData().colorScheme.copyWith(primary: subPrimaryColor, secondary: primaryColor),

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
@@ -38,6 +39,14 @@ class MainAPI {
     final response = await dio.get('$url2/class.json');
 
     final data = (response.data as List).map((e) => HomeClassModel.fromJson(e)).toList();
+
+    return data;
+  }
+
+  Future<List<ArticleModel>> getArticles() async {
+    final response = await dio.get('$url2/articles.json');
+
+    final data = (response.data as List).map((e) => ArticleModel.fromJson(e)).toList();
 
     return data;
   }

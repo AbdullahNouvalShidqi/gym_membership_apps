@@ -50,27 +50,27 @@ class ProfileViewModel with ChangeNotifier {
   final List<ProfileSettingsModel> _myAccountItems = [
     ProfileSettingsModel(
       icon: SvgPicture.asset('assets/icons/personal_detail.svg'),
-      title: const Text('Personal Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      title: const Text('Personal Details', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
     ),
     ProfileSettingsModel(
       icon: SvgPicture.asset('assets/icons/payment.svg'),
-      title: const Text('Payment Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      title: const Text('Payment Instruction', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
     ),
     ProfileSettingsModel(
       icon: SvgPicture.asset('assets/icons/update_password.svg'),
-      title: const Text('Update Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      title: const Text('Update Password', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
     ),
     ProfileSettingsModel(
       icon: SvgPicture.asset('assets/icons/feedback.svg'),
-      title: const Text('Send us Feedbacks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      title: const Text('Send us Feedbacks', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
     ),
     ProfileSettingsModel(
       icon: SvgPicture.asset('assets/icons/terms.svg'),
-      title: const Text('Terms & Conditions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      title: const Text('Terms & Conditions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
     ),
     ProfileSettingsModel(
       icon: SvgPicture.asset('assets/icons/faq.svg'),
-      title: const Text('FAQ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+      title: const Text('FAQ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400)),
     ),
     ProfileSettingsModel(
       icon: SvgPicture.asset('assets/icons/logout.svg'),

@@ -21,12 +21,10 @@ class HomePageScreen extends StatefulWidget {
 }
 
 class _HomePageScreenState extends State<HomePageScreen> {
-  List<HomeClassModel>? classModel;
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      classModel = await Provider.of<HomeViewModel>(context, listen: false).getInitData();
+      await Provider.of<HomeViewModel>(context, listen: false).getInitData();
     });
     super.initState();
   }
@@ -37,7 +35,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
       body: Consumer2<HomeViewModel, ProfileViewModel>(
         builder: (context, homeViewModel, profileViewModel, _) {
           final isError = homeViewModel.state == HomeViewState.error;
-          final isLoading = homeViewModel.state == HomeViewState.loading || classModel == null;
+          final isLoading = homeViewModel.state == HomeViewState.loading;
           final classes = homeViewModel.classes;
           final user = profileViewModel.user;
 
@@ -51,49 +49,52 @@ class _HomePageScreenState extends State<HomePageScreen> {
             return const HomeShimmerLoading();
           }
 
-          return SingleChildScrollView(
-            controller: homeViewModel.homeScrollController,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Utilities.primaryColor,
-                        radius: 25,
-                        child: Icon(Icons.person, color: Colors.white),
-                      ),
-                      const SizedBox(width: 10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Hello,', style: Utilities.greetingHomeStyle),
-                          Text(user.username, style: Utilities.greetinSubHomeStyle),
-                        ],
-                      )
-                    ],
+          return RefreshIndicator(
+            onRefresh: homeViewModel.refreshData,
+            child: SingleChildScrollView(
+              controller: homeViewModel.homeScrollController,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 57, left: 20, right: 20),
+                    child: Row(
+                      children: [
+                        const CircleAvatar(
+                          backgroundColor: Utilities.primaryColor,
+                          radius: 25,
+                          child: Icon(Icons.person, color: Colors.white),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Hello,', style: Utilities.greetingHomeStyle),
+                            Text(user.username, style: Utilities.greetinSubHomeStyle),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text('Select', style: Utilities.homeViewMainTitleStyle),
-                      Text('Workout', style: Utilities.homeViewMainTitleStyle),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text('Select', style: Utilities.homeViewMainTitleStyle),
+                        Text('Workout', style: Utilities.homeViewMainTitleStyle),
+                      ],
+                    ),
                   ),
-                ),
-                CostumHomeCard(homeClassModel: classes, type: 'Online', height: 164, width: 125),
-                const SizedBox(
-                  height: 20,
-                ),
-                CostumHomeCard(homeClassModel: classes.reversed.toList(), type: 'Offline', height: 164, width: 125),
-                const SizedBox(height: 20),
-                const TipsListView()
-              ],
+                  CostumHomeCard(homeClassModel: classes, type: 'Online', height: 164, width: 125),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  CostumHomeCard(homeClassModel: classes.reversed.toList(), type: 'Offline', height: 164, width: 125),
+                  const SizedBox(height: 20),
+                  const TipsListView()
+                ],
+              ),
             ),
           );
         },

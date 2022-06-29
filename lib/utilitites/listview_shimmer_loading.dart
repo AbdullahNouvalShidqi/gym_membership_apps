@@ -32,6 +32,7 @@ class ListViewShimmerLoading extends StatelessWidget {
               ],
             ),
           ] else ...[
+            const SizedBox(height: 60),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: ShimmerContainer(height: 63, width: double.infinity, borderRadius: BorderRadius.circular(10)),

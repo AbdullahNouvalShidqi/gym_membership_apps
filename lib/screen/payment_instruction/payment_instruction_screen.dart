@@ -117,9 +117,10 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
     required HomeViewModel homeViewModel,
   }) {
     return () async {
-      bool dontAdd = true;
+      bool dontAdd = false;
       if (scheduleViewModel.listSchedule
           .any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)) {
+        dontAdd = true;
         await showDialog(
           context: context,
           builder: (context) {

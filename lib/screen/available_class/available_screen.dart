@@ -23,7 +23,6 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
   late final _tabController = TabController(length: 7, vsync: this);
   late ClassModel item;
   Timer? _timer;
-  int _count = 0;
 
   @override
   void dispose() {
@@ -47,8 +46,6 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        _count++;
-        print(_count);
         setState(() {});
       },
     );
@@ -64,73 +61,77 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
 
     return WillPopScope(
       onWillPop: availableClassViewModel.onWillPop,
-      child: Scaffold(
-        body: SafeArea(
-          child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                SliverAppBar(
-                  title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle),
-                  leading: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
+      child: Builder(
+        builder: (context) {
+          return Scaffold(
+            body: SafeArea(
+              child: Builder(
+                builder: (context) {
+                  if (isLoading) {
+                    return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
+                  }
+                  if (isError) {
+                    return CostumErrorScreen(
+                      onPressed: () async {
+                        await availableClassViewModel.getAvailableClasses(item: item);
+                      },
+                    );
+                  }
+                  return NestedScrollView(
+                    headerSliverBuilder: (context, innerBoxIsScrolled) {
+                      return [
+                        SliverAppBar(
+                          title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle),
+                          leading: IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
+                          ),
+                          centerTitle: true,
+                        )
+                      ];
                     },
-                    icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
-                  ),
-                  centerTitle: true,
-                )
-              ];
-            },
-            body: Builder(
-              builder: (context) {
-                if (isLoading) {
-                  return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
-                }
-                if (isError) {
-                  return CostumErrorScreen(
-                    onPressed: () async {
-                      await availableClassViewModel.getAvailableClasses(item: item);
-                    },
-                  );
-                }
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                      child: Container(
-                        height: 64,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white,
-                          boxShadow: const [BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))],
-                        ),
-                        child: CostumTabBar(tabController: _tabController, item: item),
-                      ),
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          for (var i = 0; i < 7; i++) ...[
-                            CostumListView(
-                              availableClasses: classes
-                                  .where(
-                                    (element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day,
-                                  )
-                                  .toList(),
+                    body: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
+                          child: Container(
+                            height: 64,
+                            width: double.infinity,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
+                              boxShadow: const [BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))],
                             ),
-                          ]
-                        ],
-                      ),
+                            child: CostumTabBar(tabController: _tabController, item: item),
+                          ),
+                        ),
+                        Expanded(
+                          child: TabBarView(
+                            controller: _tabController,
+                            children: [
+                              for (var i = 0; i < 7; i++) ...[
+                                CostumListView(
+                                  availableClasses: classes
+                                      .where(
+                                        (element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day,
+                                      )
+                                      .toList(),
+                                ),
+                              ]
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
     );
   }

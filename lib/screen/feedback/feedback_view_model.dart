@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/email_js_api.dart';
@@ -45,11 +44,7 @@ class FeedbackViewModel with ChangeNotifier {
       );
       changeState(FeedBackState.none);
     } catch (e) {
-      if (e is DioError) {
-        changeState(FeedBackState.error);
-        print(e.response);
-        print(e.message);
-      }
+      changeState(FeedBackState.error);
     }
   }
 

@@ -158,7 +158,6 @@ class SignUpViewModel with ChangeNotifier {
 
     if (isError) {
       Fluttertoast.showToast(msg: 'Error : Check your internet connection or try again');
-      focusScope.requestFocus();
       return;
     }
 

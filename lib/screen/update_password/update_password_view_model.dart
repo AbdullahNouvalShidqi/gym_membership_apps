@@ -86,7 +86,6 @@ class UpdatePasswordViewModel with ChangeNotifier {
       changeState(UpdatePasswordState.error);
       if (e is DioError) {
         Fluttertoast.showToast(msg: e.message);
-        print(e.response);
       }
     }
   }
@@ -104,7 +103,6 @@ class UpdatePasswordViewModel with ChangeNotifier {
 
     if (isError) {
       Fluttertoast.showToast(msg: 'Error: Check your internet, or try again later');
-      focusScope.requestFocus();
       return;
     }
 

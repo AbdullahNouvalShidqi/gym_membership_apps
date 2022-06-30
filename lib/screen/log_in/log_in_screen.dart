@@ -240,8 +240,8 @@ class LoginButton extends StatelessWidget {
               height: 45,
               isLoading: isLoading,
               childText: 'Login',
-              onPressed: () {
-                logInViewModel.loginButtonOnTap(context);
+              onPressed: () async {
+                await logInViewModel.loginButtonOnTap(context);
               },
             ),
           ),

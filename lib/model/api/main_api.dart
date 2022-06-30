@@ -60,11 +60,10 @@ class MainAPI {
   }
 
   Future<void> updatePassword({required int id, required String newPassword}) async {
-    final response = await dio.put(
+    await dio.put(
       '$url/users/update/password/$id',
       data: {'password': newPassword},
     );
-    print(response.data);
   }
 
   Future<UserModel> getUserById({required int id}) async {

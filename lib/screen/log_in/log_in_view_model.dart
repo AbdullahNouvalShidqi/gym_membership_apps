@@ -166,7 +166,7 @@ class LogInViewModel with ChangeNotifier {
     navigator.pushReplacementNamed(SignUpScreen.routeName);
   }
 
-  void loginButtonOnTap(BuildContext context) async {
+  Future<void> loginButtonOnTap(BuildContext context) async {
     if (!_formKey.currentState!.validate()) return;
     final focusScope = FocusScope.of(context);
 
@@ -179,7 +179,6 @@ class LogInViewModel with ChangeNotifier {
 
     if (isError) {
       Fluttertoast.showToast(msg: 'Error: Something went wrong, try again');
-      focusScope.requestFocus();
       return;
     }
 
@@ -187,6 +186,7 @@ class LogInViewModel with ChangeNotifier {
 
     if (userData.isEmpty || userData.length > 1 || userData.first.password != _passwordCtrl.text) {
       Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
+      focusScope.requestFocus();
       return;
     }
 

@@ -108,7 +108,7 @@ class SubmitButton extends StatelessWidget {
     return CostumButton(
       isLoading: isLoading,
       onPressed: () async {
-        await feedbackViewModel.sendFeedOnTap(profileViewModel: profileViewModel);
+        await feedbackViewModel.sendFeedOnTap(context, profileViewModel: profileViewModel);
       },
       childText: 'Submit',
     );

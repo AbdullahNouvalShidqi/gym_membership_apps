@@ -48,9 +48,10 @@ class FeedbackViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> sendFeedOnTap({required ProfileViewModel profileViewModel}) async {
+  Future<void> sendFeedOnTap(BuildContext context, {required ProfileViewModel profileViewModel}) async {
     final username = profileViewModel.user.username;
     final email = profileViewModel.user.email;
+    FocusScope.of(context).unfocus();
 
     if (!_formKey.currentState!.validate()) return;
 

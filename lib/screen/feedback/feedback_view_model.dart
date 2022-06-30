@@ -48,25 +48,24 @@ class FeedbackViewModel with ChangeNotifier {
     }
   }
 
-  void Function() sendFeedOnTap({required ProfileViewModel profileViewModel}) {
+  Future<void> sendFeedOnTap({required ProfileViewModel profileViewModel}) async {
     final username = profileViewModel.user.username;
     final email = profileViewModel.user.email;
-    return () async {
-      if (!_formKey.currentState!.validate()) return;
 
-      await sendFeedBack(username: username, email: email, rating: _rating, feedback: _reviewCtrl.text);
+    if (!_formKey.currentState!.validate()) return;
 
-      final isError = _state == FeedBackState.error;
+    await sendFeedBack(username: username, email: email, rating: _rating, feedback: _reviewCtrl.text);
 
-      if (isError) {
-        Fluttertoast.showToast(msg: 'Failed to send feedback, check your internet connection and try again');
-        return;
-      }
+    final isError = _state == FeedBackState.error;
 
-      Fluttertoast.showToast(msg: 'Feedback has been sent to developer!, thanks for your feedback');
-      _rating = 0;
-      _reviewCtrl.text = '';
-      notifyListeners();
-    };
+    if (isError) {
+      Fluttertoast.showToast(msg: 'Failed to send feedback, check your internet connection and try again');
+      return;
+    }
+
+    Fluttertoast.showToast(msg: 'Feedback has been sent to developer!, thanks for your feedback');
+    _rating = 0;
+    _reviewCtrl.text = '';
+    notifyListeners();
   }
 }

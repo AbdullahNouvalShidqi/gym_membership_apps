@@ -59,6 +59,22 @@ class MainAPI {
     return data.data;
   }
 
+  Future<void> updatePassword({required int id, required String newPassword}) async {
+    final response = await dio.put(
+      '$url/users/update/password/$id',
+      data: {'password': newPassword},
+    );
+    print(response.data);
+  }
+
+  Future<UserModel> getUserById({required int id}) async {
+    final response = await dio.get('$url/users/$id');
+
+    final data = UserModel.fromJson(response.data);
+
+    return data;
+  }
+
   Future<UserModel> signUp({
     required String username,
     required String email,

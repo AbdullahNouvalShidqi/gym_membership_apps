@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/profile_settings_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
@@ -94,33 +95,39 @@ class ProfileViewModel with ChangeNotifier {
     _user = UserModel(email: '', username: '', password: '', contact: '');
   }
 
-  void Function() myAccountButtonOnTap() {
+  Future<void> getUserById({required int id}) async {
+    changeState(ProfileViewState.loading);
+
+    try {
+      _user = await MainAPI().getUserById(id: id);
+      changeState(ProfileViewState.none);
+    } catch (e) {
+      changeState(ProfileViewState.error);
+    }
+  }
+
+  void myAccountButtonOnTap() {
     _myAccountSelected = true;
     _progressSelected = false;
     notifyListeners();
-
-    return () {
-      _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
-      if (_scrollStatus == ScrollStatus.attached) {
-        _scrollStatus = ScrollStatus.detached;
-      }
-    };
+    _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.linear);
+    if (_scrollStatus == ScrollStatus.attached) {
+      _scrollStatus = ScrollStatus.detached;
+    }
   }
 
-  void Function() progressButtonOnTap({
+  void progressButtonOnTap({
     required ScheduleViewModel scheduleViewModel,
   }) {
     _myAccountSelected = false;
     _progressSelected = true;
     notifyListeners();
 
-    return () {
-      if (_scrollStatus == ScrollStatus.attached && scheduleViewModel.listSchedule.isNotEmpty) {
-        _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
-        _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
-      }
-      _scrollStatus = ScrollStatus.attached;
-    };
+    if (_scrollStatus == ScrollStatus.attached && scheduleViewModel.listSchedule.isNotEmpty) {
+      _listviewController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+      _singleListController.animateTo(0, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+    }
+    _scrollStatus = ScrollStatus.attached;
   }
 
   Future<void> refreshProgress() async {
@@ -166,8 +173,8 @@ class ProfileViewModel with ChangeNotifier {
     required ScheduleViewModel scheduleViewModel,
     required ProfileViewModel profileViewModel,
     required HomeViewModel homeViewModel,
-    required bool mounted,
   }) {
+    final navigator = Navigator.of(context, rootNavigator: true);
     final List onTap = [
       () async {
         Navigator.pushNamed(context, PersonalDetail.routeName);
@@ -211,8 +218,7 @@ class ProfileViewModel with ChangeNotifier {
           scheduleViewModel.logOut();
           profileViewModel.disposeUserData();
           homeViewModel.selectTab('Home', 0);
-          if (!mounted) return;
-          Navigator.of(context, rootNavigator: true).pushNamedAndRemoveUntil(LogInScreen.routeName, (route) => false);
+          navigator.pushNamedAndRemoveUntil(LogInScreen.routeName, (route) => false);
         }
       }
     ];

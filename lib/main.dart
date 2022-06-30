@@ -10,6 +10,7 @@ import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
+import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
@@ -19,6 +20,7 @@ import 'package:gym_membership_apps/screen/splash_screen/splash_screen.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_introduction.dart';
 import 'package:gym_membership_apps/screen/splash_screen/splash_screen_view_model.dart';
 import 'package:gym_membership_apps/screen/update_password/update_password_screen.dart';
+import 'package:gym_membership_apps/screen/update_password/update_password_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -68,6 +70,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => FeedbackViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UpdatePasswordViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProfileUpdatePasswordViewModel(),
         ),
       ],
       child: MaterialApp(

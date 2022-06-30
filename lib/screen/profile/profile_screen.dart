@@ -153,7 +153,7 @@ class ItemToReturn extends StatelessWidget {
     return Consumer3<ScheduleViewModel, HomeViewModel, ProfileViewModel>(
       builder: (context, scheduleViewModel, homeViewModel, profileViewModel, _) {
         if (myAccountSelected) {
-          return AccountSettings(mounted: mounted);
+          return const AccountSettings();
         }
         if (scheduleViewModel.listSchedule.isEmpty) {
           return EmptyListView(
@@ -202,8 +202,7 @@ class ItemToReturn extends StatelessWidget {
 }
 
 class AccountSettings extends StatelessWidget {
-  const AccountSettings({Key? key, required this.mounted}) : super(key: key);
-  final bool mounted;
+  const AccountSettings({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -227,7 +226,6 @@ class AccountSettings extends StatelessWidget {
                       homeViewModel: homeViewModel,
                       profileViewModel: profileViewModel,
                       scheduleViewModel: scheduleViewModel,
-                      mounted: mounted,
                     ),
                     child: Container(
                       height: 45,
@@ -245,6 +243,51 @@ class AccountSettings extends StatelessWidget {
                 ],
               );
             },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ProgressListView extends StatelessWidget {
+  const ProgressListView({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer3<ProfileViewModel, HomeViewModel, ScheduleViewModel>(
+      builder: (context, profileViewModel, homeViewModel, scheduleViewModel, _) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height - 150,
+          child: Center(
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+              controller: profileViewModel.listviewController,
+              itemCount: scheduleViewModel.listSchedule.length,
+              itemBuilder: (context, i) {
+                return InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      DetailScreen.routeName,
+                      arguments: DetailRouteModel(
+                        homeClassModel: homeViewModel.classes.firstWhere(
+                          (element) => element.name == scheduleViewModel.listSchedule[i].name,
+                        ),
+                        type: scheduleViewModel.listSchedule[i].type,
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: CostumCard(
+                      classModel: scheduleViewModel.listSchedule[i],
+                      whichScreen: CostumCardFor.profileScreen,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
+import 'package:gym_membership_apps/screen/update_password/update_password_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_button.dart';
-import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+import 'package:provider/provider.dart';
 
 class UpdatePasswordScreen extends StatefulWidget {
   static String routeName = '/updatePassword';
@@ -14,14 +14,13 @@ class UpdatePasswordScreen extends StatefulWidget {
 }
 
 class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _newPasswordCtrl = TextEditingController();
-  final _confirmPasswordCtrl = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
+    final updatePasswordViewModel = context.watch<UpdatePasswordViewModel>();
     return WillPopScope(
-      onWillPop: onWillPop,
+      onWillPop: () async {
+        return await updatePasswordViewModel.onWillPop(context);
+      },
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -31,7 +30,9 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
           ),
           centerTitle: true,
           leading: IconButton(
-            onPressed: appBarBackOnPressed,
+            onPressed: () async {
+              await updatePasswordViewModel.appBarBackOnPressed(context);
+            },
             icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
           ),
         ),
@@ -39,16 +40,16 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: SingleChildScrollView(
             child: Form(
-              key: _formKey,
+              key: updatePasswordViewModel.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 40),
-                  NewPasswordFormField(newPasswordCtrl: _newPasswordCtrl),
-                  const SizedBox(height: 20),
-                  ConfirmFormField(confirmPasswordCtrl: _confirmPasswordCtrl),
-                  const SizedBox(height: 30),
-                  ContinueButton(formKey: _formKey),
+                children: const [
+                  SizedBox(height: 40),
+                  NewPasswordFormField(),
+                  SizedBox(height: 20),
+                  ConfirmFormField(),
+                  SizedBox(height: 30),
+                  ContinueButton(),
                 ],
               ),
             ),
@@ -57,65 +58,16 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
       ),
     );
   }
-
-  Future<bool> onWillPop() async {
-    bool willPop = false;
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return CostumDialog(
-          title: 'Exit ?',
-          contentText: 'If you exit you will go back to the main login screen, you sure?',
-          trueText: 'Yes',
-          falseText: 'Cancel',
-          trueOnPressed: () {
-            willPop = true;
-            Navigator.pop(context);
-          },
-          falseOnPressed: () {
-            Navigator.pop(context);
-          },
-        );
-      },
-    );
-    return willPop;
-  }
-
-  void appBarBackOnPressed() async {
-    bool willPop = false;
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return CostumDialog(
-          title: 'Exit ?',
-          contentText: 'If you exit you will go back to the main login screen, you sure?',
-          trueText: 'Yes',
-          falseText: 'Cancel',
-          trueOnPressed: () {
-            willPop = true;
-            Navigator.pop(context);
-          },
-          falseOnPressed: () {
-            Navigator.pop(context);
-          },
-        );
-      },
-    );
-    if (willPop) {
-      if (!mounted) return;
-      Navigator.pop(context);
-    }
-  }
 }
 
 class NewPasswordFormField extends StatelessWidget {
-  const NewPasswordFormField({Key? key, required this.newPasswordCtrl}) : super(key: key);
-  final TextEditingController newPasswordCtrl;
+  const NewPasswordFormField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final updatePasswordViewModel = context.watch<UpdatePasswordViewModel>();
     return CostumFormField(
-      controller: newPasswordCtrl,
+      controller: updatePasswordViewModel.newPasswordCtrl,
       label: 'New Password',
       hintText: 'Enter new password',
       prefixIcon: const Icon(Icons.lock_outline),
@@ -129,9 +81,9 @@ class NewPasswordFormField extends StatelessWidget {
         } else if (newValue.length < 6) {
           return 'The minimal length of password is 6';
         } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
-          return 'Please enter at least one alphabet letter in your password';
+          return 'Please enter at least one capital letter in your password';
         } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
-          return 'Please enter at least one non alphabet letter in your password';
+          return 'Please enter at least one non capital letter in your password';
         } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
           return 'Please enter at least one number in your password';
         }
@@ -142,13 +94,13 @@ class NewPasswordFormField extends StatelessWidget {
 }
 
 class ConfirmFormField extends StatelessWidget {
-  const ConfirmFormField({Key? key, required this.confirmPasswordCtrl}) : super(key: key);
-  final TextEditingController confirmPasswordCtrl;
+  const ConfirmFormField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final updatePasswordViewModel = context.watch<UpdatePasswordViewModel>();
     return CostumFormField(
-      controller: confirmPasswordCtrl,
+      controller: updatePasswordViewModel.confirmPasswordCtrl,
       label: 'Confirm Password',
       hintText: 'Enter new password',
       prefixIcon: const Icon(Icons.lock_outline),
@@ -159,7 +111,7 @@ class ConfirmFormField extends StatelessWidget {
           return 'Please enter your password';
         } else if (newValue.contains('  ')) {
           return 'Please enter a valid password';
-        } else if (newValue != confirmPasswordCtrl.text) {
+        } else if (newValue != updatePasswordViewModel.confirmPasswordCtrl.text) {
           return 'Please enter a same password';
         }
         return null;
@@ -169,31 +121,18 @@ class ConfirmFormField extends StatelessWidget {
 }
 
 class ContinueButton extends StatelessWidget {
-  const ContinueButton({Key? key, required this.formKey}) : super(key: key);
-  final GlobalKey<FormState> formKey;
+  const ContinueButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final updatePasswordViewModel = context.watch<UpdatePasswordViewModel>();
+    final isLoading = updatePasswordViewModel.state == UpdatePasswordState.loading;
+
     return CostumButton(
-      onPressed: () {
-        if (!formKey.currentState!.validate()) return;
-        showModalBottomSheet(
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-          ),
-          isScrollControlled: true,
-          context: context,
-          builder: (context) {
-            return CostumBottomSheet(
-              title: 'Password Recovery',
-              content: 'Return to the login screen to enter the application',
-              buttonText: 'Return to login',
-              onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-            );
-          },
-        );
+      isLoading: isLoading,
+      onPressed: () async {
+        final id = ModalRoute.of(context)!.settings.arguments as int;
+        await updatePasswordViewModel.updatePasswordOnPressed(context, id: id);
       },
       childText: 'Continue',
     );

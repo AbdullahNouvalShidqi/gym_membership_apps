@@ -26,7 +26,9 @@ class _LogInScreenState extends State<LogInScreen> {
   Widget build(BuildContext context) {
     final loginViewModel = context.watch<LogInViewModel>();
     return WillPopScope(
-      onWillPop: loginViewModel.willPopValidation(context),
+      onWillPop: () async {
+        return await loginViewModel.willPopValidation(context);
+      },
       child: Form(
         key: loginViewModel.formKey,
         child: Scaffold(
@@ -79,10 +81,7 @@ class _LogInScreenState extends State<LogInScreen> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(
-                'assets/google_logo.png',
-                width: 25,
-              ),
+              Image.asset('assets/google_logo.png', width: 25),
               const SizedBox(width: 10),
               const Text(
                 'Sign in with Google',
@@ -158,23 +157,25 @@ class EmailFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LogInViewModel>(builder: (context, logInViewModel, _) {
-      return CostumFormField(
-        controller: logInViewModel.emailCtrl,
-        label: 'Email Address',
-        hintText: 'Enter your email address',
-        prefixIcon: const Icon(Icons.email_outlined),
-        textInputType: TextInputType.emailAddress,
-        validator: (newValue) {
-          if (newValue == null || newValue.isEmpty || newValue == ' ') {
-            return 'Please enter your email address';
-          } else if (!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')) {
-            return 'Please enter a valid email address';
-          }
-          return null;
-        },
-      );
-    });
+    return Consumer<LogInViewModel>(
+      builder: (context, logInViewModel, _) {
+        return CostumFormField(
+          controller: logInViewModel.emailCtrl,
+          label: 'Email Address',
+          hintText: 'Enter your email address',
+          prefixIcon: const Icon(Icons.email_outlined),
+          textInputType: TextInputType.emailAddress,
+          validator: (newValue) {
+            if (newValue == null || newValue.isEmpty || newValue == ' ') {
+              return 'Please enter your email address';
+            } else if (!Utilities.emailRegExp.hasMatch(newValue) || newValue.contains('  ')) {
+              return 'Please enter a valid email address';
+            }
+            return null;
+          },
+        );
+      },
+    );
   }
 }
 
@@ -239,7 +240,9 @@ class LoginButton extends StatelessWidget {
               height: 45,
               isLoading: isLoading,
               childText: 'Login',
-              onPressed: logInViewModel.loginButtonOnTap(context),
+              onPressed: () {
+                logInViewModel.loginButtonOnTap(context);
+              },
             ),
           ),
         );
@@ -265,7 +268,10 @@ class ToSignUpButton extends StatelessWidget {
               TextSpan(
                 text: 'Sign Up',
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()..onTap = logInViewModel.signUpButtonOnTap(context),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    logInViewModel.signUpButtonOnTap(context);
+                  },
               )
             ],
           ),

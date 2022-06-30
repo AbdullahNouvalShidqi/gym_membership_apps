@@ -100,107 +100,105 @@ class LogInViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<bool> Function() willPopValidation(BuildContext context) {
-    return () async {
-      if (_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty) {
-        bool willPop = false;
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return CostumDialog(
-              title: 'Exit?',
-              contentText: "You will lose your data you've filled!",
-              trueText: 'Exit',
-              falseText: 'Cancel',
-              trueOnPressed: () {
-                willPop = true;
-                Navigator.pop(context);
-              },
-              falseOnPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        );
-        _emailCtrl.text = '';
-        _passwordCtrl.text = '';
-        return willPop;
-      } else {
-        DateTime now = DateTime.now();
-        if ((_currentBackPressTime == null || now.difference(_currentBackPressTime!) > const Duration(seconds: 2)) &&
-            ModalRoute.of(context)!.isFirst) {
-          _currentBackPressTime = now;
-          Fluttertoast.showToast(msg: 'Press back again to exit');
-          return Future.value(false);
-        }
-        return Future.value(true);
+  Future<bool> willPopValidation(BuildContext context) async {
+    if (_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty) {
+      bool willPop = false;
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CostumDialog(
+            title: 'Exit?',
+            contentText: "You will lose your data you've filled!",
+            trueText: 'Exit',
+            falseText: 'Cancel',
+            trueOnPressed: () {
+              willPop = true;
+              Navigator.pop(context);
+            },
+            falseOnPressed: () {
+              Navigator.pop(context);
+            },
+          );
+        },
+      );
+      _emailCtrl.text = '';
+      _passwordCtrl.text = '';
+      return willPop;
+    } else {
+      DateTime now = DateTime.now();
+      if ((_currentBackPressTime == null || now.difference(_currentBackPressTime!) > const Duration(seconds: 2)) &&
+          ModalRoute.of(context)!.isFirst) {
+        _currentBackPressTime = now;
+        Fluttertoast.showToast(msg: 'Press back again to exit');
+        return Future.value(false);
       }
-    };
+      return Future.value(true);
+    }
   }
 
-  Future<void> Function() signUpButtonOnTap(BuildContext context) {
+  Future<void> signUpButtonOnTap(BuildContext context) async {
     final navigator = Navigator.of(context);
-    return () async {
-      if (_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty) {
-        bool willPop = false;
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return CostumDialog(
-              title: 'Whoa! Take it easy',
-              contentText: 'You will lost your input data to login, still want to exit?',
-              trueText: 'Yes',
-              falseText: 'No',
-              trueOnPressed: () {
-                willPop = true;
-                Navigator.pop(context);
-              },
-              falseOnPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        );
-        if (willPop) {
-          navigator.pushReplacementNamed(SignUpScreen.routeName);
-        }
-        return;
+    if (_emailCtrl.text.isNotEmpty || _passwordCtrl.text.isNotEmpty) {
+      bool willPop = false;
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return CostumDialog(
+            title: 'Whoa! Take it easy',
+            contentText: 'You will lost your input data to login, still want to exit?',
+            trueText: 'Yes',
+            falseText: 'No',
+            trueOnPressed: () {
+              willPop = true;
+              Navigator.pop(context);
+            },
+            falseOnPressed: () {
+              Navigator.pop(context);
+            },
+          );
+        },
+      );
+      if (willPop) {
+        navigator.pushReplacementNamed(SignUpScreen.routeName);
       }
-      navigator.pushReplacementNamed(SignUpScreen.routeName);
-    };
+      return;
+    }
+    navigator.pushReplacementNamed(SignUpScreen.routeName);
   }
 
-  void Function() loginButtonOnTap(BuildContext context) {
-    return () async {
-      if (!_formKey.currentState!.validate()) return;
+  void loginButtonOnTap(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) return;
+    final focusScope = FocusScope.of(context);
 
-      final navigator = Navigator.of(context);
-      final allUser = await getAllUser();
-      final email = _emailCtrl.text.toLowerCase();
-      final isError = _state == LogInState.error;
+    focusScope.unfocus();
 
-      if (isError) {
-        Fluttertoast.showToast(msg: 'Error: Something went wrong, try again');
-        return;
-      }
+    final navigator = Navigator.of(context);
+    final allUser = await getAllUser();
+    final email = _emailCtrl.text.toLowerCase();
+    final isError = _state == LogInState.error;
 
-      final userData = allUser.where((element) => element.email.toLowerCase() == email).toList();
+    if (isError) {
+      Fluttertoast.showToast(msg: 'Error: Something went wrong, try again');
+      focusScope.requestFocus();
+      return;
+    }
 
-      if (userData.isEmpty || userData.length > 1 || userData.first.password != _passwordCtrl.text) {
-        Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
-        return;
-      }
+    final userData = allUser.where((element) => element.email.toLowerCase() == email).toList();
 
-      if (_rememberMe) {
-        await setRememberMe(email: userData.first.email, password: userData.first.password);
-      } else {
-        await dontRememberMe();
-      }
+    if (userData.isEmpty || userData.length > 1 || userData.first.password != _passwordCtrl.text) {
+      Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
+      return;
+    }
 
-      ProfileViewModel.setUserData(currentUser: userData.first);
+    if (_rememberMe) {
+      await setRememberMe(email: userData.first.email, password: userData.first.password);
+    } else {
+      await dontRememberMe();
+    }
 
-      Fluttertoast.showToast(msg: 'Log in successful!');
-      navigator.pushReplacementNamed(HomeScreen.routeName);
-    };
+    ProfileViewModel.setUserData(currentUser: userData.first);
+
+    Fluttertoast.showToast(msg: 'Log in successful!');
+    navigator.pushReplacementNamed(HomeScreen.routeName);
   }
 }

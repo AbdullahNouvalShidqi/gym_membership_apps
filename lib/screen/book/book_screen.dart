@@ -180,7 +180,9 @@ class CostumButtons extends StatelessWidget {
     return Column(
       children: [
         CostumButton(
-          onPressed: backToHomeOnTap(context),
+          onPressed: () {
+            backToHomeOnTap(context);
+          },
           height: 45,
           backgroundColor: Utilities.myWhiteColor,
           borderColor: Utilities.primaryColor,

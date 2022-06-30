@@ -126,7 +126,7 @@ class ContinueButton extends StatelessWidget {
             await forgotPasswordViewModel.getAllUser();
             final allUser = forgotPasswordViewModel.allUser;
             final email = emailCtrl.text.toLowerCase();
-            final isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
+            bool isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
 
             if (isError) {
               Fluttertoast.showToast(msg: 'Something went wrong, try again.');
@@ -137,17 +137,20 @@ class ContinueButton extends StatelessWidget {
 
             if (user.length > 1 || user.isEmpty) {
               Fluttertoast.showToast(
-                  msg: 'No user with email of $email found on our database, sign up first or check your email');
+                msg: 'No user with email of $email found on our database, sign up first or check your email',
+              );
               return;
             }
 
+            final id = user.first.id;
             await forgotPasswordViewModel.sendOTP(email: email);
 
+            isError = forgotPasswordViewModel.state == ForgotPasswordState.error;
             if (isError) {
               Fluttertoast.showToast(msg: 'Error, we cannot send your otp, check your email or your internet');
               return;
             }
-            navigator.pushReplacementNamed(OtpScreen.routeName);
+            navigator.pushReplacementNamed(OtpScreen.routeName, arguments: id);
           },
           childText: 'Continue',
         );

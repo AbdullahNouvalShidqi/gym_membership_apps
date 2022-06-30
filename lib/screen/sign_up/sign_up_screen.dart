@@ -21,7 +21,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final signUpViewModel = context.watch<SignUpViewModel>();
 
     return Form(
-      onWillPop: signUpViewModel.willPopValidation(context),
+      onWillPop: () async {
+        return await signUpViewModel.willPopValidation(context);
+      },
       key: signUpViewModel.formKey,
       child: Scaffold(
         body: SingleChildScrollView(
@@ -311,7 +313,9 @@ class SignUpButton extends StatelessWidget {
             padding: const EdgeInsets.only(top: 30, bottom: 15),
             child: CostumButton(
               height: 45,
-              onPressed: signUpViewModel.signUpButtonOnPressed(context),
+              onPressed: () {
+                signUpViewModel.signUpButtonOnPressed(context);
+              },
               isLoading: isLoading,
               childText: 'Sign Up',
             ),
@@ -339,7 +343,10 @@ class ToSignInButton extends StatelessWidget {
               TextSpan(
                 text: 'Log in',
                 style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()..onTap = signUpViewModel.toLoginOnTap(context),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    signUpViewModel.toLoginOnTap(context);
+                  },
               ),
             ],
           ),

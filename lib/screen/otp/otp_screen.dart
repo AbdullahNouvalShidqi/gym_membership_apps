@@ -124,8 +124,9 @@ class _OtpScreenState extends State<OtpScreen> {
       });
     }
     if (hasError) return;
-    _timer!.cancel();
-    Navigator.pushReplacementNamed(context, UpdatePasswordScreen.routeName);
+    _timer?.cancel();
+    final id = ModalRoute.of(context)!.settings.arguments as int;
+    Navigator.pushReplacementNamed(context, UpdatePasswordScreen.routeName, arguments: id);
   }
 
   Future<bool> onWillPop() async {

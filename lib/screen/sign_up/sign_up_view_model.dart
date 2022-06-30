@@ -60,7 +60,12 @@ class SignUpViewModel with ChangeNotifier {
   }) async {
     changeState(SignUpState.loading);
     try {
-      _user = await MainAPI().signUp(username: username, email: email, contact: contact, password: password);
+      _user = await MainAPI().signUp(
+        username: username,
+        email: email.toLowerCase(),
+        contact: contact,
+        password: password,
+      );
       changeState(SignUpState.none);
     } catch (e) {
       changeState(SignUpState.error);

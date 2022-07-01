@@ -77,12 +77,14 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
                               (element) => element.id == item.id && element.type == item.type,
                             )
                                 ? null
-                                : bookNowOnTap(
-                                    scheduleViewModel: scheduleViewModel,
-                                    item: item,
-                                    isError: isError,
-                                    homeViewModel: homeViewModel,
-                                  ),
+                                : () {
+                                    bookNowOnTap(
+                                      scheduleViewModel: scheduleViewModel,
+                                      item: item,
+                                      isError: isError,
+                                      homeViewModel: homeViewModel,
+                                    );
+                                  },
                             height: 45,
                             childText: 'Book now',
                           );
@@ -110,73 +112,71 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
     Navigator.popUntil(context, (route) => route.isFirst);
   }
 
-  void Function() bookNowOnTap({
+  void bookNowOnTap({
     required ScheduleViewModel scheduleViewModel,
     required ClassModel item,
     required bool isError,
     required HomeViewModel homeViewModel,
-  }) {
-    return () async {
-      bool dontAdd = false;
-      if (scheduleViewModel.listSchedule
-          .any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)) {
-        dontAdd = true;
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return CostumDialog(
-              title: 'Watch it!',
-              contentText: 'You already book another class with the same time as this class, you sure want to book?',
-              trueText: 'Yes',
-              falseText: 'No',
-              trueOnPressed: () {
-                dontAdd = false;
-                Navigator.pop(context);
-              },
-              falseOnPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          },
-        );
-      }
-
-      if (dontAdd) {
-        Fluttertoast.showToast(msg: 'No book has done');
-        return;
-      }
-
-      await scheduleViewModel.addToSchedule(newClass: item);
-
-      if (isError) {
-        Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
-        return;
-      }
-
-      bool goToSchedule = false;
-      await showModalBottomSheet(
+  }) async {
+    bool dontAdd = false;
+    if (scheduleViewModel.listSchedule
+        .any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)) {
+      dontAdd = true;
+      await showDialog(
         context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-        ),
-        isScrollControlled: true,
         builder: (context) {
-          return CostumBottomSheet(
-            title: 'Booking Class',
-            content: 'Return to Schedule page to see your schedule',
-            buttonText: 'See Schedule',
-            onPressed: () {
-              goToSchedule = true;
+          return CostumDialog(
+            title: 'Watch it!',
+            contentText: 'You already book another class with the same time as this class, you sure want to book?',
+            trueText: 'Yes',
+            falseText: 'No',
+            trueOnPressed: () {
+              dontAdd = false;
+              Navigator.pop(context);
+            },
+            falseOnPressed: () {
               Navigator.pop(context);
             },
           );
         },
       );
-      if (goToSchedule) {
-        homeViewModel.selectTab('Schedule', 1);
-        homeViewModel.navigatorKeys['Home']!.currentState!.popUntil((route) => route.isFirst);
-      }
-    };
+    }
+
+    if (dontAdd) {
+      Fluttertoast.showToast(msg: 'No book has done');
+      return;
+    }
+
+    await scheduleViewModel.addToSchedule(newClass: item);
+
+    if (isError) {
+      Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
+      return;
+    }
+
+    bool goToSchedule = false;
+    await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+      ),
+      isScrollControlled: true,
+      builder: (context) {
+        return CostumBottomSheet(
+          title: 'Booking Class',
+          content: 'Return to Schedule page to see your schedule',
+          buttonText: 'See Schedule',
+          onPressed: () {
+            goToSchedule = true;
+            Navigator.pop(context);
+          },
+        );
+      },
+    );
+    if (goToSchedule) {
+      homeViewModel.selectTab('Schedule', 1);
+      homeViewModel.navigatorKeys['Home']!.currentState!.popUntil((route) => route.isFirst);
+    }
   }
 
   void instructionOnTap() {
@@ -310,9 +310,7 @@ class CostumMainCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
           color: Colors.white,
-          boxShadow: const [
-            BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240)),
-          ],
+          boxShadow: const [BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 240, 240, 240))],
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),

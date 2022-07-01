@@ -40,8 +40,9 @@ class ProfileUpdatePasswordViewModel with ChangeNotifier {
   }
 
   Future<bool> onWillPop(BuildContext context) async {
-    bool willPop = false;
+    bool willPop = true;
     if (_currentPwCtrl.text.isNotEmpty || _newPwCtrl.text.isNotEmpty || _confirmPwCtrl.text.isNotEmpty) {
+      willPop = false;
       await showDialog(
         context: context,
         builder: (context) {

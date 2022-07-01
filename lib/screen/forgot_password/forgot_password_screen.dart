@@ -121,8 +121,10 @@ class ContinueButton extends StatelessWidget {
           isLoading: isLoading,
           onPressed: () async {
             final navigator = Navigator.of(context);
+            final focusScope = FocusScope.of(context);
 
             if (!formKey.currentState!.validate()) return;
+            focusScope.unfocus();
             await forgotPasswordViewModel.getAllUser();
             final allUser = forgotPasswordViewModel.allUser;
             final email = emailCtrl.text.toLowerCase();
@@ -139,6 +141,7 @@ class ContinueButton extends StatelessWidget {
               Fluttertoast.showToast(
                 msg: 'No user with email of $email found on our database, sign up first or check your email',
               );
+              focusScope.requestFocus();
               return;
             }
 

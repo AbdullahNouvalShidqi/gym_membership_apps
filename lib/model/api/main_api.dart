@@ -7,11 +7,13 @@ import 'package:gym_membership_apps/model/user_model.dart';
 class MainAPI {
   final String url = "https://capstone-kelompok-3.herokuapp.com";
   final String url2 = "https://capstone-project-ec879-default-rtdb.asia-southeast1.firebasedatabase.app";
-  final dio = Dio(BaseOptions(
-    connectTimeout: 9000,
-    receiveTimeout: 9000,
-    sendTimeout: 9000,
-  ));
+  final dio = Dio(
+    BaseOptions(
+      connectTimeout: 9000,
+      receiveTimeout: 9000,
+      sendTimeout: 9000,
+    ),
+  );
 
   Future<List<ClassModel>> getAllClass({String? type}) async {
     final response = await dio.get('$url/class${type == null ? '' : '/${type.toLowerCase()}'}');
@@ -69,7 +71,7 @@ class MainAPI {
   Future<UserModel> getUserById({required int id}) async {
     final response = await dio.get('$url/users/$id');
 
-    final data = UserModel.fromJson(response.data);
+    final data = UserModel.fromJson(response.data['data']);
 
     return data;
   }

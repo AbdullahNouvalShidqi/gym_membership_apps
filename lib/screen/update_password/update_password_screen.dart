@@ -29,12 +29,6 @@ class _UpdatePasswordScreenState extends State<UpdatePasswordScreen> {
             style: Utilities.appBarTextStyle,
           ),
           centerTitle: true,
-          leading: IconButton(
-            onPressed: () async {
-              await updatePasswordViewModel.appBarBackOnPressed(context);
-            },
-            icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
-          ),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),

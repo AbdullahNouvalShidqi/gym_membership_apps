@@ -3,8 +3,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 enum EmptyListViewFor { schedule, available, progress, detail }
 
-class EmptyListView extends StatelessWidget {
-  const EmptyListView({
+class CostumEmptyListView extends StatelessWidget {
+  const CostumEmptyListView({
     Key? key,
     this.forProgress = false,
     this.title,

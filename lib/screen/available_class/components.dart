@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_card.dart';
-import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -97,7 +97,7 @@ class CostumListView extends StatelessWidget {
     final availableClassViewModel = context.watch<AvailableClassViewModel>();
 
     if (availableClasses.isEmpty) {
-      return EmptyListView(
+      return CostumEmptyListView(
         svgAssetLink: 'assets/icons/empty_class.svg',
         title: 'Ooops, class not yet available',
         emptyListViewFor: EmptyListViewFor.available,

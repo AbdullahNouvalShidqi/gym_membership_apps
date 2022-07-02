@@ -44,12 +44,6 @@ class _FaqScreenState extends State<FaqScreen> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppBar(
         title: const Text('FAQ', style: Utilities.appBarTextStyle),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 35),

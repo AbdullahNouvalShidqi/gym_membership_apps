@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/payment_instruction/payment_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_bottom_sheet.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_button.dart';
@@ -235,124 +236,53 @@ class _CostumButtonsState extends State<CostumButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CostumButton(
-          onPressed: backToHomeOnTap,
-          height: 45,
-          backgroundColor: Utilities.myWhiteColor,
-          borderColor: Utilities.primaryColor,
-          fontColor: Utilities.primaryColor,
-          childText: 'Back to home',
-        ),
-        const SizedBox(height: 5),
-        Consumer2<ScheduleViewModel, HomeViewModel>(
-          builder: (context, scheduleViewModel, homeViewModel, _) {
-            final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
-            final isError = scheduleViewModel.state == ScheduleViewState.error;
-            return CostumButton(
-              isLoading: isLoading,
-              onPressed: scheduleViewModel.listSchedule.any(
-                (element) => element.id == widget.item.id && element.type == widget.item.type,
-              )
-                  ? null
-                  : () {
-                      bookNowOnTap(
-                        context,
-                        scheduleViewModel: scheduleViewModel,
-                        item: widget.item,
-                        isError: isError,
-                        homeViewModel: homeViewModel,
-                      );
-                    },
-              height: 45,
-              childText: 'Book now',
-            );
-          },
-        ),
-      ],
-    );
-  }
+    return Consumer3<PaymentViewModel, ScheduleViewModel, HomeViewModel>(
+      builder: (context, paymentViewModel, scheduleViewModel, homeViewModel, _) {
+        final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
+        final isError = scheduleViewModel.state == ScheduleViewState.error;
 
-  void backToHomeOnTap() async {
-    DateTime now = DateTime.now();
-    if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000))) {
-      currentBackPressTime = now;
-      Fluttertoast.cancel();
-      Fluttertoast.showToast(msg: "Press back to home again, to go back to home");
-      return;
-    }
-    currentBackPressTime = null;
-    Fluttertoast.cancel();
-    Navigator.popUntil(context, (route) => route.isFirst);
-  }
-
-  void bookNowOnTap(
-    BuildContext context, {
-    required ScheduleViewModel scheduleViewModel,
-    required ClassModel item,
-    required bool isError,
-    required HomeViewModel homeViewModel,
-  }) async {
-    final navigator = Navigator.of(context);
-    bool dontAdd = false;
-    if (scheduleViewModel.listSchedule
-        .any((element) => element.startAt.hour == item.startAt.hour && element.startAt.day == item.startAt.day)) {
-      dontAdd = true;
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return CostumDialog(
-            title: 'Watch it!',
-            contentText: 'You already book another class with the same time as this class, you sure want to book?',
-            trueText: 'Yes',
-            falseText: 'No',
-            trueOnPressed: () {
-              dontAdd = false;
-              Navigator.pop(context);
-            },
-            falseOnPressed: () {
-              Navigator.pop(context);
-            },
-          );
-        },
-      );
-    }
-
-    if (dontAdd) {
-      Fluttertoast.showToast(msg: 'No book has done');
-      return;
-    }
-
-    await scheduleViewModel.addToSchedule(newClass: item);
-
-    if (isError) {
-      Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
-      return;
-    }
-
-    bool goToSchedule = false;
-    await showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-      ),
-      isScrollControlled: true,
-      builder: (context) {
-        return CostumBottomSheet(
-          title: 'Booking Class',
-          content: 'Return to Schedule page to see your schedule',
-          buttonText: 'See Schedule',
-          onPressed: () {
-            goToSchedule = true;
-            Navigator.pop(context);
-          },
+        return Container(
+          decoration: const BoxDecoration(
+            color: Utilities.myWhiteColor,
+            boxShadow: [BoxShadow(blurRadius: 3, color: Color.fromARGB(255, 230, 230, 230))],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                CostumButton(
+                  onPressed: () {
+                    paymentViewModel.backToHomeOnTap(context);
+                  },
+                  height: 45,
+                  backgroundColor: Utilities.myWhiteColor,
+                  borderColor: Utilities.primaryColor,
+                  fontColor: Utilities.primaryColor,
+                  childText: 'Back to home',
+                ),
+                const SizedBox(height: 5),
+                CostumButton(
+                  isLoading: isLoading,
+                  onPressed: scheduleViewModel.listSchedule.any(
+                    (element) => element.id == widget.item.id && element.type == widget.item.type,
+                  )
+                      ? null
+                      : () {
+                          paymentViewModel.bookNowOnTap(
+                            context,
+                            scheduleViewModel: scheduleViewModel,
+                            item: widget.item,
+                            homeViewModel: homeViewModel,
+                          );
+                        },
+                  height: 45,
+                  childText: 'Book now',
+                ),
+              ],
+            ),
+          ),
         );
       },
     );
-    if (goToSchedule) {
-      homeViewModel.selectTab(1);
-      navigator.popUntil((route) => route.isFirst);
-    }
   }
 }

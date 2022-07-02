@@ -1,11 +1,10 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_error_screen.dart';
-import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/shimmer/detail_shimmer_loading.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +55,7 @@ class _DetailScreenState extends State<DetailScreen> {
             );
           }
           if (classModel == null) {
-            return EmptyListView(
+            return CostumEmptyListView(
               title: 'Class detail not found, pull to refresh',
               svgAssetLink: 'assets/icons/empty_class.svg',
               emptyListViewFor: EmptyListViewFor.detail,

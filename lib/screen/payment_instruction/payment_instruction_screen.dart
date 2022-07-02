@@ -30,26 +30,31 @@ class _PaymentInstructionScreenState extends State<PaymentInstructionScreen> wit
           icon: const Icon(Icons.arrow_back_ios),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const SizedBox(height: 15),
-            PriceContainer(price: item?.price),
-            const SizedBox(height: 15),
-            const PaymentDetailContainer(),
-            const SizedBox(height: 15),
-            CostumMainCard(animationController: _animationController, onTap: instructionOnTap),
-            CostumSubCard(
-              animationController: _animationController,
-              scrollController: _scrollController,
-              isShown: _isShown,
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  const SizedBox(height: 15),
+                  PriceContainer(price: item?.price),
+                  const SizedBox(height: 15),
+                  const PaymentDetailContainer(),
+                  const SizedBox(height: 15),
+                  CostumMainCard(animationController: _animationController, onTap: instructionOnTap),
+                  CostumSubCard(
+                    animationController: _animationController,
+                    scrollController: _scrollController,
+                    isShown: _isShown,
+                  ),
+                  const Expanded(child: SizedBox()),
+                ],
+              ),
             ),
-            const Expanded(child: SizedBox()),
-            item == null ? const SizedBox() : CostumButtons(item: item),
-            const SizedBox(height: 20)
-          ],
-        ),
+          ),
+          item == null ? const SizedBox() : CostumButtons(item: item),
+        ],
       ),
     );
   }

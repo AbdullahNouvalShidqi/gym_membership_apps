@@ -24,15 +24,6 @@ class _ProfileUpdatePasswordScreenState extends State<ProfileUpdatePasswordScree
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Update Password', style: Utilities.appBarTextStyle),
-          leading: IconButton(
-            onPressed: () async {
-              final navigator = Navigator.of(context);
-              if (await profileUpdatePasswordViewModel.onWillPop(context)) {
-                navigator.pop();
-              }
-            },
-            icon: const Icon(Icons.arrow_back_ios),
-          ),
         ),
         body: Padding(
           padding: const EdgeInsets.only(left: 20, right: 20, top: 40),

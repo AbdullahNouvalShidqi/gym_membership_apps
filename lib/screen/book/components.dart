@@ -139,27 +139,36 @@ class CostumButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final backToHomeOnTap = context.watch<BookViewModel>().backToHomeOnTap;
-    return Column(
-      children: [
-        CostumButton(
-          onPressed: () {
-            backToHomeOnTap(context);
-          },
-          height: 45,
-          backgroundColor: Utilities.myWhiteColor,
-          borderColor: Utilities.primaryColor,
-          fontColor: Utilities.primaryColor,
-          childText: 'Back to home',
+    return Container(
+      decoration: const BoxDecoration(
+        boxShadow: [BoxShadow(blurRadius: 3, color: Color.fromARGB(255, 230, 230, 230))],
+        color: Utilities.myWhiteColor,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            CostumButton(
+              onPressed: () {
+                backToHomeOnTap(context);
+              },
+              height: 45,
+              backgroundColor: Utilities.myWhiteColor,
+              borderColor: Utilities.primaryColor,
+              fontColor: Utilities.primaryColor,
+              childText: 'Back to home',
+            ),
+            const SizedBox(height: 5),
+            CostumButton(
+              onPressed: () {
+                Navigator.pushNamed(context, PaymentInstructionScreen.routeName, arguments: item);
+              },
+              height: 45,
+              childText: 'Payment Instruction',
+            ),
+          ],
         ),
-        const SizedBox(height: 5),
-        CostumButton(
-          onPressed: () {
-            Navigator.pushNamed(context, PaymentInstructionScreen.routeName, arguments: item);
-          },
-          height: 45,
-          childText: 'Payment Instruction',
-        ),
-      ],
+      ),
     );
   }
 }

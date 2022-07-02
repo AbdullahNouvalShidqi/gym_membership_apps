@@ -14,6 +14,9 @@ class ScheduleViewModel with ChangeNotifier {
   List<ClassModel> _tempSchedules = [];
   List<ClassModel> get tempSchedules => _tempSchedules;
 
+  int _currentIndex = 0;
+  int get currentIndex => _currentIndex;
+
   static bool isInit = true;
 
   final ScrollController _scheduleListController = ScrollController();
@@ -101,5 +104,47 @@ class ScheduleViewModel with ChangeNotifier {
     _listSchedule.clear();
     _tempSchedules.clear();
     isInit = true;
+  }
+
+  void sortingButtonOnTap(
+      {required int i, required List<ClassModel> allItem, required AnimationController animationController}) {
+    if (_currentIndex != i) {
+      _currentIndex = i;
+      notifyListeners();
+
+      animationController
+          .reverse()
+          .then(
+            (value) => checkSchedules(allItem: allItem, currentIndex: _currentIndex),
+          )
+          .then(
+            (value) => animationController.forward(),
+          );
+    }
+  }
+
+  void checkSchedules({
+    required List<ClassModel> allItem,
+    required int currentIndex,
+  }) {
+    if (currentIndex == 0) {
+      resetSort();
+    }
+    if (currentIndex == 1) {
+      allItem.sort(
+        (a, b) => a.endAt.compareTo(b.endAt),
+      );
+    }
+    if (currentIndex == 2) {
+      allItem.sort(
+        (a, b) => a.startAt.compareTo(b.startAt),
+      );
+    }
+    if (currentIndex == 3) {
+      allItem.sort(
+        (a, b) => b.name.compareTo(a.name),
+      );
+    }
+    notifyListeners();
   }
 }

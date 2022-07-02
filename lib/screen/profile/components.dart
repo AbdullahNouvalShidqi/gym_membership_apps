@@ -5,7 +5,7 @@ import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_card.dart';
-import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -98,7 +98,7 @@ class ItemToReturn extends StatelessWidget {
           return const AccountSettings();
         }
         if (scheduleViewModel.listSchedule.isEmpty) {
-          return EmptyListView(
+          return CostumEmptyListView(
             forProgress: true,
             svgAssetLink: 'assets/icons/empty_list.svg',
             emptyListViewFor: EmptyListViewFor.progress,

@@ -19,19 +19,24 @@ class BookScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Booking Class', style: Utilities.appBarTextStyle),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 15),
-            BookingDetail(item: item),
-            const SizedBox(height: 20),
-            UserInformation(user: user),
-            CostumButtons(item: item),
-            const SizedBox(height: 20),
-          ],
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 15),
+                  BookingDetail(item: item),
+                  const SizedBox(height: 20),
+                  UserInformation(user: user),
+                ],
+              ),
+            ),
+          ),
+          CostumButtons(item: item)
+        ],
       ),
     );
   }

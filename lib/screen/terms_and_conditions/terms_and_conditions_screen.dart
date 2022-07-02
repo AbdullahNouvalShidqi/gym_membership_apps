@@ -14,12 +14,6 @@ class TermsAndConditionsScreen extends StatelessWidget {
           'Terms and Conditions',
           style: Utilities.appBarTextStyle,
         ),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),

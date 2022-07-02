@@ -15,6 +15,7 @@ import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
 import 'package:gym_membership_apps/screen/payment_instruction/payment_instruction_screen.dart';
+import 'package:gym_membership_apps/screen/payment_instruction/payment_view_model.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/profile_update_password/profile_update_password_screen.dart';
@@ -44,20 +45,21 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider.value(value: SplashScreenViewModel()),
-        ChangeNotifierProvider.value(value: HomeViewModel()),
-        ChangeNotifierProvider.value(value: ProfileViewModel()),
-        ChangeNotifierProvider.value(value: FaqViewModel()),
-        ChangeNotifierProvider.value(value: SignUpViewModel()),
-        ChangeNotifierProvider.value(value: LogInViewModel()),
-        ChangeNotifierProvider.value(value: ScheduleViewModel()),
-        ChangeNotifierProvider.value(value: AvailableClassViewModel()),
-        ChangeNotifierProvider.value(value: DetailViewModel()),
-        ChangeNotifierProvider.value(value: ForgotPasswordViewModel()),
-        ChangeNotifierProvider.value(value: BookViewModel()),
-        ChangeNotifierProvider.value(value: FeedbackViewModel()),
-        ChangeNotifierProvider.value(value: UpdatePasswordViewModel()),
-        ChangeNotifierProvider.value(value: ProfileUpdatePasswordViewModel()),
+        ChangeNotifierProvider(create: (context) => SplashScreenViewModel()),
+        ChangeNotifierProvider(create: (context) => HomeViewModel()),
+        ChangeNotifierProvider(create: (context) => ProfileViewModel()),
+        ChangeNotifierProvider(create: (context) => FaqViewModel()),
+        ChangeNotifierProvider(create: (context) => SignUpViewModel()),
+        ChangeNotifierProvider(create: (context) => LogInViewModel()),
+        ChangeNotifierProvider(create: (context) => ScheduleViewModel()),
+        ChangeNotifierProvider(create: (context) => AvailableClassViewModel()),
+        ChangeNotifierProvider(create: (context) => DetailViewModel()),
+        ChangeNotifierProvider(create: (context) => ForgotPasswordViewModel()),
+        ChangeNotifierProvider(create: (context) => BookViewModel()),
+        ChangeNotifierProvider(create: (context) => FeedbackViewModel()),
+        ChangeNotifierProvider(create: (context) => UpdatePasswordViewModel()),
+        ChangeNotifierProvider(create: (context) => ProfileUpdatePasswordViewModel()),
+        ChangeNotifierProvider(create: (context) => PaymentViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

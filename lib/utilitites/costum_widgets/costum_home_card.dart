@@ -54,8 +54,7 @@ class CostumHomeCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushNamed(
-                      context,
+                    Navigator.of(context).pushNamed(
                       DetailScreen.routeName,
                       arguments: DetailRouteModel(homeClassModel: homeClassModel[i], type: type),
                     );

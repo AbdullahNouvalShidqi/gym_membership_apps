@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gym_membership_apps/utilitites/shimmer.dart';
+import 'package:gym_membership_apps/utilitites/shimmer/shimmer.dart';
 
 import 'shimmer_container.dart';
 

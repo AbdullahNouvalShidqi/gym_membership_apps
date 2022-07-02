@@ -3,11 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/book/book_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
-import 'package:gym_membership_apps/utilitites/costum_button.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'utilitites.dart';
+import 'costum_button.dart';
 
 enum CostumCardFor { scheduleScreen, availableClassScreen, profileScreen }
 

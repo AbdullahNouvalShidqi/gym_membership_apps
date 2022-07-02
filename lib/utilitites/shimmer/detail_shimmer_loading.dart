@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gym_membership_apps/utilitites/shimmer.dart';
-import 'package:gym_membership_apps/utilitites/shimmer_container.dart';
+
+import 'shimmer.dart';
+import 'shimmer_container.dart';
 
 class DetailShimmerLoading extends StatelessWidget {
   const DetailShimmerLoading({Key? key}) : super(key: key);

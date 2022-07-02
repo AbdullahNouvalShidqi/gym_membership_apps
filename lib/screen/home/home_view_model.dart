@@ -4,7 +4,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
-import 'package:gym_membership_apps/utilitites/tab_navigator.dart';
+import 'package:gym_membership_apps/screen/home/home_page_screen.dart';
+import 'package:gym_membership_apps/screen/profile/profile_screen.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_screen.dart';
 
 enum HomeViewState { none, loading, error }
 
@@ -20,74 +22,36 @@ class HomeViewModel with ChangeNotifier {
   int _selectedIndex = 0;
   int get selectedIndex => _selectedIndex;
 
-  String _currentPage = 'Home';
-  String get currentPage => _currentPage;
-
   DateTime? currentBackPressTime;
 
-  final List<String> _pageKeys = ["Home", "Schedule", "Profile"];
-  List<String> get pageKeys => _pageKeys;
-
-  final Map<String, GlobalKey<NavigatorState>> _navigatorKeys = {
-    "Home": GlobalKey<NavigatorState>(),
-    "Schedule": GlobalKey<NavigatorState>(),
-    "Profile": GlobalKey<NavigatorState>(),
-  };
-
-  Map<String, GlobalKey<NavigatorState>> get navigatorKeys => _navigatorKeys;
-  GlobalKey<NavigatorState> get navigatorKey => _navigatorKeys[_currentPage]!;
+  final List<Widget> _mainPages = [
+    const HomePageScreen(),
+    const ScheduleScreen(),
+    const ProfileScreen(),
+  ];
 
   final ScrollController _homeScrollController = ScrollController();
   ScrollController get homeScrollController => _homeScrollController;
 
-  void selectTab(String tabItem, int index) async {
-    if (tabItem == _currentPage) {
-      final isNotFirstRouteInCurrentTab = _navigatorKeys[_currentPage]!.currentState!.canPop();
-      DateTime now = DateTime.now();
-      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) &&
-          isNotFirstRouteInCurrentTab) {
-        currentBackPressTime = now;
-        Fluttertoast.cancel();
-        Fluttertoast.showToast(msg: "Press $_currentPage again to main page of $_currentPage");
-        return;
-      } else if (tabItem == _currentPage &&
-          _homeScrollController.offset != _homeScrollController.position.minScrollExtent &&
-          !isNotFirstRouteInCurrentTab) {
-        _homeScrollController.animateTo(_homeScrollController.position.minScrollExtent,
-            duration: const Duration(milliseconds: 500), curve: Curves.easeOutQuart);
-        return;
-      }
-      currentBackPressTime = null;
-      Fluttertoast.cancel();
-      _navigatorKeys[tabItem]!.currentState!.popUntil((route) => route.isFirst);
-    } else {
-      _currentPage = pageKeys[index];
-      _selectedIndex = index;
-      notifyListeners();
-    }
+  void selectTab(int index) async {
+    _selectedIndex = index;
+    notifyListeners();
   }
 
-  Widget buildOffstageNavigator(String tabItem) {
+  Widget buildOffstageNavigator(int index) {
     return Offstage(
-      offstage: _currentPage != tabItem,
-      child: TabNavigator(
-        navigatorKey: _navigatorKeys[tabItem]!,
-        tabItem: tabItem,
-      ),
+      offstage: _selectedIndex != index,
+      child: _mainPages[index],
     );
   }
 
   Future<bool> onWillPop() async {
-    final isNotFirstRouteInCurrentTab = await navigatorKey.currentState!.maybePop();
-    if (isNotFirstRouteInCurrentTab) {
-      return false;
-    } else if (_currentPage != "Home") {
-      selectTab("Home", 0);
+    if (_selectedIndex != 0) {
+      selectTab(0);
       return false;
     } else {
       DateTime now = DateTime.now();
-      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000)) &&
-          !isNotFirstRouteInCurrentTab) {
+      if ((currentBackPressTime == null || now.difference(currentBackPressTime!) > const Duration(milliseconds: 2000))) {
         currentBackPressTime = now;
         Fluttertoast.cancel();
         Fluttertoast.showToast(msg: 'Press back again to exit');

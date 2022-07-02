@@ -7,7 +7,7 @@ import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
-import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum SignUpState { none, loading, error }

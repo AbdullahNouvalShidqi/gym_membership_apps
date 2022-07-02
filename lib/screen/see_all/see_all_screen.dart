@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
-import 'package:gym_membership_apps/utilitites/costum_grid_view.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_grid_view.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 

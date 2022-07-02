@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gym_membership_apps/utilitites/shimmer_container.dart';
-import 'package:gym_membership_apps/utilitites/shimmer.dart';
+import 'package:gym_membership_apps/utilitites/shimmer/shimmer.dart';
+import 'shimmer_container.dart';
 
 class HomeShimmerLoading extends StatelessWidget {
   const HomeShimmerLoading({Key? key}) : super(key: key);

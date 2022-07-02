@@ -15,7 +15,7 @@ import 'package:gym_membership_apps/screen/profile_update_password/profile_updat
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_screen.dart';
 import 'package:gym_membership_apps/screen/terms_and_conditions/terms_and_conditions_screen.dart';
-import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_dialog.dart';
 
 enum ProfileViewState { none, loading, error }
 
@@ -217,7 +217,7 @@ class ProfileViewModel with ChangeNotifier {
         if (logOut) {
           scheduleViewModel.logOut();
           profileViewModel.disposeUserData();
-          homeViewModel.selectTab('Home', 0);
+          homeViewModel.selectTab(0);
           navigator.pushNamedAndRemoveUntil(LogInScreen.routeName, (route) => false);
         }
       }

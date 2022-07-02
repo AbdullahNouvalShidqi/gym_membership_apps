@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gym_membership_apps/utilitites/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
+
+import 'costum_button.dart';
 
 class CostumDialog extends StatelessWidget {
   const CostumDialog({

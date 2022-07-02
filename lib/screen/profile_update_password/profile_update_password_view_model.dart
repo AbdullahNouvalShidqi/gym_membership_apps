@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
-import 'package:gym_membership_apps/utilitites/costum_bottom_sheet.dart';
-import 'package:gym_membership_apps/utilitites/costum_dialog.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_bottom_sheet.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_dialog.dart';
 
 enum ProfileUpdatePasswordState { none, loading, error }
 

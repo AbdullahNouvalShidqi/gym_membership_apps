@@ -19,9 +19,9 @@ class HomeScreen extends StatelessWidget {
             body: Stack(
               alignment: Alignment.bottomCenter,
               children: [
-                homeViewModel.buildOffstageNavigator('Home'),
-                homeViewModel.buildOffstageNavigator('Schedule'),
-                homeViewModel.buildOffstageNavigator('Profile'),
+                homeViewModel.buildOffstageNavigator(0),
+                homeViewModel.buildOffstageNavigator(1),
+                homeViewModel.buildOffstageNavigator(2),
               ],
             ),
             bottomNavigationBar: BottomNavigationBar(
@@ -43,8 +43,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
               onTap: (index) {
-                final onGoToSchedule = homeViewModel.currentPage != 'Schedule';
-                homeViewModel.selectTab(homeViewModel.pageKeys[index], index);
+                final onGoToSchedule = homeViewModel.selectedIndex != 1;
+                homeViewModel.selectTab(index);
                 if (index == 1 && ScheduleViewModel.isInit) {
                   scheduleViewModel.getSchedule(id: '');
                   ScheduleViewModel.isInitDone();

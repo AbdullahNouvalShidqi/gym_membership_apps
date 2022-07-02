@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gym_membership_apps/utilitites/shimmering_gradient.dart';
+import 'package:gym_membership_apps/utilitites/shimmer/shimmering_gradient.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Utilities {
@@ -30,9 +30,10 @@ class Utilities {
     ),
     primaryColor: primaryColor,
     elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(primaryColor),
-    )),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(primaryColor),
+      ),
+    ),
     scaffoldBackgroundColor: myWhiteColor,
     inputDecorationTheme: const InputDecorationTheme(
       focusColor: formFocusColor,
@@ -66,8 +67,11 @@ class Utilities {
     color: primaryColor,
   );
 
-  static const TextStyle homeViewMainTitleStyle =
-      TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.black);
+  static const TextStyle homeViewMainTitleStyle = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.w700,
+    color: Colors.black,
+  );
 
   static const TextStyle greetingHomeStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey);
 

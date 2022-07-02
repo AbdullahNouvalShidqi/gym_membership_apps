@@ -5,10 +5,10 @@ import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
-import 'package:gym_membership_apps/utilitites/costum_card.dart';
-import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_card.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
-import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
+import 'package:gym_membership_apps/utilitites/shimmer/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -46,7 +46,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
           builder: (context, scheduleViewModel, homeViewModel, _) {
             final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
             final isError = scheduleViewModel.state == ScheduleViewState.error;
-            List<ClassModel> allItem = scheduleViewModel.tempSchedules;
+            final allItem = scheduleViewModel.tempSchedules;
 
             if (isError) {
               return CostumErrorScreen(

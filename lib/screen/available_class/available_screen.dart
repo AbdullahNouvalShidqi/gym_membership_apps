@@ -3,13 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
-import 'package:gym_membership_apps/utilitites/costum_card.dart';
-import 'package:gym_membership_apps/utilitites/costum_error_screen.dart';
-import 'package:gym_membership_apps/utilitites/empty_list_view.dart';
-import 'package:gym_membership_apps/utilitites/listview_shimmer_loading.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_error_screen.dart';
+import 'package:gym_membership_apps/utilitites/shimmer/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import 'components.dart';
 
 class AvailableClassScreen extends StatefulWidget {
   static String routeName = '/availableClass';
@@ -61,151 +60,39 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
 
     return WillPopScope(
       onWillPop: availableClassViewModel.onWillPop,
-      child: Builder(
-        builder: (context) {
-          return Scaffold(
-            body: SafeArea(
-              child: Builder(
-                builder: (context) {
-                  if (isLoading) {
-                    return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
-                  }
-                  if (isError) {
-                    return CostumErrorScreen(
-                      onPressed: () async {
-                        await availableClassViewModel.getAvailableClasses(item: item);
-                      },
-                    );
-                  }
-                  return NestedScrollView(
-                    headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return [
-                        SliverAppBar(
-                          title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle),
-                          leading: IconButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            icon: const Icon(Icons.arrow_back_ios, color: Utilities.primaryColor),
-                          ),
-                          centerTitle: true,
-                        )
-                      ];
-                    },
-                    body: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20, top: 5),
-                          child: Container(
-                            height: 64,
-                            width: double.infinity,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
-                              boxShadow: const [BoxShadow(blurRadius: 8, color: Color.fromARGB(255, 230, 230, 230))],
-                            ),
-                            child: CostumTabBar(tabController: _tabController, item: item),
-                          ),
-                        ),
-                        Expanded(
-                          child: TabBarView(
-                            controller: _tabController,
-                            children: [
-                              for (var i = 0; i < 7; i++) ...[
-                                CostumListView(
-                                  availableClasses: classes
-                                      .where(
-                                        (element) => element.startAt.day == DateTime.now().add(Duration(days: i)).day,
-                                      )
-                                      .toList(),
-                                ),
-                              ]
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
+      child: Scaffold(
+        body: SafeArea(
+          child: Builder(
+            builder: (context) {
+              if (isLoading) {
+                return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.availableScreen);
+              }
+              if (isError) {
+                return CostumErrorScreen(
+                  onPressed: () async {
+                    await availableClassViewModel.getAvailableClasses(item: item);
+                  },
+                );
+              }
+              return NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      title: Text('${item.type} ${item.name} Class', style: Utilities.appBarTextStyle),
+                      centerTitle: true,
+                    )
+                  ];
                 },
-              ),
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class CostumTabBar extends StatelessWidget {
-  const CostumTabBar({
-    Key? key,
-    required this.tabController,
-    required this.item,
-  }) : super(key: key);
-  final TabController tabController;
-  final ClassModel item;
-
-  @override
-  Widget build(BuildContext context) {
-    return TabBar(
-      controller: tabController,
-      indicatorWeight: 0,
-      indicator: BoxDecoration(borderRadius: BorderRadius.circular(15), color: Utilities.primaryColor),
-      indicatorPadding: const EdgeInsets.all(10),
-      isScrollable: false,
-      unselectedLabelColor: const Color.fromRGBO(112, 112, 112, 1),
-      labelColor: Utilities.myWhiteColor,
-      labelPadding: const EdgeInsets.symmetric(horizontal: 10),
-      tabs: [
-        for (var i = 0; i < 7; i++) ...[
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                DateFormat('EEE').format(DateTime.now().add(Duration(days: i))),
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-              ),
-              const SizedBox(height: 5),
-              Text(
-                DateFormat('d').format(DateTime.now().add(Duration(days: i))),
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-              )
-            ],
+                body: Column(
+                  children: [
+                    CostumTabBar(tabController: _tabController, item: item),
+                    CostumTabBarView(tabController: _tabController, classes: classes)
+                  ],
+                ),
+              );
+            },
           ),
-        ]
-      ],
-    );
-  }
-}
-
-class CostumListView extends StatelessWidget {
-  const CostumListView({Key? key, required this.availableClasses}) : super(key: key);
-  final List<ClassModel> availableClasses;
-
-  @override
-  Widget build(BuildContext context) {
-    final availableClassViewModel = context.watch<AvailableClassViewModel>();
-
-    if (availableClasses.isEmpty) {
-      return EmptyListView(
-        svgAssetLink: 'assets/icons/empty_class.svg',
-        title: 'Ooops, class not yet available',
-        emptyListViewFor: EmptyListViewFor.available,
-        onRefresh: availableClassViewModel.refreshData,
-      );
-    }
-    return RefreshIndicator(
-      onRefresh: availableClassViewModel.refreshData,
-      child: ListView.builder(
-        padding: const EdgeInsets.only(top: 15),
-        itemCount: availableClasses.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: CostumCard(classModel: availableClasses[index], whichScreen: CostumCardFor.availableClassScreen),
-          );
-        },
+        ),
       ),
     );
   }

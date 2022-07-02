@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gym_membership_apps/utilitites/costum_button.dart';
+
+import 'costum_button.dart';
 
 class CostumBottomSheet extends StatelessWidget {
   const CostumBottomSheet({

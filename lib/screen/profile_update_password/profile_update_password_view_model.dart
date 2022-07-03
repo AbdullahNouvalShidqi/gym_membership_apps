@@ -102,6 +102,7 @@ class ProfileUpdatePasswordViewModel with ChangeNotifier {
         return CostumBottomSheet(
           title: 'Password Recovery',
           content: 'Return to the to profile screen to continue',
+          successful: true,
           buttonText: 'Return to profile screen',
           onPressed: () {
             Navigator.popUntil(context, (route) => route.isFirst);

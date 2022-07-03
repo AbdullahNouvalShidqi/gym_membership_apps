@@ -8,11 +8,13 @@ class CostumBottomSheet extends StatelessWidget {
     Key? key,
     required this.title,
     required this.content,
+    required this.successful,
     required this.buttonText,
     required this.onPressed,
   }) : super(key: key);
   final String title;
   final String content;
+  final bool successful;
   final String buttonText;
   final void Function() onPressed;
 
@@ -34,10 +36,10 @@ class CostumBottomSheet extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
-                  const Text(
-                    'Succesful',
+                  Text(
+                    successful ? 'Succesful' : 'Failed',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),

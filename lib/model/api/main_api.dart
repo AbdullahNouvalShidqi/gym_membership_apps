@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
+import 'package:gym_membership_apps/model/book_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
+import 'package:gym_membership_apps/model/to_book_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
 
 class MainAPI {
@@ -23,16 +25,10 @@ class MainAPI {
     return data.data;
   }
 
-  Future<ClassModel?> getClassById({required int id}) async {
+  Future<ClassModel> getClassById({required int id}) async {
     final response = await dio.get('$url/class/$id');
 
-    final Map<String, dynamic>? classData = (response.data as List).firstWhere((element) => element, orElse: () => null);
-
-    ClassModel? data;
-
-    if (classData != null) {
-      data = ClassModel.fromJson(classData);
-    }
+    final data = (response.data['data'] as List).map((e) => ClassModel.fromJson(e)).first;
 
     return data;
   }
@@ -62,11 +58,10 @@ class MainAPI {
   }
 
   Future<void> updatePassword({required int id, required String newPassword}) async {
-    final response = await dio.put(
+    await dio.put(
       '$url/users/update/password/$id',
       data: {'password': newPassword},
     );
-    print(response.data);
   }
 
   Future<UserModel> getUserById({required int id}) async {
@@ -90,5 +85,22 @@ class MainAPI {
     final returnData = UserModel.fromJson(response.data['data']);
 
     return returnData;
+  }
+
+  Future<void> bookClass({required int classId, required int idUser}) async {
+    final data = ToBookModel(classId: classId, idUser: idUser).toJson();
+
+    await dio.post('$url/booking', data: data);
+  }
+
+  Future<List<BookModel>> getSchedulesById({required int id}) async {
+    final response = await dio.get('$url/booking/iduser/$id');
+
+    if (response.data['data'] != null) {
+      final data = (response.data['data'] as List).map((e) => BookModel.fromJson(e)).toList();
+      return data;
+    }
+
+    return [];
   }
 }

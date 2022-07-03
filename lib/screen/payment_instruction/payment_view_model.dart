@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
+import 'package:gym_membership_apps/screen/available_class/available_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_bottom_sheet.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_dialog.dart';
@@ -26,6 +29,8 @@ class PaymentViewModel with ChangeNotifier {
     BuildContext context, {
     required ScheduleViewModel scheduleViewModel,
     required HomeViewModel homeViewModel,
+    required AvailableClassViewModel availableClassViewModel,
+    required ProfileViewModel profileViewModel,
     required ClassModel item,
   }) async {
     final navigator = Navigator.of(context);
@@ -59,9 +64,45 @@ class PaymentViewModel with ChangeNotifier {
       return;
     }
 
-    await scheduleViewModel.addToSchedule(newClass: item);
+    await availableClassViewModel.updateClassById(id: item.id);
 
-    final isError = scheduleViewModel.state == ScheduleViewState.error;
+    bool isError = availableClassViewModel.state == AvailableClassState.error;
+
+    if (isError) {
+      Fluttertoast.showToast(msg: 'Something went wrong, try again');
+      return;
+    }
+
+    final isFull = availableClassViewModel.availableClasses.firstWhere((e) => e.id == item.id).qtyUsers <= 0;
+
+    if (isFull) {
+      await showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(40),
+            topRight: Radius.circular(40),
+          ),
+        ),
+        isScrollControlled: true,
+        builder: (context) {
+          return CostumBottomSheet(
+            title: 'Booking class',
+            content: 'Sorry, the class is full as you book, go to available screen to see another class',
+            successful: false,
+            buttonText: 'Go to available screen',
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.settings.name == AvailableClassScreen.routeName);
+            },
+          );
+        },
+      );
+      return;
+    }
+
+    await scheduleViewModel.booking(classId: item.id, idUser: profileViewModel.user.id!);
+
+    isError = scheduleViewModel.state == ScheduleViewState.error;
 
     if (isError) {
       Fluttertoast.showToast(msg: 'Something went wrong, book again or check your internet connection');
@@ -72,13 +113,17 @@ class PaymentViewModel with ChangeNotifier {
     await showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(40),
+          topRight: Radius.circular(40),
+        ),
       ),
       isScrollControlled: true,
       builder: (context) {
         return CostumBottomSheet(
           title: 'Booking Class',
           content: 'Return to Schedule page to see your schedule',
+          successful: true,
           buttonText: 'See Schedule',
           onPressed: () {
             goToSchedule = true;
@@ -89,6 +134,9 @@ class PaymentViewModel with ChangeNotifier {
     );
     if (goToSchedule) {
       homeViewModel.selectTab(1);
+      if (ScheduleViewModel.isInit) {
+        scheduleViewModel.getInitSchedule(id: profileViewModel.user.id!);
+      }
       navigator.popUntil((route) => route.isFirst);
     }
   }

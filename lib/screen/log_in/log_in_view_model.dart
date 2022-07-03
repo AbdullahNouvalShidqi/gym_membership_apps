@@ -166,7 +166,7 @@ class LogInViewModel with ChangeNotifier {
     navigator.pushReplacementNamed(SignUpScreen.routeName);
   }
 
-  Future<void> loginButtonOnTap(BuildContext context) async {
+  Future<void> loginButtonOnTap(BuildContext context, {required ProfileViewModel profileViewModel}) async {
     if (!_formKey.currentState!.validate()) return;
     final focusScope = FocusScope.of(context);
 
@@ -196,7 +196,7 @@ class LogInViewModel with ChangeNotifier {
       await dontRememberMe();
     }
 
-    ProfileViewModel.setUserData(currentUser: userData.first);
+    profileViewModel.setUserData(currentUser: userData.first);
 
     Fluttertoast.showToast(msg: 'Log in successful!');
     navigator.pushReplacementNamed(HomeScreen.routeName);

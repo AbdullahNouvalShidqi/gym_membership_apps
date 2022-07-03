@@ -87,8 +87,9 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  static void setUserData({required UserModel currentUser}) {
+  void setUserData({required UserModel currentUser}) {
     _user = currentUser;
+    notifyListeners();
   }
 
   void disposeUserData() {
@@ -119,6 +120,9 @@ class ProfileViewModel with ChangeNotifier {
   void progressButtonOnTap({
     required ScheduleViewModel scheduleViewModel,
   }) {
+    if (!_progressSelected) {
+      scheduleViewModel.refreshData();
+    }
     _myAccountSelected = false;
     _progressSelected = true;
     notifyListeners();

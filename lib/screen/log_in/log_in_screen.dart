@@ -48,43 +48,10 @@ class _LogInScreenState extends State<LogInScreen> {
                     ],
                   ),
                   const LoginButton(),
-                  Center(
-                    child: Text(
-                      'OR',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700, color: Colors.grey[700]),
-                    ),
-                  ),
-                  googleLoginButton(),
                   const ToSignUpButton()
                 ],
               ),
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget googleLoginButton() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 25),
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.white),
-            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45)),
-          ),
-          onPressed: () {},
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset('assets/google_logo.png', width: 25),
-              const SizedBox(width: 10),
-              const Text(
-                'Sign in with Google',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),
-              )
-            ],
           ),
         ),
       ),

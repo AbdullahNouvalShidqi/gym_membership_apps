@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/sign_up/sign_up_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_form_field.dart';
@@ -222,8 +223,8 @@ class SignUpButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SignUpViewModel>(
-      builder: (context, signUpViewModel, _) {
+    return Consumer2<SignUpViewModel, ProfileViewModel>(
+      builder: (context, signUpViewModel, profileViewModel, _) {
         final isLoading = signUpViewModel.state == SignUpState.loading;
         return Center(
           child: Padding(
@@ -231,7 +232,7 @@ class SignUpButton extends StatelessWidget {
             child: CostumButton(
               height: 45,
               onPressed: () {
-                signUpViewModel.signUpButtonOnPressed(context);
+                signUpViewModel.signUpButtonOnPressed(context, profileViewModel: profileViewModel);
               },
               isLoading: isLoading,
               childText: 'Sign Up',
@@ -249,24 +250,21 @@ class ToSignInButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final signUpViewModel = context.watch<SignUpViewModel>();
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 15),
-      child: Center(
-        child: RichText(
-          text: TextSpan(
-            text: 'Already have an account? ',
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
-            children: [
-              TextSpan(
-                text: 'Log in',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    signUpViewModel.toLoginOnTap(context);
-                  },
-              ),
-            ],
-          ),
+    return Center(
+      child: RichText(
+        text: TextSpan(
+          text: 'Already have an account? ',
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          children: [
+            TextSpan(
+              text: 'Log in',
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  signUpViewModel.toLoginOnTap(context);
+                },
+            ),
+          ],
         ),
       ),
     );

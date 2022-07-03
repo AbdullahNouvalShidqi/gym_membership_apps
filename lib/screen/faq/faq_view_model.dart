@@ -11,12 +11,14 @@ class FaqViewModel with ChangeNotifier {
           style: Utilities.faqSubTitleStyle,
         ),
       ),
+      'height': 60.0
     },
     {
       'title': const Text('Is the trainer professional?', style: Utilities.faqTitleStyle),
       'value': RichText(
         text: const TextSpan(
-          text: 'All trainers in the A-A gym are professional trainers in their fields because we want all those who attend the A-A gym class to be able to apply the right exercise according to their goals.',
+          text:
+              'All trainers in the A-A gym are professional trainers in their fields because we want all those who attend the A-A gym class to be able to apply the right exercise according to their goals.',
           style: Utilities.faqSubTitleStyle,
         ),
       ),
@@ -25,7 +27,8 @@ class FaqViewModel with ChangeNotifier {
       'title': const Text('How to book?', style: Utilities.faqTitleStyle),
       'value': RichText(
         text: const TextSpan(
-          text: 'You can choose a gym class first on the homepage, after that you can choose the available gym class schedule and then you can book a class and make payments at the gym.',
+          text:
+              'You can choose a gym class first on the homepage, after that you can choose the available gym class schedule and then you can book a class and make payments at the gym.',
           style: Utilities.faqSubTitleStyle,
         ),
       ),
@@ -34,7 +37,8 @@ class FaqViewModel with ChangeNotifier {
       'title': const Text('How to joined class from home?', style: Utilities.faqTitleStyle),
       'value': RichText(
         text: const TextSpan(
-          text: 'you can choose a gym class online first on the homepage, after that you can choose the available gym class online schedule and then you can book a class and make payments at the gym.',
+          text:
+              'you can choose a gym class online first on the homepage, after that you can choose the available gym class online schedule and then you can book a class and make payments at the gym.',
           style: Utilities.faqSubTitleStyle,
         ),
       ),

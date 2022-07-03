@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gym_membership_apps/model/book_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/book/book_screen.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
@@ -12,8 +13,14 @@ import 'costum_button.dart';
 enum CostumCardFor { scheduleScreen, availableClassScreen, profileScreen }
 
 class CostumCard extends StatelessWidget {
-  const CostumCard({Key? key, required this.classModel, required this.whichScreen}) : super(key: key);
+  const CostumCard({
+    Key? key,
+    required this.classModel,
+    this.bookedClass,
+    required this.whichScreen,
+  }) : super(key: key);
   final ClassModel classModel;
+  final BookModel? bookedClass;
   final CostumCardFor whichScreen;
 
   @override
@@ -36,6 +43,7 @@ class CostumCard extends StatelessWidget {
             StatusAndButton(
               classModel: classModel,
               whichScreen: whichScreen,
+              bookedClass: bookedClass,
             )
           ],
         ),
@@ -117,8 +125,14 @@ class Details extends StatelessWidget {
 }
 
 class StatusAndButton extends StatelessWidget {
-  const StatusAndButton({Key? key, required this.classModel, required this.whichScreen}) : super(key: key);
+  const StatusAndButton({
+    Key? key,
+    required this.classModel,
+    this.bookedClass,
+    required this.whichScreen,
+  }) : super(key: key);
   final ClassModel classModel;
+  final BookModel? bookedClass;
   final CostumCardFor whichScreen;
 
   @override
@@ -139,12 +153,13 @@ class StatusAndButton extends StatelessWidget {
                   Container(
                     height: 8,
                     width: 8,
-                    decoration: const BoxDecoration(shape: BoxShape.circle, color: Utilities.yellowColor),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle, color: checkScheduleStatus(bookedClass: bookedClass!)['color']!),
                   ),
                   const SizedBox(width: 5),
-                  const Text(
-                    'Waiting',
-                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
+                  Text(
+                    checkScheduleStatus(bookedClass: bookedClass!)['status']!,
+                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
                   )
                 ],
               ),
@@ -164,14 +179,14 @@ class StatusAndButton extends StatelessWidget {
                 width: 8,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: checkProgressStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['color'],
+                  color: checkProgressStatus(classModel: classModel, bookedClass: bookedClass)['color'],
                 ),
               ),
               const SizedBox(
                 width: 5,
               ),
               Text(
-                checkProgressStatus(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'],
+                checkProgressStatus(classModel: classModel, bookedClass: bookedClass)['status'],
                 style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
               )
             ],
@@ -221,6 +236,25 @@ class StatusAndButton extends StatelessWidget {
     });
   }
 
+  Map<String, dynamic> checkScheduleStatus({required BookModel bookedClass}) {
+    if (bookedClass.isBooked) {
+      return {
+        'color': Utilities.greenColor,
+        'status': 'Accepted',
+      };
+    }
+    if (DateTime.now().isAfter(bookedClass.bookedClasses.startAt) && !bookedClass.isBooked) {
+      return {
+        'color': Utilities.redColor,
+        'status': 'Late',
+      };
+    }
+    return {
+      'color': Utilities.yellowColor,
+      'status': 'Waiting',
+    };
+  }
+
   Map<String, dynamic> checkItem({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}) {
     final now = DateTime.now();
     final startAt = classModel.startAt;
@@ -239,13 +273,15 @@ class StatusAndButton extends StatelessWidget {
     return {'status': 'Book now', 'onPressed': true};
   }
 
-  Map<String, dynamic> checkProgressStatus({
-    required ClassModel classModel,
-    required ScheduleViewModel scheduleViewModel,
-  }) {
+  Map<String, dynamic> checkProgressStatus({required ClassModel classModel, required BookModel? bookedClass}) {
     final now = DateTime.now();
     if (classModel.endAt.compareTo(now) <= 0) {
       return {'status': 'Ended', 'color': Utilities.redColor};
+    }
+    if (bookedClass != null) {
+      if (!bookedClass.isBooked) {
+        return {'status': 'Waiting', 'color': Utilities.yellowColor};
+      }
     }
     return {'status': 'Joined', 'color': Utilities.greenColor};
   }

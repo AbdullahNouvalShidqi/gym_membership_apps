@@ -46,7 +46,7 @@ class HomeScreen extends StatelessWidget {
                 final onGoToSchedule = homeViewModel.selectedIndex != 1;
                 homeViewModel.selectTab(index);
                 if (index == 1 && ScheduleViewModel.isInit) {
-                  scheduleViewModel.getSchedule(id: '');
+                  scheduleViewModel.getInitSchedule(id: profileViewModel.user.id!);
                   ScheduleViewModel.isInitDone();
                   return;
                 } else if (index == 1 && onGoToSchedule && !ScheduleViewModel.isInit) {

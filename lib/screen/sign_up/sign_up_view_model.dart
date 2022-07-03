@@ -143,9 +143,11 @@ class SignUpViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> signUpButtonOnPressed(BuildContext context) async {
+  Future<void> signUpButtonOnPressed(BuildContext context, {required ProfileViewModel profileViewModel}) async {
     final navigator = Navigator.of(context);
     final focusScope = FocusScope.of(context);
+
+    if (!_formKey.currentState!.validate()) return;
 
     focusScope.unfocus();
     await getAllUser();
@@ -172,7 +174,7 @@ class SignUpViewModel with ChangeNotifier {
       await dontRememberMe();
     }
 
-    ProfileViewModel.setUserData(currentUser: _user!);
+    profileViewModel.setUserData(currentUser: _user!);
     Fluttertoast.showToast(msg: 'Sign up succesful!');
     navigator.pushReplacementNamed(HomeScreen.routeName);
   }
@@ -202,6 +204,10 @@ class SignUpViewModel with ChangeNotifier {
             );
           });
       if (willPop) {
+        _usernameCtrl.text = '';
+        _emailCtrl.text = '';
+        _phoneNumberCtrl.text = '';
+        _passwordCtrl.text = '';
         navigator.pushReplacementNamed(LogInScreen.routeName);
       }
       return;

@@ -77,7 +77,7 @@ class CostumSubCard extends StatelessWidget {
             alignment: Alignment.center,
             duration: const Duration(milliseconds: 200),
             width: MediaQuery.of(context).size.width,
-            height: isShown[i] ? 60 : 0,
+            height: isShown[i] ? faqViewModel.mainData[i]['height'] ?? 80 : 0,
             decoration: BoxDecoration(
               color: const Color.fromRGBO(232, 232, 232, 1),
               borderRadius: BorderRadius.circular(8),

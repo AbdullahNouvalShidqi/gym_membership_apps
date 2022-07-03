@@ -133,7 +133,10 @@ class CostumScheduleListCard extends StatelessWidget {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: CostumCard(classModel: allItem[i], whichScreen: CostumCardFor.scheduleScreen),
+                    child: CostumCard(
+                        classModel: allItem[i],
+                        bookedClass: scheduleViewModel.listBookedClasses[i],
+                        whichScreen: CostumCardFor.scheduleScreen),
                   ),
                 );
               },

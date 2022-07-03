@@ -28,6 +28,20 @@ class AvailableClassViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateClassById({required int id}) async {
+    changeState(AvailableClassState.loading);
+
+    try {
+      final classById = await MainAPI().getClassById(id: id);
+      int indexToUpdate = _availableClasses.indexWhere((element) => element.id == classById.id);
+
+      _availableClasses[indexToUpdate].qtyUsers = classById.qtyUsers;
+      changeState(AvailableClassState.none);
+    } catch (e) {
+      changeState(AvailableClassState.error);
+    }
+  }
+
   Future<void> getAvailableClasses({required ClassModel item}) async {
     changeState(AvailableClassState.loading);
 

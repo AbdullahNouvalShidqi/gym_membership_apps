@@ -102,39 +102,43 @@ class ItemToReturn extends StatelessWidget {
             forProgress: true,
             svgAssetLink: 'assets/icons/empty_list.svg',
             emptyListViewFor: EmptyListViewFor.progress,
-            onRefresh: scheduleViewModel.refreshData,
+            onRefresh: scheduleViewModel.pullToRefresh,
           );
         }
         return SizedBox(
           height: MediaQuery.of(context).size.height - 150,
           child: Center(
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-              controller: profileViewModel.listviewController,
-              itemCount: scheduleViewModel.listSchedule.length,
-              itemBuilder: (context, i) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      DetailScreen.routeName,
-                      arguments: DetailRouteModel(
-                        homeClassModel: homeViewModel.classes.firstWhere(
-                          (element) => element.name == scheduleViewModel.listSchedule[i].name,
+            child: RefreshIndicator(
+              onRefresh: scheduleViewModel.pullToRefresh,
+              child: ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                controller: profileViewModel.listviewController,
+                itemCount: scheduleViewModel.listSchedule.length,
+                itemBuilder: (context, i) {
+                  return InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        DetailScreen.routeName,
+                        arguments: DetailRouteModel(
+                          homeClassModel: homeViewModel.classes.firstWhere(
+                            (element) => element.name == scheduleViewModel.listSchedule[i].name,
+                          ),
+                          type: scheduleViewModel.listSchedule[i].type,
                         ),
-                        type: scheduleViewModel.listSchedule[i].type,
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: CostumCard(
+                        classModel: scheduleViewModel.listSchedule[i],
+                        bookedClass: scheduleViewModel.listBookedClasses[i],
+                        whichScreen: CostumCardFor.profileScreen,
                       ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5),
-                    child: CostumCard(
-                      classModel: scheduleViewModel.listSchedule[i],
-                      whichScreen: CostumCardFor.profileScreen,
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         );

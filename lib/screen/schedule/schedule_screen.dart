@@ -43,9 +43,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
 
             if (isError) {
               return CostumErrorScreen(
-                onPressed: () async {
-                  await scheduleViewModel.refreshData();
-                },
+                onPressed: scheduleViewModel.pullToRefresh,
               );
             } else if (isLoading) {
               return const ListViewShimmerLoading(shimmeringLoadingFor: ShimmeringLoadingFor.scheduleScreen);
@@ -53,14 +51,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
               return CostumEmptyListView(
                 svgAssetLink: 'assets/icons/empty_list.svg',
                 emptyListViewFor: EmptyListViewFor.schedule,
-                onRefresh: scheduleViewModel.refreshData,
+                onRefresh: scheduleViewModel.pullToRefresh,
                 controller: scheduleViewModel.scheduleListController,
               );
             }
 
             return RefreshIndicator(
               key: const Key('scheduleRefresh'),
-              onRefresh: scheduleViewModel.refreshData,
+              onRefresh: scheduleViewModel.pullToRefresh,
               child: Column(
                 children: [
                   const SizedBox(height: 5),

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:gym_membership_apps/model/api/main_api.dart';
+import 'package:gym_membership_apps/model/book_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 
 enum ScheduleViewState { none, loading, error }
@@ -13,6 +15,11 @@ class ScheduleViewModel with ChangeNotifier {
 
   List<ClassModel> _tempSchedules = [];
   List<ClassModel> get tempSchedules => _tempSchedules;
+
+  List<BookModel> _listBookedClasses = [];
+  List<BookModel> get listBookedClasses => _listBookedClasses;
+
+  int _currentId = 0;
 
   int _currentIndex = 0;
   int get currentIndex => _currentIndex;
@@ -52,13 +59,52 @@ class ScheduleViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getSchedule({required String id}) async {
+  Future<void> getInitSchedule({required int id}) async {
     if (_scheduleListController.offset != _scheduleListController.position.minScrollExtent) {
       _scheduleListController.jumpTo(_scheduleListController.position.minScrollExtent);
     }
+    _currentId = id;
     changeState(ScheduleViewState.loading);
     try {
-      await Future.delayed(const Duration(seconds: 2));
+      _listBookedClasses = await MainAPI().getSchedulesById(id: id);
+      if (_listBookedClasses.isNotEmpty) {
+        _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
+        for (var i = 0; i < _listSchedule.length; i++) {
+          final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
+          for (var j = 0; j < 3; j++) {
+            _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
+          }
+        }
+        _tempSchedules = [..._listSchedule];
+      }
+      changeState(ScheduleViewState.none);
+    } catch (e) {
+      changeState(ScheduleViewState.error);
+    }
+  }
+
+  Future<void> pullToRefresh() async {
+    try {
+      int currentLength = _listSchedule.length;
+      _listBookedClasses = await MainAPI().getSchedulesById(id: _currentId);
+      if (_listBookedClasses.isNotEmpty) {
+        _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
+        for (var i = 0; i < _listSchedule.length; i++) {
+          final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
+          for (var j = 0; j < 3; j++) {
+            _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
+          }
+        }
+        _tempSchedules = [..._listSchedule];
+      }
+      if (_listSchedule.length < currentLength) {
+        Fluttertoast.showToast(msg: 'Some data are deleted');
+      } else if (_listSchedule.length > currentLength) {
+        Fluttertoast.showToast(msg: 'New data added to your schedule');
+      } else {
+        Fluttertoast.cancel();
+        Fluttertoast.showToast(msg: 'No new data found in your schedule');
+      }
       changeState(ScheduleViewState.none);
     } catch (e) {
       changeState(ScheduleViewState.error);
@@ -68,13 +114,21 @@ class ScheduleViewModel with ChangeNotifier {
   Future<void> refreshData() async {
     try {
       int currentLength = _listSchedule.length;
-      await Future.delayed(const Duration(seconds: 2));
+      _listBookedClasses = await MainAPI().getSchedulesById(id: _currentId);
+      if (_listBookedClasses.isNotEmpty) {
+        _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
+        for (var i = 0; i < _listSchedule.length; i++) {
+          final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
+          for (var j = 0; j < 3; j++) {
+            _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
+          }
+        }
+        _tempSchedules = [..._listSchedule];
+      }
       if (_listSchedule.length < currentLength) {
         Fluttertoast.showToast(msg: 'Some data are deleted');
       } else if (_listSchedule.length > currentLength) {
         Fluttertoast.showToast(msg: 'New data added to your schedule');
-      } else {
-        Fluttertoast.showToast(msg: 'No new data found in your schedule');
       }
       changeState(ScheduleViewState.none);
     } catch (e) {
@@ -88,7 +142,22 @@ class ScheduleViewModel with ChangeNotifier {
     try {
       await Future.delayed(const Duration(seconds: 1));
       _listSchedule = [newClass, ..._listSchedule];
-      _tempSchedules = [newClass, ..._tempSchedules];
+      _tempSchedules = [..._listSchedule];
+      changeState(ScheduleViewState.none);
+    } catch (e) {
+      changeState(ScheduleViewState.error);
+    }
+  }
+
+  Future<void> booking({required int classId, required int idUser}) async {
+    changeState(ScheduleViewState.loading);
+
+    try {
+      await MainAPI().bookClass(classId: classId, idUser: idUser);
+      _listBookedClasses = await MainAPI().getSchedulesById(id: _currentId);
+      if (_listBookedClasses.isNotEmpty) {
+        _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
+      }
       changeState(ScheduleViewState.none);
     } catch (e) {
       changeState(ScheduleViewState.error);

@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/payment_instruction/payment_view_model.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
-import 'package:gym_membership_apps/utilitites/costum_widgets/costum_bottom_sheet.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_button.dart';
-import 'package:gym_membership_apps/utilitites/costum_widgets/costum_dialog.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -236,10 +236,11 @@ class _CostumButtonsState extends State<CostumButtons> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer3<PaymentViewModel, ScheduleViewModel, HomeViewModel>(
-      builder: (context, paymentViewModel, scheduleViewModel, homeViewModel, _) {
-        final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
-        final isError = scheduleViewModel.state == ScheduleViewState.error;
+    return Consumer5<PaymentViewModel, ScheduleViewModel, HomeViewModel, AvailableClassViewModel, ProfileViewModel>(
+      builder:
+          (context, paymentViewModel, scheduleViewModel, homeViewModel, availableClassViewModel, profileViewModel, _) {
+        final isLoading = scheduleViewModel.state == ScheduleViewState.loading ||
+            availableClassViewModel.state == AvailableClassState.loading;
 
         return Container(
           decoration: const BoxDecoration(
@@ -271,8 +272,10 @@ class _CostumButtonsState extends State<CostumButtons> {
                           paymentViewModel.bookNowOnTap(
                             context,
                             scheduleViewModel: scheduleViewModel,
-                            item: widget.item,
                             homeViewModel: homeViewModel,
+                            availableClassViewModel: availableClassViewModel,
+                            profileViewModel: profileViewModel,
+                            item: widget.item,
                           );
                         },
                   height: 45,

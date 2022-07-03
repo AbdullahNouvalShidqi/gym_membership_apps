@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/screen/forgot_password/forgot_password_screen.dart';
 import 'package:gym_membership_apps/screen/log_in/log_in_view_model.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_button.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_form_field.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -141,8 +142,8 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<LogInViewModel>(
-      builder: (context, logInViewModel, _) {
+    return Consumer2<LogInViewModel, ProfileViewModel>(
+      builder: (context, logInViewModel, profileViewModel, _) {
         final isLoading = logInViewModel.state == LogInState.loading;
 
         return Center(
@@ -153,7 +154,7 @@ class LoginButton extends StatelessWidget {
               isLoading: isLoading,
               childText: 'Login',
               onPressed: () async {
-                await logInViewModel.loginButtonOnTap(context);
+                await logInViewModel.loginButtonOnTap(context, profileViewModel: profileViewModel);
               },
             ),
           ),
@@ -169,24 +170,21 @@ class ToSignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final logInViewModel = context.watch<LogInViewModel>();
-    return Padding(
-      padding: const EdgeInsets.only(top: 15),
-      child: Center(
-        child: RichText(
-          text: TextSpan(
-            text: "Don't have an account? ",
-            style: const TextStyle(fontSize: 12, color: Colors.grey),
-            children: [
-              TextSpan(
-                text: 'Sign Up',
-                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    logInViewModel.signUpButtonOnTap(context);
-                  },
-              )
-            ],
-          ),
+    return Center(
+      child: RichText(
+        text: TextSpan(
+          text: "Don't have an account? ",
+          style: const TextStyle(fontSize: 12, color: Colors.grey),
+          children: [
+            TextSpan(
+              text: 'Sign Up',
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Utilities.primaryColor),
+              recognizer: TapGestureRecognizer()
+                ..onTap = () {
+                  logInViewModel.signUpButtonOnTap(context);
+                },
+            )
+          ],
         ),
       ),
     );

@@ -119,6 +119,7 @@ class UpdatePasswordViewModel with ChangeNotifier {
         return CostumBottomSheet(
           title: 'Password Recovery',
           content: 'Return to the login screen to enter the application',
+          successful: true,
           buttonText: 'Return to login',
           onPressed: () {
             Navigator.popUntil(context, (route) => route.isFirst);

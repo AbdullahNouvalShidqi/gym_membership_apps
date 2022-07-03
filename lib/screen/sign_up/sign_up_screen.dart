@@ -28,58 +28,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const MainTitle(),
-                const UsernameFormField(),
-                const EmailFormField(),
-                const PhoneNumberFormField(),
-                const PasswordFormField(),
-                const ConfirmFormField(),
-                const RememberMeCheckBox(),
-                const SignUpButton(),
-                Center(
-                  child: Text(
-                    'OR',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.grey[700],
-                    ),
-                  ),
-                ),
-                googleSiugnUpButton(),
-                const ToSignInButton()
+              children: const [
+                MainTitle(),
+                UsernameFormField(),
+                EmailFormField(),
+                PhoneNumberFormField(),
+                PasswordFormField(),
+                ConfirmFormField(),
+                RememberMeCheckBox(),
+                SignUpButton(),
+                ToSignInButton()
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget googleSiugnUpButton() {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(Colors.white),
-            fixedSize: MaterialStateProperty.all(Size(MediaQuery.of(context).size.width, 45)),
-          ),
-          onPressed: () {},
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/google_logo.png',
-                width: 25,
-              ),
-              const SizedBox(width: 10),
-              const Text(
-                'Sign up with Google',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700, color: Colors.grey),
-              )
-            ],
           ),
         ),
       ),

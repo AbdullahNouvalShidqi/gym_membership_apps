@@ -25,6 +25,7 @@ class ClassModel {
   String location;
   List<String> images;
   InstructorModel instructor;
+  String? status;
 
   ClassModel({
     required this.id,
@@ -38,6 +39,7 @@ class ClassModel {
     required this.location,
     required this.images,
     required this.instructor,
+    this.status,
   });
 
   ClassModel.fromJson(Map<String, dynamic> json)

@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -12,6 +13,7 @@ import 'package:gym_membership_apps/utilitites/costum_widgets/costum_button.dart
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PriceContainer extends StatelessWidget {
   const PriceContainer({Key? key, required this.price}) : super(key: key);
@@ -159,13 +161,16 @@ class CostumSubCard extends StatelessWidget {
     required this.animationController,
     required this.isShown,
     required this.scrollController,
+    this.item,
   }) : super(key: key);
   final AnimationController animationController;
   final ScrollController scrollController;
   final bool isShown;
+  final ClassModel? item;
 
   @override
   Widget build(BuildContext context) {
+    final profileViewModel = context.watch<ProfileViewModel>();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: isShown ? 10 : 5),
       child: SlideTransition(
@@ -188,27 +193,49 @@ class CostumSubCard extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: RichText(
-                    text: const TextSpan(
+                    text: TextSpan(
                       text:
                           '1. Select another Menu > Transfer\n2. Select the origin account and select the destination account to MANDIRI account\n3. Enter the account number ',
-                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
+                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
                       children: [
-                        TextSpan(
+                        const TextSpan(
                           text: '12345678910 ',
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text: 'and select correct\n4. Enter the payment amount ',
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text: 'Rp.300.000 ',
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Utilities.primaryColor),
                         ),
-                        TextSpan(
+                        const TextSpan(
                           text:
                               "and select correct\n5. Check the data on the screen. Make sure the name is the recipient's name, and the amount is correct. If so, select Yes.",
                           style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
+                        ),
+                        const TextSpan(
+                          text: "6. Send your transaction to ",
+                          style: TextStyle(fontSize: 10, fontWeight: FontWeight.w400, color: Colors.black),
+                        ),
+                        TextSpan(
+                          text: "Whatsapp Link",
+                          style: const TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Utilities.primaryColor,
+                          ),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () async {
+                              final user = profileViewModel.user;
+                              final whatsappLink = Utilities.getWhatsappUrl(classModel: item, username: user.username);
+                              if (await canLaunchUrl(whatsappLink)) {
+                                await launchUrl(whatsappLink, mode: LaunchMode.externalNonBrowserApplication);
+                              } else {
+                                Fluttertoast.showToast(msg: 'Error: cannot open link, check your internet connection');
+                              }
+                            },
                         ),
                       ],
                     ),

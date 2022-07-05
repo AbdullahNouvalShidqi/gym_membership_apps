@@ -3,6 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
 import 'package:gym_membership_apps/model/book_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 enum ScheduleViewState { none, loading, error }
 
@@ -60,9 +61,6 @@ class ScheduleViewModel with ChangeNotifier {
   }
 
   Future<void> getInitSchedule({required int id}) async {
-    if (_scheduleListController.offset != _scheduleListController.position.minScrollExtent) {
-      _scheduleListController.jumpTo(_scheduleListController.position.minScrollExtent);
-    }
     _currentId = id;
     changeState(ScheduleViewState.loading);
     try {
@@ -74,6 +72,9 @@ class ScheduleViewModel with ChangeNotifier {
           for (var j = 0; j < 3; j++) {
             _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
           }
+        }
+        for (var i = 0; i < _listSchedule.length; i++) {
+          _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
         }
         _tempSchedules = [..._listSchedule];
       }
@@ -95,6 +96,9 @@ class ScheduleViewModel with ChangeNotifier {
             _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
           }
         }
+        for (var i = 0; i < _listSchedule.length; i++) {
+          _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
+        }
         _tempSchedules = [..._listSchedule];
       }
       if (_listSchedule.length < currentLength) {
@@ -107,6 +111,8 @@ class ScheduleViewModel with ChangeNotifier {
       }
       changeState(ScheduleViewState.none);
     } catch (e) {
+      Fluttertoast.cancel();
+      Fluttertoast.showToast(msg: 'Error: Cannot get data, check your internet connection');
       changeState(ScheduleViewState.error);
     }
   }
@@ -123,6 +129,9 @@ class ScheduleViewModel with ChangeNotifier {
             _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
           }
         }
+        for (var i = 0; i < _listSchedule.length; i++) {
+          _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
+        }
         _tempSchedules = [..._listSchedule];
       }
       if (_listSchedule.length < currentLength) {
@@ -132,6 +141,8 @@ class ScheduleViewModel with ChangeNotifier {
       }
       changeState(ScheduleViewState.none);
     } catch (e) {
+      Fluttertoast.cancel();
+      Fluttertoast.showToast(msg: 'Error: Cannot get data, check your internet connection');
       changeState(ScheduleViewState.error);
     }
   }
@@ -142,6 +153,15 @@ class ScheduleViewModel with ChangeNotifier {
     try {
       await Future.delayed(const Duration(seconds: 1));
       _listSchedule = [newClass, ..._listSchedule];
+      for (var i = 0; i < _listSchedule.length; i++) {
+        final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
+        for (var j = 0; j < 3; j++) {
+          _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
+        }
+      }
+      for (var i = 0; i < _listSchedule.length; i++) {
+        _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
+      }
       _tempSchedules = [..._listSchedule];
       changeState(ScheduleViewState.none);
     } catch (e) {
@@ -164,6 +184,17 @@ class ScheduleViewModel with ChangeNotifier {
     }
   }
 
+  String checkStatus(BookModel bookedClass) {
+    final now = DateTime.now().toUtc().add(DateTime.now().timeZoneOffset);
+    if (bookedClass.isBooked) {
+      return 'Accepted';
+    }
+    if (now.isAfter(bookedClass.bookedClasses.startAt) && !bookedClass.isBooked) {
+      return 'Late';
+    }
+    return 'Waiting';
+  }
+
   void resetSort() {
     _tempSchedules = [..._listSchedule];
     notifyListeners();
@@ -175,8 +206,7 @@ class ScheduleViewModel with ChangeNotifier {
     isInit = true;
   }
 
-  void sortingButtonOnTap(
-      {required int i, required List<ClassModel> allItem, required AnimationController animationController}) {
+  void sortingButtonOnTap({required int i, required AnimationController animationController}) {
     if (_currentIndex != i) {
       _currentIndex = i;
       notifyListeners();
@@ -184,7 +214,7 @@ class ScheduleViewModel with ChangeNotifier {
       animationController
           .reverse()
           .then(
-            (value) => checkSchedules(allItem: allItem, currentIndex: _currentIndex),
+            (value) => checkSchedules(),
           )
           .then(
             (value) => animationController.forward(),
@@ -192,26 +222,26 @@ class ScheduleViewModel with ChangeNotifier {
     }
   }
 
-  void checkSchedules({
-    required List<ClassModel> allItem,
-    required int currentIndex,
-  }) {
+  void checkSchedules() {
     if (currentIndex == 0) {
       resetSort();
     }
     if (currentIndex == 1) {
-      allItem.sort(
-        (a, b) => a.endAt.compareTo(b.endAt),
-      );
+      _tempSchedules.sort((a, b) {
+        if (a.status!.toLowerCase() == 'late') {
+          return b.status!.compareTo(a.status!);
+        }
+        return a.status!.compareTo(b.status!);
+      });
     }
     if (currentIndex == 2) {
-      allItem.sort(
+      _tempSchedules.sort(
         (a, b) => a.startAt.compareTo(b.startAt),
       );
     }
     if (currentIndex == 3) {
-      allItem.sort(
-        (a, b) => b.name.compareTo(a.name),
+      _tempSchedules.sort(
+        (a, b) => a.name.compareTo(b.name),
       );
     }
     notifyListeners();

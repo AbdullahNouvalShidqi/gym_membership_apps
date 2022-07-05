@@ -1,21 +1,15 @@
-import 'package:dio/dio.dart';
 import 'package:gym_membership_apps/model/article_model.dart';
 import 'package:gym_membership_apps/model/book_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/model/home_class_model.dart';
 import 'package:gym_membership_apps/model/to_book_model.dart';
 import 'package:gym_membership_apps/model/user_model.dart';
+import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class MainAPI {
   final String url = "https://capstone-kelompok-3.herokuapp.com";
   final String url2 = "https://capstone-project-ec879-default-rtdb.asia-southeast1.firebasedatabase.app";
-  final dio = Dio(
-    BaseOptions(
-      connectTimeout: 9000,
-      receiveTimeout: 9000,
-      sendTimeout: 9000,
-    ),
-  );
+  final dio = Utilities.dio;
 
   Future<List<ClassModel>> getAllClass({String? type}) async {
     final response = await dio.get('$url/class${type == null ? '' : '/${type.toLowerCase()}'}');

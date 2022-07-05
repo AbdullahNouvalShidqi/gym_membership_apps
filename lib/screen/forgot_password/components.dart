@@ -97,7 +97,7 @@ class ContinueButton extends StatelessWidget {
               return;
             }
 
-            final user = allUser.where((element) => element.email.toLowerCase() == email.toLowerCase());
+            final user = allUser.where((element) => element.email.toLowerCase() == email.toLowerCase()).toList();
 
             if (user.length > 1 || user.isEmpty) {
               Fluttertoast.showToast(

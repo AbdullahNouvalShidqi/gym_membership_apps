@@ -43,6 +43,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> with SingleTickerProvid
 
             if (isError) {
               return CostumErrorScreen(
+                useLoading: true,
                 onPressed: scheduleViewModel.pullToRefresh,
               );
             } else if (isLoading) {

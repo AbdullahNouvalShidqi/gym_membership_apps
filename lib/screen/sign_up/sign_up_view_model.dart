@@ -68,6 +68,7 @@ class SignUpViewModel with ChangeNotifier {
       );
       changeState(SignUpState.none);
     } catch (e) {
+      print(e);
       changeState(SignUpState.error);
     }
   }

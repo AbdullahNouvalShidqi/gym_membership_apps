@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/detail_route_model.dart';
 import 'package:gym_membership_apps/screen/detail/detail_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
@@ -6,6 +7,7 @@ import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_card.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_empty_list_view.dart';
+import 'package:gym_membership_apps/utilitites/costum_widgets/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -105,43 +107,7 @@ class ItemToReturn extends StatelessWidget {
             onRefresh: scheduleViewModel.pullToRefresh,
           );
         }
-        return SizedBox(
-          height: MediaQuery.of(context).size.height - 150,
-          child: Center(
-            child: RefreshIndicator(
-              onRefresh: scheduleViewModel.pullToRefresh,
-              child: ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-                controller: profileViewModel.listviewController,
-                itemCount: scheduleViewModel.listSchedule.length,
-                itemBuilder: (context, i) {
-                  return InkWell(
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        DetailScreen.routeName,
-                        arguments: DetailRouteModel(
-                          homeClassModel: homeViewModel.classes.firstWhere(
-                            (element) => element.name == scheduleViewModel.listSchedule[i].name,
-                          ),
-                          type: scheduleViewModel.listSchedule[i].type,
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 5),
-                      child: CostumCard(
-                        classModel: scheduleViewModel.listSchedule[i],
-                        bookedClass: scheduleViewModel.listBookedClasses[i],
-                        whichScreen: CostumCardFor.profileScreen,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
+        return const ProgressListView();
       },
     );
   }
@@ -203,6 +169,19 @@ class ProgressListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer3<ProfileViewModel, HomeViewModel, ScheduleViewModel>(
       builder: (context, profileViewModel, homeViewModel, scheduleViewModel, _) {
+        bool isError = scheduleViewModel.state == ScheduleViewState.error;
+
+        if (isError) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height - 310,
+            child: CostumErrorScreen(
+              useLoading: true,
+              onPressed: () async {
+                await scheduleViewModel.refreshData();
+              },
+            ),
+          );
+        }
         return SizedBox(
           height: MediaQuery.of(context).size.height - 150,
           child: Center(

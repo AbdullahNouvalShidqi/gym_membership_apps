@@ -3,9 +3,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'costum_button.dart';
 
-class CostumErrorScreen extends StatelessWidget {
-  const CostumErrorScreen({Key? key, required this.onPressed}) : super(key: key);
+class CostumErrorScreen extends StatefulWidget {
+  const CostumErrorScreen({Key? key, required this.onPressed, this.useLoading = false}) : super(key: key);
   final Future<void> Function() onPressed;
+  final bool useLoading;
+
+  @override
+  State<CostumErrorScreen> createState() => _CostumErrorScreenState();
+}
+
+class _CostumErrorScreenState extends State<CostumErrorScreen> {
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +38,26 @@ class CostumErrorScreen extends StatelessWidget {
                 style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: Color.fromRGBO(88, 88, 88, 1)),
               ),
               const SizedBox(height: 25),
-              CostumButton(onPressed: onPressed, width: 121, childText: 'Try Again')
+              CostumButton(
+                onPressed: () async {
+                  if (widget.useLoading) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                  }
+
+                  await widget.onPressed();
+
+                  if (widget.useLoading) {
+                    setState(() {
+                      isLoading = false;
+                    });
+                  }
+                },
+                isLoading: isLoading,
+                width: 121,
+                childText: 'Try Again',
+              )
             ],
           ),
         ),

@@ -57,9 +57,9 @@ class NewPasswordFormField extends StatelessWidget {
         } else if (newValue.length < 6) {
           return 'The minimal length of password is 6';
         } else if (!Utilities.pwNeedOneCapital.hasMatch(newValue)) {
-          return 'Please enter at least one alphabet letter in your password';
+          return 'Please enter at least one capital letter in your password';
         } else if (!Utilities.pwNeedOneNonCapital.hasMatch(newValue)) {
-          return 'Please enter at least one non alphabet letter in your password';
+          return 'Please enter at least one non capital letter in your password';
         } else if (!Utilities.pwNeedOneNumber.hasMatch(newValue)) {
           return 'Please enter at least one number in your password';
         }

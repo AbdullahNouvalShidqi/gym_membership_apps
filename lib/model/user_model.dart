@@ -27,5 +27,11 @@ class UserModel {
         contact = json['contact'],
         password = json['password'];
 
-  toJson() => {'username': username, 'email': email, 'contact': contact, 'password': password};
+  toJson() => {
+        'username': username,
+        'name': username,
+        'email': email,
+        'contact': contact,
+        'password': password,
+      };
 }

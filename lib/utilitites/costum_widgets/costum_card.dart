@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/book_model.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/book/book_screen.dart';
+import 'package:gym_membership_apps/screen/profile/profile_view_model.dart';
 import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'costum_button.dart';
 
@@ -137,8 +140,80 @@ class StatusAndButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ScheduleViewModel>(builder: (context, scheduleViewModel, _) {
-      if (whichScreen == CostumCardFor.scheduleScreen) {
+    return Consumer2<ScheduleViewModel, ProfileViewModel>(
+      builder: (context, scheduleViewModel, profileViewModel, _) {
+        if (whichScreen == CostumCardFor.scheduleScreen) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Container(
+                height: 14,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: const BoxDecoration(color: Color.fromARGB(255, 254, 241, 241)),
+                child: Row(
+                  children: [
+                    Container(
+                      height: 8,
+                      width: 8,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: checkScheduleStatus(status: classModel.status.toString()),
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Text(
+                      classModel.status.toString(),
+                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
+                    )
+                  ],
+                ),
+              ),
+              classModel.status != null && classModel.status!.toLowerCase() == 'waiting'
+                  ? CostumButton(
+                      onPressed: () async {
+                        final username = profileViewModel.user.username;
+                        final whatsappLink = Utilities.getWhatsappUrl(classModel: classModel, username: username);
+                        if (await canLaunchUrl(whatsappLink)) {
+                          await launchUrl(whatsappLink, mode: LaunchMode.externalNonBrowserApplication);
+                        } else {
+                          Fluttertoast.showToast(msg: 'Error: cannot open link, check your internet connection');
+                        }
+                      },
+                      useFixedSize: false,
+                      childText: 'Pay Now',
+                    )
+                  : const SizedBox()
+            ],
+          );
+        }
+        if (whichScreen == CostumCardFor.profileScreen) {
+          return Container(
+            height: 14,
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: const BoxDecoration(color: Color.fromARGB(255, 254, 241, 241)),
+            child: Row(
+              children: [
+                Container(
+                  height: 8,
+                  width: 8,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: checkProgressStatus(classModel: classModel, bookedClass: bookedClass)['color'],
+                  ),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  checkProgressStatus(classModel: classModel, bookedClass: bookedClass)['status'],
+                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
+                )
+              ],
+            ),
+          );
+        }
         return Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -154,105 +229,43 @@ class StatusAndButton extends StatelessWidget {
                     height: 8,
                     width: 8,
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: checkScheduleStatus(bookedClass: bookedClass!)['color']!),
+                      shape: BoxShape.circle,
+                      color: classModel.qtyUsers == 0 ? Utilities.redColor : Utilities.greenColor,
+                    ),
                   ),
-                  const SizedBox(width: 5),
+                  const SizedBox(
+                    width: 5,
+                  ),
                   Text(
-                    checkScheduleStatus(bookedClass: bookedClass!)['status']!,
+                    classModel.qtyUsers == 0 ? 'Full' : 'Available',
                     style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
                   )
                 ],
               ),
             ),
+            CostumButton(
+              useFixedSize: false,
+              onPressed: checkItem(classModel: classModel, scheduleViewModel: scheduleViewModel)['onPressed']
+                  ? () {
+                      Navigator.pushNamed(context, BookScreen.routeName, arguments: classModel);
+                    }
+                  : null,
+              childText: checkItem(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'],
+            )
           ],
         );
-      }
-      if (whichScreen == CostumCardFor.profileScreen) {
-        return Container(
-          height: 14,
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          decoration: const BoxDecoration(color: Color.fromARGB(255, 254, 241, 241)),
-          child: Row(
-            children: [
-              Container(
-                height: 8,
-                width: 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: checkProgressStatus(classModel: classModel, bookedClass: bookedClass)['color'],
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                checkProgressStatus(classModel: classModel, bookedClass: bookedClass)['status'],
-                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
-              )
-            ],
-          ),
-        );
-      }
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Container(
-            height: 14,
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: const BoxDecoration(color: Color.fromARGB(255, 254, 241, 241)),
-            child: Row(
-              children: [
-                Container(
-                  height: 8,
-                  width: 8,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: classModel.qtyUsers == 0 ? Utilities.redColor : Utilities.greenColor,
-                  ),
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                Text(
-                  classModel.qtyUsers == 0 ? 'Full' : 'Available',
-                  style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
-                )
-              ],
-            ),
-          ),
-          CostumButton(
-            useFixedSize: false,
-            onPressed: checkItem(classModel: classModel, scheduleViewModel: scheduleViewModel)['onPressed']
-                ? () {
-                    Navigator.pushNamed(context, BookScreen.routeName, arguments: classModel);
-                  }
-                : null,
-            childText: checkItem(classModel: classModel, scheduleViewModel: scheduleViewModel)['status'],
-          )
-        ],
-      );
-    });
+      },
+    );
   }
 
-  Map<String, dynamic> checkScheduleStatus({required BookModel bookedClass}) {
-    if (bookedClass.isBooked) {
-      return {
-        'color': Utilities.greenColor,
-        'status': 'Accepted',
-      };
+  Color checkScheduleStatus({required String status}) {
+    if (status.toLowerCase() == 'accepted') {
+      return Utilities.greenColor;
     }
-    if (DateTime.now().isAfter(bookedClass.bookedClasses.startAt) && !bookedClass.isBooked) {
-      return {
-        'color': Utilities.redColor,
-        'status': 'Late',
-      };
+    if (status.toLowerCase() == 'late') {
+      return Utilities.redColor;
     }
-    return {
-      'color': Utilities.yellowColor,
-      'status': 'Waiting',
-    };
+    return Utilities.yellowColor;
   }
 
   Map<String, dynamic> checkItem({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}) {
@@ -274,15 +287,18 @@ class StatusAndButton extends StatelessWidget {
   }
 
   Map<String, dynamic> checkProgressStatus({required ClassModel classModel, required BookModel? bookedClass}) {
-    final now = DateTime.now();
+    final now = DateTime.now().toUtc().add(DateTime.now().timeZoneOffset);
     if (classModel.endAt.compareTo(now) <= 0) {
       return {'status': 'Ended', 'color': Utilities.redColor};
     }
+    if (classModel.startAt.compareTo(now) <= 0) {
+      return {'status': 'Late', 'color': Utilities.redColor};
+    }
     if (bookedClass != null) {
-      if (!bookedClass.isBooked) {
-        return {'status': 'Waiting', 'color': Utilities.yellowColor};
+      if (bookedClass.isBooked) {
+        return {'status': 'Joined', 'color': Utilities.greenColor};
       }
     }
-    return {'status': 'Joined', 'color': Utilities.greenColor};
+    return {'status': 'Waiting', 'color': Utilities.yellowColor};
   }
 }

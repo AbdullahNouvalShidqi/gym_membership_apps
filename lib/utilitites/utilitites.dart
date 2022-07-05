@@ -1,5 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/utilitites/shimmer/shimmering_gradient.dart';
+import 'package:intl/intl.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Utilities {
@@ -12,6 +15,45 @@ class Utilities {
   static RegExp pwNeedOneCapital = RegExp(r"^(?=.*?[A-Z])");
   static RegExp pwNeedOneNonCapital = RegExp(r"^(?=.*?[a-z])");
   static RegExp pwNeedOneNumber = RegExp(r"^(?=.*?[0-9])");
+
+  static final Dio dio = Dio(
+    BaseOptions(
+      connectTimeout: 9000,
+      receiveTimeout: 9000,
+      sendTimeout: 9000,
+    ),
+  );
+
+  static Uri getWhatsappUrl({required ClassModel? classModel, required String username}) {
+    const mainUrl = 'https://wa.me/+6287823232237/?text=';
+    if (classModel != null) {
+      final whatsappLink = Uri.encodeFull(
+        '''$mainUrl
+Hello, my username is $username.\n
+I'd like to send a proof of paymet to my class where the data of the class are:
+- ClassId: ${classModel.id},
+- ClassName: ${classModel.name},
+- ClassType: ${classModel.type},
+- StartAt: ${DateFormat('d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)},
+- EndAt: ${DateFormat('d MMMM y').format(classModel.endAt)}, ${DateFormat('Hm').format(classModel.endAt)}\n
+*Send your image proof here*''',
+      );
+      final mainLink = Uri.parse(whatsappLink);
+      return mainLink;
+    }
+    final whatsappLink = Uri.encodeFull(
+      '''$mainUrl
+Hello, my username is $username.\n
+I'd like to send a proof of paymet to my class where the data of the class are (Please fill your data):
+- ClassName: ,
+- ClassType: ,
+- StartAt: ,
+- EndAt: \n
+*Send your image proof here*''',
+    );
+    final mainLink = Uri.parse(whatsappLink);
+    return mainLink;
+  }
 
   static const String serviceId = 'service_vgdtrkl';
   static const String userId = 'Vd_KL9xxjmE9t1gSo';

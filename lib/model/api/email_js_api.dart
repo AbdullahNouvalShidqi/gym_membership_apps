@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 
 class EmailJsAPI {
-  final dio = Dio();
+  final dio = Utilities.dio;
   String url = 'https://api.emailjs.com/api/v1.0/email';
 
   Future<String> sendOTP({required String email}) async {

@@ -184,8 +184,14 @@ class LogInViewModel with ChangeNotifier {
 
     final userData = allUser.where((element) => element.email.toLowerCase() == email).toList();
 
-    if (userData.isEmpty || userData.length > 1 || userData.first.password != _passwordCtrl.text) {
-      Fluttertoast.showToast(msg: 'Sign in failed, check your email and password');
+    if (userData.isEmpty) {
+      Fluttertoast.showToast(msg: "Sign in failed, looks like you haven't sign up with this email");
+      focusScope.requestFocus();
+      return;
+    }
+
+    if (userData.length > 1 || userData.first.password != _passwordCtrl.text) {
+      Fluttertoast.showToast(msg: "Sign in failed, check your email and password");
       focusScope.requestFocus();
       return;
     }

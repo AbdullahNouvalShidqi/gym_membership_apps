@@ -8,6 +8,8 @@ import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_card.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_empty_list_view.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_error_screen.dart';
+import 'package:gym_membership_apps/utilitites/shimmer/shimmer.dart';
+import 'package:gym_membership_apps/utilitites/shimmer/shimmer_container.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
 import 'package:provider/provider.dart';
 
@@ -67,7 +69,10 @@ class TabButton extends StatelessWidget {
         const SizedBox(width: 10),
         ElevatedButton(
           onPressed: () {
-            profileViewModel.progressButtonOnTap(scheduleViewModel: scheduleViewModel);
+            profileViewModel.progressButtonOnTap(
+              scheduleViewModel: scheduleViewModel,
+              profileViewModel: profileViewModel,
+            );
           },
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(progressSelected ? Colors.white : null),
@@ -98,14 +103,6 @@ class ItemToReturn extends StatelessWidget {
 
         if (myAccountSelected) {
           return const AccountSettings();
-        }
-        if (scheduleViewModel.listSchedule.isEmpty) {
-          return CostumEmptyListView(
-            forProgress: true,
-            svgAssetLink: 'assets/icons/empty_list.svg',
-            emptyListViewFor: EmptyListViewFor.progress,
-            onRefresh: scheduleViewModel.pullToRefresh,
-          );
         }
         return const ProgressListView();
       },
@@ -170,6 +167,7 @@ class ProgressListView extends StatelessWidget {
     return Consumer3<ProfileViewModel, HomeViewModel, ScheduleViewModel>(
       builder: (context, profileViewModel, homeViewModel, scheduleViewModel, _) {
         bool isError = scheduleViewModel.state == ScheduleViewState.error;
+        final isLoading = scheduleViewModel.state == ScheduleViewState.loading;
 
         if (isError) {
           return SizedBox(
@@ -180,6 +178,38 @@ class ProgressListView extends StatelessWidget {
                 await scheduleViewModel.refreshData();
               },
             ),
+          );
+        }
+        if (isLoading) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height - 150,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: 6,
+                itemBuilder: (context, i) {
+                  return Shimmer(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5),
+                      child: ShimmerContainer(
+                        height: 114,
+                        width: double.infinity,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          );
+        }
+        if (scheduleViewModel.listSchedule.isEmpty) {
+          return CostumEmptyListView(
+            forProgress: true,
+            svgAssetLink: 'assets/icons/empty_list.svg',
+            emptyListViewFor: EmptyListViewFor.progress,
+            onRefresh: scheduleViewModel.pullToRefresh,
           );
         }
         return SizedBox(

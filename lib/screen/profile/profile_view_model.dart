@@ -119,9 +119,14 @@ class ProfileViewModel with ChangeNotifier {
 
   void progressButtonOnTap({
     required ScheduleViewModel scheduleViewModel,
+    required ProfileViewModel profileViewModel,
   }) {
-    if (!_progressSelected) {
+    if (!_progressSelected && !ScheduleViewModel.isInit) {
       scheduleViewModel.refreshData();
+    }
+    if (ScheduleViewModel.isInit) {
+      scheduleViewModel.getInitSchedule(id: profileViewModel.user.id!);
+      ScheduleViewModel.isInitDone();
     }
     _myAccountSelected = false;
     _progressSelected = true;

@@ -67,16 +67,7 @@ class ScheduleViewModel with ChangeNotifier {
       _listBookedClasses = await MainAPI().getSchedulesById(id: id);
       if (_listBookedClasses.isNotEmpty) {
         _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
-        for (var i = 0; i < _listSchedule.length; i++) {
-          final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
-          for (var j = 0; j < 3; j++) {
-            _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
-          }
-        }
-        for (var i = 0; i < _listSchedule.length; i++) {
-          _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
-        }
-        _tempSchedules = [..._listSchedule];
+        addImagesToSchedule();
       }
       changeState(ScheduleViewState.none);
     } catch (e) {
@@ -90,16 +81,7 @@ class ScheduleViewModel with ChangeNotifier {
       _listBookedClasses = await MainAPI().getSchedulesById(id: _currentId);
       if (_listBookedClasses.isNotEmpty) {
         _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
-        for (var i = 0; i < _listSchedule.length; i++) {
-          final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
-          for (var j = 0; j < 3; j++) {
-            _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
-          }
-        }
-        for (var i = 0; i < _listSchedule.length; i++) {
-          _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
-        }
-        _tempSchedules = [..._listSchedule];
+        addImagesToSchedule();
       }
       if (_listSchedule.length < currentLength) {
         Fluttertoast.showToast(msg: 'Some data are deleted');
@@ -123,16 +105,7 @@ class ScheduleViewModel with ChangeNotifier {
       _listBookedClasses = await MainAPI().getSchedulesById(id: _currentId);
       if (_listBookedClasses.isNotEmpty) {
         _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
-        for (var i = 0; i < _listSchedule.length; i++) {
-          final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
-          for (var j = 0; j < 3; j++) {
-            _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
-          }
-        }
-        for (var i = 0; i < _listSchedule.length; i++) {
-          _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
-        }
-        _tempSchedules = [..._listSchedule];
+        addImagesToSchedule();
       }
       if (_listSchedule.length < currentLength) {
         Fluttertoast.showToast(msg: 'Some data are deleted');
@@ -153,16 +126,7 @@ class ScheduleViewModel with ChangeNotifier {
     try {
       await Future.delayed(const Duration(seconds: 1));
       _listSchedule = [newClass, ..._listSchedule];
-      for (var i = 0; i < _listSchedule.length; i++) {
-        final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
-        for (var j = 0; j < 3; j++) {
-          _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
-        }
-      }
-      for (var i = 0; i < _listSchedule.length; i++) {
-        _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
-      }
-      _tempSchedules = [..._listSchedule];
+      addImagesToSchedule();
       changeState(ScheduleViewState.none);
     } catch (e) {
       changeState(ScheduleViewState.error);
@@ -177,11 +141,25 @@ class ScheduleViewModel with ChangeNotifier {
       _listBookedClasses = await MainAPI().getSchedulesById(id: _currentId);
       if (_listBookedClasses.isNotEmpty) {
         _listSchedule = _listBookedClasses.map((e) => e.bookedClasses).toList();
+        addImagesToSchedule();
       }
       changeState(ScheduleViewState.none);
     } catch (e) {
       changeState(ScheduleViewState.error);
     }
+  }
+
+  void addImagesToSchedule() {
+    for (var i = 0; i < _listSchedule.length; i++) {
+      final name = _listSchedule[i].name.replaceAll(' ', '').toLowerCase();
+      for (var j = 0; j < 3; j++) {
+        _listSchedule[i].images.add('assets/$name${j == 0 ? '' : j}.png');
+      }
+    }
+    for (var i = 0; i < _listSchedule.length; i++) {
+      _listSchedule[i].status = checkStatus(_listBookedClasses[i]);
+    }
+    _tempSchedules = [..._listSchedule];
   }
 
   String checkStatus(BookModel bookedClass) {
@@ -241,7 +219,7 @@ class ScheduleViewModel with ChangeNotifier {
     }
     if (currentIndex == 3) {
       _tempSchedules.sort(
-        (a, b) => a.name.compareTo(b.name),
+        (a, b) => b.type.compareTo(a.type),
       );
     }
     notifyListeners();

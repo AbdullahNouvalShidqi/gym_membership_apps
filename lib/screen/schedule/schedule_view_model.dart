@@ -54,6 +54,10 @@ class ScheduleViewModel with ChangeNotifier {
     isInit = false;
   }
 
+  void notify() {
+    notifyListeners();
+  }
+
   void changeState(ScheduleViewState s) {
     _state = s;
     notifyListeners();

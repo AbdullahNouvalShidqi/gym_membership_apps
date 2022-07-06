@@ -186,7 +186,6 @@ class LogInViewModel with ChangeNotifier {
 
     if (userData.isEmpty) {
       Fluttertoast.showToast(msg: "Sign in failed, looks like you haven't sign up with this email");
-      focusScope.requestFocus();
       return;
     }
 

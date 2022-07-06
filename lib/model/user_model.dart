@@ -22,10 +22,10 @@ class UserModel {
 
   UserModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
-        email = json['email'],
-        username = json['username'],
-        contact = json['contact'],
-        password = json['password'];
+        email = json['email'].toString(),
+        username = json['username'].toString(),
+        contact = json['contact'].toString(),
+        password = json['password'].toString();
 
   toJson() => {
         'username': username,

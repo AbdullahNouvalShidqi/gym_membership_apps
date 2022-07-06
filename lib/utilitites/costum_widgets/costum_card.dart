@@ -230,14 +230,17 @@ class StatusAndButton extends StatelessWidget {
                     width: 8,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: classModel.qtyUsers == 0 ? Utilities.redColor : Utilities.greenColor,
+                      color: checkItem(
+                        classModel: classModel,
+                        scheduleViewModel: scheduleViewModel,
+                      )['availability']['color'],
                     ),
                   ),
                   const SizedBox(
                     width: 5,
                   ),
                   Text(
-                    classModel.qtyUsers == 0 ? 'Full' : 'Available',
+                    checkItem(classModel: classModel, scheduleViewModel: scheduleViewModel)['availability']['status'],
                     style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w700, color: Colors.grey),
                   )
                 ],
@@ -269,21 +272,49 @@ class StatusAndButton extends StatelessWidget {
   }
 
   Map<String, dynamic> checkItem({required ClassModel classModel, required ScheduleViewModel scheduleViewModel}) {
-    final now = DateTime.now();
+    final now = DateTime.now().toUtc().add(DateTime.now().timeZoneOffset);
     final startAt = classModel.startAt;
 
-    if (now.day == startAt.day && now.hour >= startAt.subtract(const Duration(hours: 2)).hour) {
-      return {'status': 'Late', 'onPressed': false};
-    }
     if (scheduleViewModel.listSchedule.any(
       (element) => element.id == classModel.id && element.type == classModel.type,
     )) {
-      return {'status': 'Booked', 'onPressed': false};
+      return {
+        'status': 'Booked',
+        'onPressed': false,
+        'availability': {
+          'status': 'Booked',
+          'color': Utilities.redColor,
+        }
+      };
+    }
+    if (now.isAfter(startAt.subtract(const Duration(hours: 2)))) {
+      return {
+        'status': 'Late',
+        'onPressed': false,
+        'availability': {
+          'status': 'Late',
+          'color': Utilities.redColor,
+        }
+      };
     }
     if (classModel.qtyUsers == 0) {
-      return {'status': 'Full', 'onPressed': false};
+      return {
+        'status': 'Full',
+        'onPressed': false,
+        'availability': {
+          'status': 'Full',
+          'color': Utilities.redColor,
+        }
+      };
     }
-    return {'status': 'Book now', 'onPressed': true};
+    return {
+      'status': 'Book now',
+      'onPressed': true,
+      'availability': {
+        'status': 'Available',
+        'color': Utilities.greenColor,
+      }
+    };
   }
 
   Map<String, dynamic> checkProgressStatus({required ClassModel classModel, required BookModel? bookedClass}) {

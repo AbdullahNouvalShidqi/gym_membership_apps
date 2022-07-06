@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:gym_membership_apps/model/class_model.dart';
 import 'package:gym_membership_apps/screen/available_class/available_class_view_model.dart';
+import 'package:gym_membership_apps/screen/schedule/schedule_view_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_error_screen.dart';
 import 'package:gym_membership_apps/utilitites/shimmer/listview_shimmer_loading.dart';
 import 'package:gym_membership_apps/utilitites/utilitites.dart';
@@ -45,7 +46,7 @@ class _AvailableClassScreenState extends State<AvailableClassScreen> with Single
     _timer = Timer.periodic(
       const Duration(seconds: 1),
       (timer) {
-        setState(() {});
+        Provider.of<ScheduleViewModel>(context, listen: false).notify();
       },
     );
   }

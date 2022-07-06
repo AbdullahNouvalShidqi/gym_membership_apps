@@ -119,19 +119,6 @@ class ScheduleViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> addToSchedule({required ClassModel newClass}) async {
-    changeState(ScheduleViewState.loading);
-
-    try {
-      await Future.delayed(const Duration(seconds: 1));
-      _listSchedule = [newClass, ..._listSchedule];
-      addImagesToSchedule();
-      changeState(ScheduleViewState.none);
-    } catch (e) {
-      changeState(ScheduleViewState.error);
-    }
-  }
-
   Future<void> booking({required int classId, required int idUser}) async {
     changeState(ScheduleViewState.loading);
 

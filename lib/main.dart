@@ -14,6 +14,7 @@ import 'package:gym_membership_apps/screen/forgot_password/forgot_password_view_
 import 'package:gym_membership_apps/screen/home/home_screen.dart';
 import 'package:gym_membership_apps/screen/home/home_view_model.dart';
 import 'package:gym_membership_apps/screen/otp/otp_screen.dart';
+import 'package:gym_membership_apps/screen/otp/otp_view_model.dart';
 import 'package:gym_membership_apps/screen/payment_instruction/payment_instruction_screen.dart';
 import 'package:gym_membership_apps/screen/payment_instruction/payment_view_model.dart';
 import 'package:gym_membership_apps/screen/personal_detail/personal_detail_screen.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => UpdatePasswordViewModel()),
         ChangeNotifierProvider(create: (context) => ProfileUpdatePasswordViewModel()),
         ChangeNotifierProvider(create: (context) => PaymentViewModel()),
+        ChangeNotifierProvider(create: (context) => OtpViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

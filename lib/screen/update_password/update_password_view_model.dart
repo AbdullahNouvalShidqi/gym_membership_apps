@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gym_membership_apps/model/api/main_api.dart';
+import 'package:gym_membership_apps/model/user_model.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_bottom_sheet.dart';
 import 'package:gym_membership_apps/utilitites/costum_widgets/costum_dialog.dart';
 
@@ -19,6 +20,8 @@ class UpdatePasswordViewModel with ChangeNotifier {
 
   final _confirmPasswordCtrl = TextEditingController();
   TextEditingController get confirmPasswordCtrl => _confirmPasswordCtrl;
+
+  UserModel? _toUpdatePasswordUser;
 
   Future<bool> onWillPop(BuildContext context) async {
     bool willPop = false;
@@ -40,6 +43,11 @@ class UpdatePasswordViewModel with ChangeNotifier {
         );
       },
     );
+    if (willPop) {
+      _newPasswordCtrl.text = '';
+      _confirmPasswordCtrl.text = '';
+      _toUpdatePasswordUser = null;
+    }
     return willPop;
   }
 
@@ -67,6 +75,7 @@ class UpdatePasswordViewModel with ChangeNotifier {
     if (willPop) {
       _newPasswordCtrl.text = '';
       _confirmPasswordCtrl.text = '';
+      _toUpdatePasswordUser = null;
       navigator.pop();
     }
   }
@@ -90,6 +99,17 @@ class UpdatePasswordViewModel with ChangeNotifier {
     }
   }
 
+  Future<void> getUserById({required int id}) async {
+    changeState(UpdatePasswordState.loading);
+
+    try {
+      _toUpdatePasswordUser = await MainAPI().getUserById(id: id);
+      changeState(UpdatePasswordState.none);
+    } catch (e) {
+      changeState(UpdatePasswordState.error);
+    }
+  }
+
   Future<void> updatePasswordOnPressed(BuildContext context, {required int id}) async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -97,9 +117,23 @@ class UpdatePasswordViewModel with ChangeNotifier {
 
     focusScope.unfocus();
 
+    await getUserById(id: id);
+
+    bool isError = _state == UpdatePasswordState.error;
+
+    if (isError) {
+      Fluttertoast.showToast(msg: 'Error: Check your internet, or try again later');
+      return;
+    }
+
+    if (_toUpdatePasswordUser!.password == _newPasswordCtrl.text) {
+      Fluttertoast.showToast(msg: 'Please input a new password instead of using the same old password');
+      return;
+    }
+
     await updatePassword(id: id, newPassword: _newPasswordCtrl.text);
 
-    final isError = _state == UpdatePasswordState.error;
+    isError = _state == UpdatePasswordState.error;
 
     if (isError) {
       Fluttertoast.showToast(msg: 'Error: Check your internet, or try again later');
@@ -108,8 +142,9 @@ class UpdatePasswordViewModel with ChangeNotifier {
 
     _newPasswordCtrl.text = '';
     _confirmPasswordCtrl.text = '';
+    _toUpdatePasswordUser = null;
 
-    showModalBottomSheet(
+    await showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(topLeft: Radius.circular(40), topRight: Radius.circular(40)),
       ),

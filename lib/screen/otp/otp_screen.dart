@@ -111,7 +111,11 @@ class _OtpScreenState extends State<OtpScreen> {
   void resetTime() {
     setState(() {
       time = 120;
+      hasError = false;
     });
+    if (!_timer!.isActive) {
+      startTime();
+    }
   }
 
   void submitButtonOnPressed() {

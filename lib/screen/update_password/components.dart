@@ -56,7 +56,7 @@ class ConfirmFormField extends StatelessWidget {
           return 'Please enter your password';
         } else if (newValue.contains('  ')) {
           return 'Please enter a valid password';
-        } else if (newValue != updatePasswordViewModel.confirmPasswordCtrl.text) {
+        } else if (newValue != updatePasswordViewModel.newPasswordCtrl.text) {
           return 'Please enter a same password';
         }
         return null;

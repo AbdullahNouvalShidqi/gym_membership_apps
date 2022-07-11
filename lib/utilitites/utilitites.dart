@@ -30,13 +30,13 @@ class Utilities {
       final whatsappLink = Uri.encodeFull(
         '''$mainUrl
 Hello, my username is $username.\n
-I'd like to send a proof of paymet to my class where the data of the class are:
+I'd like to send a proof of paymet to the class I've booked, where the data of the class are:
 - ClassId: ${classModel.id},
 - ClassName: ${classModel.name},
 - ClassType: ${classModel.type},
 - StartAt: ${DateFormat('d MMMM y').format(classModel.startAt)}, ${DateFormat('Hm').format(classModel.startAt)},
 - EndAt: ${DateFormat('d MMMM y').format(classModel.endAt)}, ${DateFormat('Hm').format(classModel.endAt)}\n
-*Send your image proof here*''',
+*Send your screenshot proof here*''',
       );
       final mainLink = Uri.parse(whatsappLink);
       return mainLink;
@@ -44,12 +44,13 @@ I'd like to send a proof of paymet to my class where the data of the class are:
     final whatsappLink = Uri.encodeFull(
       '''$mainUrl
 Hello, my username is $username.\n
-I'd like to send a proof of paymet to my class where the data of the class are (Please fill your data):
+I'd like to send a proof of paymet to the class I've booked, where the data of the class are:
 - ClassName: ,
 - ClassType: ,
 - StartAt: ,
 - EndAt: \n
-*Send your image proof here*''',
+*Please fill your data*
+*And send your screenshot proof here*''',
     );
     final mainLink = Uri.parse(whatsappLink);
     return mainLink;

@@ -152,7 +152,17 @@ class SignUpViewModel with ChangeNotifier {
     focusScope.unfocus();
     await getAllUser();
 
-    if (!_formKey.currentState!.validate()) return;
+    bool isError = _state == SignUpState.error;
+
+    if (isError) {
+      Fluttertoast.showToast(msg: 'Error : Check your internet connection or try again');
+      return;
+    }
+
+    if (!_formKey.currentState!.validate()) {
+      focusScope.requestFocus();
+      return;
+    }
 
     await signUpWithEmailAndPassword(
       username: _usernameCtrl.text,
@@ -161,7 +171,7 @@ class SignUpViewModel with ChangeNotifier {
       password: _passwordCtrl.text,
     );
 
-    final isError = _state == SignUpState.error;
+    isError = _state == SignUpState.error;
 
     if (isError) {
       Fluttertoast.showToast(msg: 'Error : Check your internet connection or try again');
@@ -173,6 +183,11 @@ class SignUpViewModel with ChangeNotifier {
     } else {
       await dontRememberMe();
     }
+
+    _usernameCtrl.text = '';
+    _emailCtrl.text = '';
+    _phoneNumberCtrl.text = '';
+    _passwordCtrl.text = '';
 
     profileViewModel.setUserData(currentUser: _user!);
     Fluttertoast.showToast(msg: 'Sign up succesful!');
@@ -187,22 +202,23 @@ class SignUpViewModel with ChangeNotifier {
         _passwordCtrl.text.isNotEmpty) {
       bool willPop = false;
       await showDialog(
-          context: context,
-          builder: (context) {
-            return CostumDialog(
-              title: 'Whoa! Take it easy',
-              contentText: 'You will lost your input data to sign up, still want to exit?',
-              trueText: 'Yes',
-              falseText: 'No',
-              trueOnPressed: () {
-                willPop = true;
-                Navigator.pop(context);
-              },
-              falseOnPressed: () {
-                Navigator.pop(context);
-              },
-            );
-          });
+        context: context,
+        builder: (context) {
+          return CostumDialog(
+            title: 'Whoa! Take it easy',
+            contentText: 'You will lost your input data to sign up, still want to exit?',
+            trueText: 'Yes',
+            falseText: 'No',
+            trueOnPressed: () {
+              willPop = true;
+              Navigator.pop(context);
+            },
+            falseOnPressed: () {
+              Navigator.pop(context);
+            },
+          );
+        },
+      );
       if (willPop) {
         _usernameCtrl.text = '';
         _emailCtrl.text = '';

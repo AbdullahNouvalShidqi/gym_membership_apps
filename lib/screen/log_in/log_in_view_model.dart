@@ -57,17 +57,6 @@ class LogInViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> signIn({required String email, required String password}) async {
-    changeState(LogInState.loading);
-    try {
-      currentUser = UserModel(username: 'AbdullahNS', email: email, contact: '087823232237', password: password);
-      await Future.delayed(const Duration(seconds: 1));
-      changeState(LogInState.none);
-    } catch (e) {
-      changeState(LogInState.error);
-    }
-  }
-
   Future<void> setRememberMe({required String email, required String password}) async {
     _sharedPreferences = await SharedPreferences.getInstance();
     Map<String, dynamic> data = {'email': email, 'password': password};

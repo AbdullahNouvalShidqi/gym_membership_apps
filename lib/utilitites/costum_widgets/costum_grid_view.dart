@@ -12,7 +12,7 @@ class CostumGridView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<HomeViewModel>(
       builder: (context, homeViewModel, _) {
-        final items = type == 'Online' ? homeViewModel.classes : homeViewModel.classes.reversed.toList();
+        final items = type.toLowerCase() == 'online' ? homeViewModel.classes : homeViewModel.classes.reversed.toList();
         return GridView.builder(
           padding: const EdgeInsets.only(left: 20, right: 20, bottom: 20),
           physics: const ScrollPhysics(),
@@ -30,7 +30,7 @@ class CostumGridView extends StatelessWidget {
                 Navigator.pushNamed(
                   context,
                   DetailScreen.routeName,
-                  arguments: DetailRouteModel(homeClassModel: homeViewModel.classes[i], type: type),
+                  arguments: DetailRouteModel(homeClassModel: items[i], type: type),
                 );
               },
               child: Container(

@@ -37,7 +37,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ConfirmFormField(),
                 RememberMeCheckBox(),
                 SignUpButton(),
-                ToSignInButton()
+                ToSignInButton(),
+                SizedBox(height: 20)
               ],
             ),
           ),

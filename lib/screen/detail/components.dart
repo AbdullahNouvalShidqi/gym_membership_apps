@@ -207,9 +207,17 @@ class ClassDetail extends StatelessWidget {
         children: [
           const Text('About This Class', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w700)),
           const SizedBox(height: 5),
-          Text(
-            item.description,
-            style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 88, 88, 88), height: 1.5),
+          SizedBox(
+            height: MediaQuery.of(context).size.height - 561,
+            child: Scrollbar(
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                child: Text(
+                  item.description,
+                  style: const TextStyle(fontSize: 12, color: Color.fromARGB(255, 88, 88, 88), height: 1.5),
+                ),
+              ),
+            ),
           ),
         ],
       ),
